@@ -363,54 +363,83 @@
         <p><em>"O melhor de vós é aquele que aprende o Alcorão e o ensina."</em></p>
     </footer>
 
-    <script>
-        // Lógica do Accordion
-        function toggleAcc(btn) {
-            const item = btn.parentElement;
-            const isActive = item.classList.contains('active');
-            
-            // Fecha todos antes de abrir o novo
-            document.querySelectorAll('.acc-item').forEach(el => el.classList.remove('active'));
-            
-            if (!isActive) {
-                item.classList.add('active');
-            }
-        }
+    <script type="module">
+    // 1. Importações do Firebase (Versão Modular)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Countdown
-        function updateTimer() {
-            const target = new Date('April 6, 2026 00:00:00').getTime();
-            const now = new Date().getTime();
-            const diff = target - now;
+    // 2. Sua Configuração (Madrassa Online)
+    const firebaseConfig = {
+        apiKey: "AIzaSyD2rNS7HSJyek3OCrRquudFgqQSWXZJYrY",
+        authDomain: "madrassa-online-b851c.firebaseapp.com",
+        projectId: "madrassa-online-b851c",
+        databaseURL: "https://madrassa-online-b851c-default-rtdb.firebaseio.com",
+        storageBucket: "madrassa-online-b851c.firebasestorage.app",
+        messagingSenderId: "360782668012",
+        appId: "1:360782668012:web:d501ef187911db632445c9"
+    };
 
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-            document.getElementById('days').innerText = d;
-            document.getElementById('hours').innerText = h;
-            document.getElementById('minutes').innerText = m;
-            document.getElementById('seconds').innerText = s;
-        }
-        setInterval(updateTimer, 1000);
+    // --- Lógica do Accordion ---
+    window.toggleAcc = function(btn) {
+        const item = btn.parentElement;
+        const isActive = item.classList.contains('active');
+        document.querySelectorAll('.acc-item').forEach(el => el.classList.remove('active'));
+        if (!isActive) item.classList.add('active');
+    };
 
-        // Modal
-        function toggleModal(show) {
-            document.getElementById('enrollModal').style.display = show ? 'block' : 'none';
-        }
+    // --- Countdown ---
+    function updateTimer() {
+        const target = new Date('April 6, 2026 00:00:00').getTime();
+        const now = new Date().getTime();
+        const diff = target - now;
+        if (diff < 0) return;
+        document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+        document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        document.getElementById('minutes').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById('seconds').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+    }
+    setInterval(updateTimer, 1000);
 
-        // WhatsApp integration
-        function sendWhatsApp() {
-            const nome = document.getElementById('nome').value;
-            const zap = document.getElementById('zap').value;
-            const nivel = document.getElementById('selNivel').value;
-            
-            if(!nome || !zap) return alert("Por favor, preencha os dados.");
+    // --- Modal ---
+    window.toggleModal = function(show) {
+        document.getElementById('enrollModal').style.display = show ? 'block' : 'none';
+    };
 
+    // --- INTEGRAÇÃO FIREBASE + WHATSAPP ---
+    window.sendWhatsApp = function() {
+        const nome = document.getElementById('nome').value;
+        const zap = document.getElementById('zap').value;
+        const nivel = document.getElementById('selNivel').value;
+        const valorInscricao = 100; // Valor fixo em MTN
+
+        if(!nome || !zap) return alert("Por favor, preencha os dados.");
+
+        // A. Registrar no Firebase (Nó Transações)
+        const transacoesRef = ref(db, 'transacoes');
+        const novaTransacaoRef = push(transacoesRef);
+
+        set(novaTransacaoRef, {
+            nome_aluno: nome,
+            msisdn: zap,
+            amount: valorInscricao,
+            nivel: nivel,
+            status: "pendente", // Esperando processador ou comprovativo
+            data_pedido: new Date().toISOString()
+        })
+        .then(() => {
+            // B. Só abre o WhatsApp depois de salvar no Banco
             const msg = `Assalamu Alaikum! Gostaria de confirmar minha inscrição na Madrassa.%0A%0A*Nome:* ${nome}%0A*Contacto:* ${zap}%0A*Nível:* ${nivel}%0A%0AEstou enviando o comprovativo de 100 MTN em anexo.`;
             window.open(`https://wa.me/258841153418?text=${msg}`);
-        }
-    </script>
+        })
+        .catch((error) => {
+            console.error("Erro ao registrar:", error);
+            alert("Erro de conexão. Tente novamente.");
+        });
+    };
+</script>
 </body>
 </html>
