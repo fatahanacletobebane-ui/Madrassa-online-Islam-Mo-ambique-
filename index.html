@@ -38,7 +38,7 @@
             color: var(--text-dark);
             min-height: 100vh;
             overflow-x: hidden;
-            direction: ltr; /* Site em português mantém LTR */
+            direction: ltr;
         }
 
         .arabic-font {
@@ -200,6 +200,12 @@
         .btn-danger { background: var(--danger); color: white; }
         .btn-success { background: var(--success); color: white; }
 
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         /* Cards */
         .cards-grid {
             display: grid;
@@ -289,7 +295,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.8);
             z-index: 2000;
             justify-content: center;
             align-items: center;
@@ -371,7 +377,7 @@
         }
         .stat-card h4 { font-size: 2rem; color: var(--accent-gold); margin-bottom: 0.5rem; }
 
-        /* Admin Panel */
+        /* Admin Panel - PROTEGIDO */
         .admin-panel {
             display: none;
             background: var(--white);
@@ -380,12 +386,58 @@
         }
         .admin-panel.active { display: block; }
 
+        .admin-login-wall {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--light-bg) 0%, var(--white) 100%);
+            border-radius: 20px;
+            border: 3px solid var(--accent-gold);
+        }
+
+        .admin-login-wall h2 {
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+            font-family: 'Amiri', serif;
+        }
+
+        .admin-login-wall .pin-input {
+            font-size: 2rem;
+            letter-spacing: 1rem;
+            text-align: center;
+            width: 200px;
+            margin: 2rem auto;
+            display: block;
+        }
+
         .admin-header {
             background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
             color: var(--white);
             padding: 2rem;
             border-radius: 15px;
             margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-header h2 {
+            font-family: 'Amiri', serif;
+            color: var(--accent-gold);
+            margin: 0;
+        }
+
+        .admin-logout-btn {
+            background: var(--danger);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            border: none;
+            font-weight: 600;
+        }
+
+        .admin-data-hidden {
+            display: none !important;
         }
 
         table {
@@ -446,9 +498,9 @@
         .lesson-tab { display: none; }
         .lesson-tab.active { display: block; }
 
-        /* NOORANI QAIDA - Alfabeto Árabe Completo (DIREITA PARA ESQUERDA) */
+        /* NOORANI QAIDA - RTL */
         .arabic-alphabet-container {
-            direction: rtl; /* IMPORTANTE: Árabe é RTL */
+            direction: rtl;
             text-align: right;
             font-family: 'Scheherazade New', 'Amiri', serif;
             margin: 2rem 0;
@@ -456,7 +508,7 @@
 
         .alphabet-row {
             display: flex;
-            flex-direction: row-reverse; /* Inverte para mostrar da direita para esquerda */
+            flex-direction: row-reverse;
             justify-content: flex-start;
             gap: 1rem;
             margin-bottom: 1.5rem;
@@ -472,7 +524,6 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .letter-card:hover {
@@ -494,14 +545,6 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        .letter-card .letter-transliteration {
-            font-size: 0.8rem;
-            color: var(--accent-gold);
-            margin-top: 0.3rem;
-            font-weight: 600;
-        }
-
-        /* Seções de conteúdo expandidas */
         .content-section {
             background: var(--light-bg);
             padding: 2rem;
@@ -591,7 +634,7 @@
         .option:hover { border-color: var(--accent-gold); }
         .option.selected { border-color: var(--primary-green); background: rgba(13, 74, 56, 0.1); }
 
-        /* WhatsApp Button */
+        /* WhatsApp */
         .whatsapp-btn {
             position: fixed;
             bottom: 2rem;
@@ -622,7 +665,6 @@
 
         .hidden { display: none !important; }
         
-        /* Alert */
         .alert {
             padding: 1rem;
             border-radius: 10px;
@@ -634,12 +676,22 @@
         .alert-warning { background: #fff3cd; color: #856404; }
         .alert-danger { background: #f8d7da; color: #721c24; }
 
+        .security-notice {
+            background: #fff3cd;
+            border: 2px solid var(--warning);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 768px) {
             .header-content { flex-direction: column; gap: 1rem; }
             .alphabet-row { justify-content: center; }
             .letter-card { min-width: 80px; padding: 1rem; }
             .letter-card .arabic-letter { font-size: 2rem; }
             .form-row { grid-template-columns: 1fr; }
+            .admin-header { flex-direction: column; gap: 1rem; text-align: center; }
         }
     </style>
 </head>
@@ -652,7 +704,7 @@
                 <div class="logo-icon">☪</div>
                 <div class="logo-text">
                     <h1>Islam Moçambique</h1>
-                    <p>Madrassa Online - Nível 1 (Noorani Qaida)</p>
+                    <p>Madrassa Online Nível 1</p>
                 </div>
             </div>
             <nav class="nav-links" id="mainNav">
@@ -677,10 +729,9 @@
         <section id="home" class="section-content">
             <div class="hero">
                 <div class="hero-content">
-                    <h2>Bem-vindo à Madrassa Online Nível 1</h2>
-                    <p>Curso completo de Noorani Qaida: Alfabeto Árabe, Kalimah, Duãs, Salat, Adab, Hadith, Fiq e Sirat. Duração: 3 meses | Aulas: Seg-Sex | Testes: Sábados</p>
+                    <h2>Bem-vindo à Madrassa Online</h2>
+                    <p>Curso completo de Noorani Qaida Nível 1: Alfabeto Árabe, Kalimah, Duãs, Salat, Adab, Hadith, Fiq e Sirat. Duração: 3 meses.</p>
                     <a onclick="openModal('registerModal')" class="btn">Começar Agora</a>
-                    <a onclick="showSection('curriculum')" class="btn btn-secondary" style="margin-left: 1rem;">Ver Conteúdo</a>
                 </div>
             </div>
 
@@ -688,50 +739,30 @@
                 <div class="card">
                     <div class="card-icon">📖</div>
                     <h3>Noorani Qaida Nível 1</h3>
-                    <p>Alfabeto Árabe completo (29 letras) organizado da direita para esquerda. Aprenda a pronúncia correta (Makhraj) de cada letra isolada.</p>
+                    <p>Alfabeto Árabe completo (29 letras) organizado da direita para esquerda. Apenas letras isoladas - sem junção.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">🤲</div>
                     <h3>Kalimah & Duãs</h3>
-                    <p>As 6 Kalimah fundamentais do Islam e as duãs essenciais para o dia a dia com tradução e contexto.</p>
+                    <p>As 6 Kalimah fundamentais e duãs essenciais para o dia a dia do muçulmano.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">🕌</div>
                     <h3>Salat Completa</h3>
-                    <p>Aprenda a oração desde a purificação (Wudu) até o Taslim, com todos os recitados em árabe e português.</p>
+                    <p>Aprenda a oração desde o Wudu até o Taslim, com todos os recitados.</p>
                 </div>
                 <div class="card">
                     <div class="card-icon">📿</div>
-                    <h3>Adab Islâmico</h3>
-                    <p>Boas maneiras, etiqueta com pais, professores, irmãos, e comportamento no dia a dia do muçulmano.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon">📜</div>
-                    <h3>Hadith Selecionados</h3>
-                    <p>40 Hadiths de An-Nawawi adaptados para iniciantes, com explicação detalhada e aplicação prática.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon">⚖️</div>
-                    <h3>Fiq Básico</h3>
-                    <p>Leis fundamentais: Tahara (purificação), Salat, Jejum, Zakat e Hajj - o essencial para o muçulmano.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon">🌟</div>
-                    <h3>Sirat do Profeta</h3>
-                    <p>Biografia completa de Muhammad (S.A.W.): nascimento, infância, primeira revelação, Makkah, Madinah.</p>
-                </div>
-                <div class="card">
-                    <div class="card-icon">⏰</div>
-                    <h3>Horários Flexíveis</h3>
-                    <p>Escolha entre 9:30, 14:30 ou 20:30. Uma aula de 45 minutos por dia. Aprovação administrativa obrigatória.</p>
+                    <h3>Adab, Hadith, Fiq & Sirat</h3>
+                    <p>Boas maneiras, hadiths selecionados, jurisprudência básica e biografia do Profeta.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Curriculum Section - CONTEÚDO COMPLETO -->
+        <!-- Curriculum Section -->
         <section id="curriculum" class="section-content hidden">
             <div class="lesson-content active">
-                <h2 class="section-title">Currículo Completo - Madrassa Nível 1</h2>
+                <h2 class="section-title">Currículo Completo</h2>
                 
                 <div class="lesson-nav">
                     <button class="active" onclick="showLesson('noorani')">Noorani Qaida</button>
@@ -744,52 +775,44 @@
                     <button onclick="showLesson('sirat')">Sirat</button>
                 </div>
 
-                <!-- NOORANI QAIDA - ALFABETO COMPLETO RTL -->
+                <!-- NOORANI QAIDA - Alfabeto Completo RTL -->
                 <div id="noorani" class="lesson-tab active">
-                    <h3 style="color: var(--primary-green); margin-bottom: 1rem;">Lição 1: Alif até Ya (Alfabeto Árabe Isolado)</h3>
+                    <h3 style="color: var(--primary-green);">Lição 1: Alif até Ya (Alfabeto Árabe Isolado)</h3>
                     <p style="margin-bottom: 2rem; color: #666;">
-                        O Noorani Qaida Nível 1 ensina apenas as letras isoladas (Huruf Mufradat). 
-                        Cada letra tem um ponto de articulação (Makhraj) específico. 
-                        <strong>Importante:</strong> O alfabeto árabe é lido da <strong>DIREITA para a ESQUERDA</strong>.
+                        <strong>IMPORTANTE:</strong> O alfabeto árabe é lido da DIREITA para a ESQUERDA (RTL). 
+                        No Nível 1 do Noorani Qaida, aprendemos apenas as letras isoladas (Huruf Mufradat), sem junção.
                     </p>
 
                     <div class="arabic-alphabet-container">
-                        <!-- LINHA 1: Alif até Kha (Direita para Esquerda) -->
+                        <!-- LINHA 1: Alif até Kha -->
                         <div class="alphabet-row">
                             <div class="letter-card" onclick="playLetter('alif')">
                                 <span class="arabic-letter">ا</span>
                                 <span class="letter-name">Alif</span>
-                                <span class="letter-transliteration">Garganta</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('ba')">
                                 <span class="arabic-letter">ب</span>
                                 <span class="letter-name">Ba</span>
-                                <span class="letter-transliteration">Dois lábios</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('ta')">
                                 <span class="arabic-letter">ت</span>
                                 <span class="letter-name">Ta</span>
-                                <span class="letter-transliteration">Ponta da língua</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('tha')">
                                 <span class="arabic-letter">ث</span>
                                 <span class="letter-name">Tha</span>
-                                <span class="letter-transliteration">Entre os dentes</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('jim')">
                                 <span class="arabic-letter">ج</span>
                                 <span class="letter-name">Jim</span>
-                                <span class="letter-transliteration">Meio do palato</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('ha')">
                                 <span class="arabic-letter">ح</span>
                                 <span class="letter-name">Ha</span>
-                                <span class="letter-transliteration">Garganta (suave)</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('kha')">
                                 <span class="arabic-letter">خ</span>
                                 <span class="letter-name">Kha</span>
-                                <span class="letter-transliteration">Garganta (rasgado)</span>
                             </div>
                         </div>
 
@@ -798,72 +821,58 @@
                             <div class="letter-card" onclick="playLetter('dal')">
                                 <span class="arabic-letter">د</span>
                                 <span class="letter-name">Dal</span>
-                                <span class="letter-transliteration">Ponta da língua</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('dhal')">
                                 <span class="arabic-letter">ذ</span>
                                 <span class="letter-name">Dhal</span>
-                                <span class="letter-transliteration">Entre dentes</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('ra')">
                                 <span class="arabic-letter">ر</span>
                                 <span class="letter-name">Ra</span>
-                                <span class="letter-transliteration">Topo da língua</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('zay')">
                                 <span class="arabic-letter">ز</span>
                                 <span class="letter-name">Zay</span>
-                                <span class="letter-transliteration">Topo da língua</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('sin')">
                                 <span class="arabic-letter">س</span>
                                 <span class="letter-name">Sin</span>
-                                <span class="letter-transliteration">Entre dentes (s)</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('shin')">
                                 <span class="arabic-letter">ش</span>
                                 <span class="letter-name">Shin</span>
-                                <span class="letter-transliteration">Meio do palato</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('sad')">
                                 <span class="arabic-letter">ص</span>
                                 <span class="letter-name">Sad</span>
-                                <span class="letter-transliteration">Língua lateral</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('dad')">
                                 <span class="arabic-letter">ض</span>
                                 <span class="letter-name">Dad</span>
-                                <span class="letter-transliteration">Lado da língua</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('ta_heavy')">
                                 <span class="arabic-letter">ط</span>
                                 <span class="letter-name">Ta (pesado)</span>
-                                <span class="letter-transliteration">Gengiva superior</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('dha')">
                                 <span class="arabic-letter">ظ</span>
                                 <span class="letter-name">Dha</span>
-                                <span class="letter-transliteration">Entre dentes (z)</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('ain')">
                                 <span class="arabic-letter">ع</span>
                                 <span class="letter-name">Ain</span>
-                                <span class="letter-transliteration">Meio da garganta</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('ghain')">
                                 <span class="arabic-letter">غ</span>
                                 <span class="letter-name">Ghain</span>
-                                <span class="letter-transliteration">Raiz da garganta</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('fa')">
                                 <span class="arabic-letter">ف</span>
                                 <span class="letter-name">Fa</span>
-                                <span class="letter-transliteration">Dente inferior</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('qaf')">
                                 <span class="arabic-letter">ق</span>
                                 <span class="letter-name">Qaf</span>
-                                <span class="letter-transliteration">Palato mais profundo</span>
                             </div>
                         </div>
 
@@ -872,37 +881,30 @@
                             <div class="letter-card" onclick="playLetter('kaf')">
                                 <span class="arabic-letter">ك</span>
                                 <span class="letter-name">Kaf</span>
-                                <span class="letter-transliteration">Palato</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('lam')">
                                 <span class="arabic-letter">ل</span>
                                 <span class="letter-name">Lam</span>
-                                <span class="letter-transliteration">Ponta da língua</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('mim')">
                                 <span class="arabic-letter">م</span>
                                 <span class="letter-name">Mim</span>
-                                <span class="letter-transliteration">Lábios fechados</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('nun')">
                                 <span class="arabic-letter">ن</span>
                                 <span class="letter-name">Nun</span>
-                                <span class="letter-transliteration">Gengiva</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('ha')">
                                 <span class="arabic-letter">ه</span>
                                 <span class="letter-name">Ha (suave)</span>
-                                <span class="letter-transliteration">Garganta (final)</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('waw')">
                                 <span class="arabic-letter">و</span>
                                 <span class="letter-name">Waw</span>
-                                <span class="letter-transliteration">Círculo dos lábios</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('ya')">
                                 <span class="arabic-letter">ي</span>
                                 <span class="letter-name">Ya</span>
-                                <span class="letter-transliteration">Meio da língua</span>
                             </div>
                         </div>
 
@@ -911,98 +913,78 @@
                             <div class="letter-card" onclick="playLetter('hamza')">
                                 <span class="arabic-letter">ء</span>
                                 <span class="letter-name">Hamza</span>
-                                <span class="letter-transliteration">Garganta (parada)</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('ta_marbuta')">
                                 <span class="arabic-letter">ة</span>
                                 <span class="letter-name">Ta Marbuta</span>
-                                <span class="letter-transliteration">Final feminino</span>
                             </div>
                             <div class="letter-card" onclick="playLetter('alif_maksura')">
                                 <span class="arabic-letter">ى</span>
                                 <span class="letter-name">Alif Maksura</span>
-                                <span class="letter-transliteration">Final longo</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="content-section">
-                        <h4>📚 Estrutura do Curso Noorani Qaida Nível 1 (3 Meses)</h4>
+                        <h4>📚 Estrutura do Curso (3 Meses)</h4>
                         <ul>
-                            <li><strong>Semanas 1-4:</strong> Alif até Kha (7 letras) - Prática de pronúncia e Makhraj</li>
-                            <li><strong>Semanas 5-8:</strong> Dal até Qaf (14 letras) - Letras de empréstimo árabe</li>
-                            <li><strong>Semanas 9-12:</strong> Kaf até Ya + especiais (8 letras) - Completando o alfabeto</li>
-                            <li><strong>Observação:</strong> Junção de letras (Murakkabat) será ensinada apenas no Nível 2</li>
-                        </ul>
-                    </div>
-
-                    <div class="content-section">
-                        <h4>🎯 Pontos de Articulação (Makhraj)</h4>
-                        <ul>
-                            <li><strong>Garganta (Halq):</strong> Alif, Ha (ح), Kha, Ain, Ghain, Ha (ه), Hamza</li>
-                            <li><strong>Língua (Lisan):</strong> Todas as letras exceto as acima e lábios</li>
-                            <li><strong>Lábios (Shafatan):</strong> Ba, Mim, Waw, Fa</li>
-                            <li><strong>Nariz (Khayshum):</strong> Ghunna (em Nun e Mim com shaddah)</li>
+                            <li><strong>Semanas 1-4:</strong> Alif até Kha (7 letras) - Pronúncia e Makhraj</li>
+                            <li><strong>Semanas 5-8:</strong> Dal até Qaf (14 letras) - Letras de empréstimo</li>
+                            <li><strong>Semanas 9-12:</strong> Kaf até Ya + especiais (8 letras)</li>
+                            <li><strong>Nível 2:</strong> Junção de letras (Murakkabat) - NÃO incluído neste nível</li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- KALIMAH - Conteúdo Completo -->
+                <!-- KALIMAH -->
                 <div id="kalimah" class="lesson-tab">
-                    <h3 style="color: var(--primary-green); margin-bottom: 1rem;">As Seis Kalimah do Islam</h3>
+                    <h3 style="color: var(--primary-green);">As Seis Kalimah do Islam</h3>
                     
                     <div class="content-section">
-                        <h4>1. Kalimah Tayyibah (A Palavra Pura)</h4>
-                        <div class="arabic-text-display" style="font-size: 2.5rem;">
+                        <h4>1. Kalimah Tayyibah</h4>
+                        <div class="arabic-text-display" style="font-size: 2rem;">
                             لَا إِلَٰهَ إِلَّا ٱللَّٰهُ مُحَمَّدٌ رَسُولُ ٱللَّٰهِ
                         </div>
-                        <p><strong>Transliteração:</strong> La ilaha illallah, Muhammadur Rasulullah</p>
                         <p><strong>Significado:</strong> "Não há divindade digna de adoração exceto Allah, e Muhammad é o Mensageiro de Allah."</p>
-                        <p><strong>Importância:</strong> Esta é a declaração de fé (Shahada) que torna uma pessoa muçulmana. É a base do Islam.</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>2. Kalimah Shahadah (Testemunho)</h4>
-                        <div class="arabic-text-display">
+                        <h4>2. Kalimah Shahadah</h4>
+                        <div class="arabic-text-display" style="font-size: 1.5rem;">
                             أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا ٱللَّٰهُ وَحْدَهُۥ لَا شَرِيكَ لَهُۥ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُۥ وَرَسُولُهُۥ
                         </div>
-                        <p><strong>Significado:</strong> "Testifico que não há divindade exceto Allah, Único, sem parceiros, e testifico que Muhammad é Seu servo e Mensageiro."</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>3. Kalimah Tamjeed (Glorificação)</h4>
-                        <div class="arabic-text-display">
+                        <h4>3. Kalimah Tamjeed</h4>
+                        <div class="arabic-text-display" style="font-size: 1.5rem;">
                             سُبْحَانَ ٱللَّٰهِ وَٱلْحَمْدُ لِلَّٰهِ وَلَا إِلَٰهَ إِلَّا ٱللَّٰهُ وَٱللَّٰهُ أَكْبَرُ
                         </div>
-                        <p><strong>Significado:</strong> "Glorificado seja Allah, e louvor a Allah, e não há divindade exceto Allah, e Allah é o Maior."</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>4. Kalimah Tawhid (Unicidade)</h4>
-                        <div class="arabic-text-display">
+                        <h4>4. Kalimah Tawhid</h4>
+                        <div class="arabic-text-display" style="font-size: 1.3rem;">
                             لَا إِلَٰهَ إِلَّا ٱللَّٰهُ وَحْدَهُۥ لَا شَرِيكَ لَهُۥ لَهُ ٱلْمُلْكُ وَلَهُ ٱلْحَمْدُ يُحْىِۦ وَيُمِيتُ وَهُوَ حَىٌّ لَا يَمُوتُ أَبَدًا أَبَدًا ذُو ٱلْجَلَالِ وَٱلْإِكْرَامِ
                         </div>
-                        <p><strong>Significado:</strong> "Não há divindade exceto Allah, Único, sem parceiros. A Ele pertence o reino e a Ele pertence todo louvor. Ele dá a vida e causa a morte. Ele é Vivo e não morre. Eternamente Eterno. Possuidor da Majestade e Generosidade."</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>5. Kalimah Istighfar (Pedido de Perdão)</h4>
-                        <div class="arabic-text-display">
+                        <h4>5. Kalimah Istighfar</h4>
+                        <div class="arabic-text-display" style="font-size: 1.3rem;">
                             أَسْتَغْفِرُ ٱللَّٰهَ رَبِّى مِنْ كُلِّ ذَنْبٍ أَذْنَبْتُهُۥ عَمَدًا أَوْ خَطَأًۭ سِرًّۭا أَوْ عَلَانِيَةًۭ وَأَتُوبُ إِلَيْهِ
                         </div>
-                        <p><strong>Significado:</strong> "Peço perdão a Allah, meu Senhor, por todo pecado que cometi, intencional ou acidental, em segredo ou abertamente, e eu me arrependo para Ele."</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>6. Kalimah Radd Kufr (Rejeição da Descrença)</h4>
-                        <div class="arabic-text-display">
+                        <h4>6. Kalimah Radd Kufr</h4>
+                        <div class="arabic-text-display" style="font-size: 1.2rem;">
                             ٱللَّٰهُمَّ إِنِّىٓ أَعُوذُ بِكَ مِنْ أَنْ أُشْرِكَ بِكَ شَيْـًۭٔا وَأَنَا۠ أَعْلَمُ بِهِۦ وَأَسْتَغْفِرُكَ لِمَا لَآ أَعْلَمُ بِهِۦ تُبْتُ عَنْهُ وَتَبَرَّأْتُ مِنَ ٱلْكُفْرِ وَٱلشِّرْكِ وَٱلْكِذْبِ وَٱلْغِيبَةِ وَٱلْبِدْعَةِ وَٱلنَّمِيمَةِ وَٱلْفَوَٰحِشِ وَٱلْبُهْتَانِ وَٱلْمَعَاصِى كُلِّهَا
                         </div>
-                        <p><strong>Significado:</strong> "Ó Allah, eu busco proteção em Ti de associar parceiros a Ti enquanto eu sei, e peço Teu perdão pelo que não sei. Eu me arrependo e me dissocio da descrença, politeísmo, mentira, calúnia, inovação, fofoca, obscenidades, acusações falsas e todos os pecados."</p>
                     </div>
                 </div>
 
-                <!-- DUÃS - Conteúdo Completo -->
+                <!-- DUÃS -->
                 <div id="duas" class="lesson-tab">
                     <h3 style="color: var(--primary-green);">Duãs Diárias Essenciais</h3>
 
@@ -1011,8 +993,7 @@
                         <div class="arabic-text-display">
                             ٱلْحَمْدُ لِلَّٰهِ ٱلَّذِى أَحْيَانَا بَعْدَ مَآ أَمَاتَنَا وَإِلَيْهِ ٱلنُّشُورُ
                         </div>
-                        <p><strong>Transliteração:</strong> Alhamdu lillahil-ladhi ahyana ba'da ma amatana wa ilaihin-nushur.</p>
-                        <p><strong>Significado:</strong> "Louvado seja Allah que nos deu a vida depois de nos ter dado a morte, e a Ele é o retorno."</p>
+                        <p>"Louvado seja Allah que nos deu a vida depois de nos ter dado a morte."</p>
                     </div>
 
                     <div class="content-section">
@@ -1020,7 +1001,6 @@
                         <div class="arabic-text-display">
                             بِسْمِكَ ٱللَّٰهُمَّ أَمُوتُ وَأَحْيَا
                         </div>
-                        <p><strong>Significado:</strong> "Em Teu nome, ó Allah, eu morro e vivo."</p>
                     </div>
 
                     <div class="content-section">
@@ -1028,8 +1008,6 @@
                         <div class="arabic-text-display">
                             بِسْمِ ٱللَّٰهِ
                         </div>
-                        <p><strong>Significado:</strong> "Em nome de Allah."</p>
-                        <p><strong>Completo:</strong> Bismillahi wa 'ala barakatillah (Em nome de Allah e com a bênção de Allah)</p>
                     </div>
 
                     <div class="content-section">
@@ -1037,7 +1015,6 @@
                         <div class="arabic-text-display">
                             ٱلْحَمْدُ لِلَّٰهِ ٱلَّذِىٓ أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مِنَ ٱلْمُسْلِمِينَ
                         </div>
-                        <p><strong>Significado:</strong> "Louvado seja Allah que nos alimentou, deu de beber e nos fez muçulmanos."</p>
                     </div>
 
                     <div class="content-section">
@@ -1045,7 +1022,6 @@
                         <div class="arabic-text-display">
                             ٱلسَّلَٰمُ عَلَيْنَا وَعَلَىٰ عِبَادِ ٱللَّٰهِ ٱلصَّٰلِحِينَ
                         </div>
-                        <p><strong>Significado:</strong> "Que a paz esteja sobre nós e sobre os servos virtuosos de Allah."</p>
                     </div>
 
                     <div class="content-section">
@@ -1053,223 +1029,179 @@
                         <div class="arabic-text-display">
                             بِسْمِ ٱللَّٰهِ تَوَكَّلْتُ عَلَى ٱللَّٰهِ لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِٱللَّٰهِ
                         </div>
-                        <p><strong>Significado:</strong> "Em nome de Allah, confio em Allah. Não há poder nem força exceto com Allah."</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>7. Antes de Entrar no Banheiro</h4>
+                        <h4>7. Antes do Banheiro</h4>
                         <div class="arabic-text-display">
                             ٱللَّٰهُمَّ إِنِّىٓ أَعُوذُ بِكَ مِنَ ٱلْخُبُثِ وَٱلْخَبَٰٓئِثِ
                         </div>
-                        <p><strong>Significado:</strong> "Ó Allah, eu busco proteção em Ti dos machos e fêmeas dos demônios."</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>8. Após Sair do Banheiro</h4>
+                        <h4>8. Após o Banheiro</h4>
                         <div class="arabic-text-display">
                             غُفْرَانَكَ ٱلْحَمْدُ لِلَّٰهِ ٱلَّذِىٓ أَذْهَبَ عَنِّى ٱلْأَذَىٰ وَعَافَانِى
                         </div>
-                        <p><strong>Significado:</strong> "Eu peço Teu perdão (Ó Allah). Louvado seja Allah que removeu de mim o mal e me deu saúde."</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>9. Ao Ouvir o Trovão</h4>
-                        <div class="arabic-text-display">
-                            سُبْحَٰنَ ٱلَّذِى يُسَبِّحُ ٱلرَّعْدُ بِحَمْدِهِۦ وَٱلْمَلَٰٓئِكَةُ مِنْ خِيفَتِهِۦ
-                        </div>
-                        <p><strong>Significado:</strong> "Glorificado seja Aquele que o trovão glorifica com Seu louvor, e os anjos por temor dEle."</p>
-                    </div>
-
-                    <div class="content-section">
-                        <h4>10. Para os Pais (Duã de Rahma)</h4>
+                        <h4>9. Para os Pais</h4>
                         <div class="arabic-text-display">
                             رَّبِّ ٱرْحَمْهُمَا كَمَا رَبَّيَانِى صَغِيرًۭا
                         </div>
-                        <p><strong>Significado:</strong> "Meu Senhor, tem misericórdia deles (pais) como eles me criaram pequeno."</p>
+                        <p>"Meu Senhor, tem misericórdia deles como eles me criaram pequeno."</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>10. Ao Ouvir Trovão</h4>
+                        <div class="arabic-text-display">
+                            سُبْحَٰنَ ٱلَّذِى يُسَبِّحُ ٱلرَّعْدُ بِحَمْدِهِۦ وَٱلْمَلَٰٓئِكَةُ مِنْ خِيفَتِهِۦ
+                        </div>
                     </div>
                 </div>
 
-                <!-- SALAT - Conteúdo Completo -->
+                <!-- SALAT -->
                 <div id="salat" class="lesson-tab">
-                    <h3 style="color: var(--primary-green);">Como Realizar a Salat (Oração)</h3>
+                    <h3 style="color: var(--primary-green);">Como Realizar a Salat</h3>
 
                     <div class="content-section">
-                        <h4>1. Purificação (Wudu) - Pré-requisito</h4>
+                        <h4>1. Wudu (Purificação)</h4>
                         <ul>
-                            <li>Intenção (Niyyah) no coração</li>
+                            <li>Intenção (Niyyah)</li>
                             <li>Dizer "Bismillah"</li>
-                            <li>Lavar as mãos 3x</li>
-                            <li>Enxaguar a boca 3x</li>
-                            <li>Lavar o nariz 3x</li>
-                            <li>Lavar o rosto 3x (orelha a orelha, queixo à testa)</li>
-                            <li>Lavar os braços até os cotovelos 3x (direito primeiro)</li>
-                            <li>Passar a mão molhada na cabeça (masah) 1x</li>
-                            <li>Passar nas orelhas 1x</li>
-                            <li>Lavar os pés até os tornozelos 3x (direito primeiro)</li>
+                            <li>Lavar mãos 3x</li>
+                            <li>Enxaguar boca e nariz 3x</li>
+                            <li>Lavar rosto 3x (orelha a orelha)</li>
+                            <li>Lavar braços até cotovelos 3x</li>
+                            <li>Passar mão na cabeça (masah)</li>
+                            <li>Passar nas orelhas</li>
+                            <li>Lavar pés até tornozelos 3x</li>
                         </ul>
-                        <p><strong>Quebra do Wudu:</strong> Eliminação de gases, urina, fezes, sangue, vômito, sono profundo.</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>2. Takbiratul Ihram (Início da Oração)</h4>
+                        <h4>2. Takbir - Início</h4>
                         <div class="arabic-text-display" style="font-size: 2rem;">
                             ٱللَّٰهُ أَكْبَرُ
                         </div>
-                        <p>Levantar as mãos aos ombros/orelhas e dizer "Allahu Akbar" (Allah é o Maior)</p>
-                        <p>Posição: Qiyam (em pé), mãos direitas sobre esquerdas no peito</p>
+                        <p>Levantar mãos aos ombros, mãos direita sobre esquerda no peito</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>3. Recitação em Pé (Qiyam)</h4>
-                        <p><strong>Primeiro:</strong> Surat Al-Fatiha (obrigatória)</p>
-                        <div class="arabic-text-display" style="font-size: 1.5rem;">
+                        <h4>3. Surat Al-Fatiha (Obrigatória)</h4>
+                        <div class="arabic-text-display" style="font-size: 1.3rem;">
                             بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ۝ ٱلْحَمْدُ لِلَّٰهِ رَبِّ ٱلْعَٰلَمِينَ ۝ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ۝ مَٰلِكِ يَوْمِ ٱلدِّينِ ۝ إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ۝ ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ ۝ صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ
                         </div>
-                        <p><strong>Depois:</strong> Qualquer Surah ou versículos (mínimo 3 versículos curtos)</p>
-                        <p>Exemplo Surat Al-Ikhlas:</p>
+                    </div>
+
+                    <div class="content-section">
+                        <h4>4. Surah Adicional (ex: Al-Ikhlas)</h4>
                         <div class="arabic-text-display" style="font-size: 1.3rem;">
                             قُلْ هُوَ ٱللَّٰهُ أَحَدٌ ۝ ٱللَّٰهُ ٱلصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ
                         </div>
                     </div>
 
                     <div class="content-section">
-                        <h4>4. Ruku (Inclinação)</h4>
+                        <h4>5. Ruku (Inclinação)</h4>
                         <div class="arabic-text-display">
                             سُبْحَانَ رَبِّىَ ٱلْعَظِيمِ
                         </div>
-                        <p><strong>Significado:</strong> "Glorificado seja meu Senhor, o Magnífico."</p>
-                        <p>Repetir 3x enquanto segura os joelhos com as mãos, costas retas.</p>
+                        <p>Repetir 3x, segurar joelhos, costas retas</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>5. Qawmah (Levantar da Ruku)</h4>
+                        <h4>6. Qawmah (Levantar)</h4>
                         <div class="arabic-text-display">
                             سَمِعَ ٱللَّٰهُ لِمَنْ حَمِدَهُۥ ۝ رَبَّنَا وَلَكَ ٱلْحَمْدُ
                         </div>
-                        <p><strong>Significado:</strong> "Allah ouve quem O louva. Nosso Senhor, a Ti pertence todo louvor."</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>6. Sujud (Prostração)</h4>
+                        <h4>7. Sujud (Prostração)</h4>
                         <div class="arabic-text-display">
                             سُبْحَانَ رَبِّىَ ٱلْأَعْلَىٰ
                         </div>
-                        <p><strong>Significado:</strong> "Glorificado seja meu Senhor, o Altíssimo."</p>
-                        <p><strong>Posição:</strong> Testa, nariz, ambas as palmas, joelhos e dedos dos pés no chão.</p>
-                        <p>Repetir 3x.</p>
+                        <p>Testa, nariz, palmas, joelhos e dedos dos pés no chão. Repetir 3x.</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>7. Jalsa (Sentar entre os Sujud)</h4>
+                        <h4>8. Jalsa (Entre os Sujud)</h4>
                         <div class="arabic-text-display">
                             ٱللَّٰهُمَّ ٱغْفِرْ لِى وَارْحَمْنِى وَٱجْبُرْنِى وَٱهْدِنِى وَٱرْزُقْنِى
                         </div>
-                        <p><strong>Significado:</strong> "Ó Allah, perdoa-me, tem misericórdia de mim, fortalece-me, guia-me e concede-me sustento."</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>8. Tashahhud (Sentado - Final)</h4>
-                        <div class="arabic-text-display" style="font-size: 1.3rem;">
+                        <h4>9. Tashahhud (Sentado)</h4>
+                        <div class="arabic-text-display" style="font-size: 1.2rem;">
                             ٱلتَّحِيَّٰتُ لِلَّٰهِ وَٱلصَّلَوَٰتُ وَٱلطَّيِّبَٰتُ ۝ ٱلسَّلَامُ عَلَيْكَ أَيُّهَا ٱلنَّبِىُّ وَرَحْمَةُ ٱللَّٰهِ وَبَرَكَٰتُهُۥ ۝ ٱلسَّلَامُ عَلَيْنَا وَعَلَىٰ عِبَادِ ٱللَّٰهِ ٱلصَّٰلِحِينَ ۝ أَشْهَدُ أَنْ لَّآ إِلَٰهَ إِلَّا ٱللَّٰهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُۥ وَرَسُولُهُۥ
                         </div>
                     </div>
 
                     <div class="content-section">
-                        <h4>9. Durood (Bênção sobre o Profeta)</h4>
-                        <div class="arabic-text-display" style="font-size: 1.2rem;">
+                        <h4>10. Durood Ibrahim</h4>
+                        <div class="arabic-text-display" style="font-size: 1.1rem;">
                             ٱللَّٰهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍۢ وَعَلَىٰٓ ءَالِ مُحَمَّدٍۢ كَمَا صَلَّيْتَ عَلَىٰٓ إِبْرَٰهِيمَ وَعَلَىٰٓ ءَالِ إِبْرَٰهِيمَ إِنَّكَ حَمِيدٌۭ مَّجِيدٌۭ ۝ ٱللَّٰهُمَّ بَارِكْ عَلَىٰ مُحَمَّدٍۢ وَعَلَىٰٓ ءَالِ مُحَمَّدٍۢ كَمَا بَارَكْتَ عَلَىٰٓ إِبْرَٰهِيمَ وَعَلَىٰٓ ءَالِ إِبْرَٰهِيمَ إِنَّكَ حَمِيدٌۭ مَّجِيدٌۭ
                         </div>
                     </div>
 
                     <div class="content-section">
-                        <h4>10. Taslim (Encerramento)</h4>
+                        <h4>11. Taslim (Encerramento)</h4>
                         <div class="arabic-text-display">
                             ٱلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ ٱللَّٰهِ
                         </div>
-                        <p>Virar a cabeça para direita, depois para esquerda, dizendo a frase acima.</p>
-                    </div>
-
-                    <div class="content-section">
-                        <h4>Resumo das Orações Obrigatórias</h4>
-                        <ul>
-                            <li><strong>Fajr:</strong> 2 rak'ahs (unidades)</li>
-                            <li><strong>Dhuhr:</strong> 4 rak'ahs</li>
-                            <li><strong>Asr:</strong> 4 rak'ahs</li>
-                            <li><strong>Maghrib:</strong> 3 rak'ahs</li>
-                            <li><strong>Isha:</strong> 4 rak'ahs</li>
-                        </ul>
+                        <p>Virar cabeça para direita, depois esquerda</p>
                     </div>
                 </div>
 
-                <!-- ADAB - Conteúdo Completo -->
+                <!-- ADAB -->
                 <div id="adab" class="lesson-tab">
-                    <h3 style="color: var(--primary-green);">Adab (Boas Maneiras Islâmicas)</h3>
+                    <h3 style="color: var(--primary-green);">Adab (Boas Maneiras)</h3>
 
                     <div class="content-section">
-                        <h4>Adab com Allah (Deus)</h4>
+                        <h4>Adab com Allah</h4>
                         <ul>
-                            <li>Sempre lembrar de Allah em todas as situações</li>
+                            <li>Lembrar de Allah em todas as situações</li>
                             <li>Agradecer (Alhamdulillah) nas bênçãos</li>
                             <li>Paciência (Sabr) nas dificuldades</li>
-                            <li>Nunca desesperar da misericórdia de Allah</li>
-                            <li>Manter as orações no tempo certo</li>
-                            <li>Evitar palavras de desagrado (palavrões, mentiras)</li>
+                            <li>Manter orações no tempo certo</li>
+                            <li>Evitar palavrões e mentiras</li>
                         </ul>
                     </div>
 
                     <div class="content-section">
-                        <h4>Adab com os Pais (Birrul Walidayn)</h4>
+                        <h4>Adab com os Pais</h4>
                         <ul>
-                            <li>Obediência em tudo que não é desobediência a Allah</li>
+                            <li>Obediência em tudo que não é pecado</li>
                             <li>Falar com gentileza e voz suave</li>
                             <li>Nunca dizer "uf" (expressão de irritação)</li>
                             <li>Cuidar deles na velhice</li>
                             <li>Orar por eles após a morte</li>
-                            <li>Honrar amigos deles após o falecimento</li>
-                            <li>Não os chamar pelos nomes diretamente (dizer "meu pai"/"minha mãe")</li>
-                        </ul>
-                        <p><strong>Hadith:</strong> "O prazer de Allah está no prazer dos pais, e a ira de Allah está na ira dos pais." (Tirmidhi)</p>
-                    </div>
-
-                    <div class="content-section">
-                        <h4>Adab com o Profeta Muhammad (S.A.W.)</h4>
-                        <ul>
-                            <li>Enviar bênçãos (Salat wa Salam) ao mencioná-lo</li>
-                            <li>Seguir seu exemplo (Sunnah)</li>
-                            <li>Amá-lo mais que a si mesmo, pais e filhos</li>
-                            <li>Defendê-lo de calúnias</li>
-                            <li>Aprender sobre sua vida (Sirat)</li>
-                            <li>Honrar sua família (Ahlul Bayt) e companheiros (Sahaba)</li>
                         </ul>
                     </div>
 
                     <div class="content-section">
-                        <h4>Adab com os Irmãos Muçulmanos</h4>
+                        <h4>Adab com Irmãos Muçulmanos</h4>
                         <ul>
-                            <li>Dar Salam (saudação islâmica) primeiro</li>
-                            <li>Apertar a mão com ambas as mãos</li>
-                            <li>Abraçar (mesmo sexo) ao encontrar</li>
+                            <li>Dar Salam primeiro</li>
+                            <li>Apertar mão com ambas as mãos</li>
                             <li>Visitar o doente</li>
-                            <li>Acompanhar o funeral (Janazah)</li>
-                            <li>Cumprir convites e promessas</li>
+                            <li>Acompanhar funeral</li>
                             <li>Manter segredos (Amanah)</li>
-                            <li>Não fofocar (Ghibah) ou caluniar (Namimah)</li>
-                            <li>Perdoar erros</li>
-                            <li>Desejar para o irmão o que deseja para si</li>
+                            <li>Não fofocar (Ghibah)</li>
                         </ul>
                     </div>
 
                     <div class="content-section">
-                        <h4>Adab na Mesa (Comer e Beber)</h4>
+                        <h4>Adab na Mesa</h4>
                         <ul>
-                            <li>Lavar as mãos antes</li>
-                            <li>Dizer Bismillah antes e Alhamdulillah depois</li>
-                            <li>Comer com a mão direita</li>
-                            <li>Comer do lado mais próximo (não pegar do meio)</li>
-                            <li>Não soprar na comida/bebida</li>
+                            <li>Lavar mãos antes</li>
+                            <li>Dizer Bismillah antes, Alhamdulillah depois</li>
+                            <li>Comer com mão direita</li>
+                            <li>Não soprar na comida</li>
                             <li>Não reclamar da comida</li>
-                            <li>Levantar pequenos restos (comer tudo)</li>
-                            <li>Limpar os dedos após comer (não deixar bênçãos)</li>
+                            <li>Limpar os dedos após comer</li>
                         </ul>
                     </div>
 
@@ -1277,75 +1209,39 @@
                         <h4>Adab no Banheiro</h4>
                         <ul>
                             <li>Entrar com pé esquerdo</li>
-                            <li>Dizer a duã de proteção ao entrar</li>
-                            <li>Não falar dentro (a menos que necessário)</li>
-                            <li>Não recitar Alcorão</li>
+                            <li>Dizer duã de proteção ao entrar</li>
+                            <li>Não falar dentro</li>
                             <li>Usar mão esquerda para limpeza</li>
                             <li>Sair com pé direito</li>
-                            <li>Dizer a duã de agradecimento ao sair</li>
-                        </ul>
-                    </div>
-
-                    <div class="content-section">
-                        <h4>Adab do Vestuário</h4>
-                        <ul>
-                            <li>Cobrir o Awrah (partes privadas)</li>
-                            <li>Homens: ombrinho ao joelho mínimo</li>
-                            <li>Mulheres: tudo exceto rosto e mãos (público)</li>
-                            <li>Vestir-se começando pelo lado direito</li>
-                            <li>Dizer Bismillah ao vestir</li>
-                            <li>Não usar seda pura (homens)</li>
-                            <li>Não usar ouro (homens)</li>
-                            <li>Evitar ostentação (Israf)</li>
                         </ul>
                     </div>
                 </div>
 
-                <!-- HADITH - Conteúdo Completo -->
+                <!-- HADITH -->
                 <div id="hadith" class="lesson-tab">
-                    <h3 style="color: var(--primary-green);">40 Hadiths de An-Nawawi (Seleção Nível 1)</h3>
+                    <h3 style="color: var(--primary-green);">40 Hadiths de An-Nawawi (Seleção)</h3>
 
                     <div class="content-section">
                         <h4>Hadith 1: Intenções</h4>
-                        <div class="arabic-text-display" style="font-size: 1.3rem;">
-                            إِنَّمَا ٱلْأَعْمَٰلُ بِٱلنِّيَّٰتِ وَإِنَّمَا لِكُلِّ ٱمْرِئٍۢ مَّا نَوَىٰ
-                        </div>
-                        <p><strong>Tradução:</strong> "As ações são julgadas apenas pelas intenções, e cada pessoa terá o que pretendeu."</p>
-                        <p><strong>Contexto:</strong> Baseado na emigração (Hijrah) - quem emigrou para Allah e Seu Mensageiro vs. quem emigrou por uma mulher.</p>
-                        <p><strong>Lição:</strong> A importância da sinceridade (Ikhlas) em todas as ações.</p>
+                        <p>"As ações são julgadas apenas pelas intenções, e cada pessoa terá o que pretendeu."</p>
+                        <p><em>Lição: A importância da sinceridade (Ikhlas).</em></p>
                     </div>
 
                     <div class="content-section">
-                        <h4>Hadith 2: O Islã, o Iman e o Ihsan</h4>
-                        <p><strong>Islã:</strong> Testemunhar que não há divindade exceto Allah e Muhammad é Seu Mensageiro, realizar a oração, pagar o Zakat, jejuar no Ramadan e fazer a peregrinação (Hajj).</p>
-                        <p><strong>Iman:</strong> Acreditar em Allah, Seus anjos, Seus livros, Seus mensageiros, no Último Dia e no Decreto (Qadar), tanto o bom quanto o mau.</p>
-                        <p><strong>Ihsan:</strong> Adorar Allah como se você O visse, pois se você não O vê, Ele certamente vê você.</p>
-                    </div>
-
-                    <div class="content-section">
-                        <h4>Hadith 3: Cinco Pilares do Islam</h4>
-                        <ul>
-                            <li>Testemunho de fé (Shahada)</li>
-                            <li>Oração (Salat) - 5 vezes ao dia</li>
-                            <li>Caridade obrigatória (Zakat)</li>
-                            <li>Jejum (Sawm) no Ramadan</li>
-                            <li>Peregrinação (Hajj) - se capaz</li>
-                        </ul>
+                        <h4>Hadith 2: Islam, Iman e Ihsan</h4>
+                        <p><strong>Islam:</strong> 5 pilares (Shahada, Salat, Zakat, Sawm, Hajj)</p>
+                        <p><strong>Iman:</strong> Acreditar em Allah, anjos, livros, mensageiros, Último Dia, Qadar</p>
+                        <p><strong>Ihsan:</strong> Adorar Allah como se O visse</p>
                     </div>
 
                     <div class="content-section">
                         <h4>Hadith 16: Proibições</h4>
-                        <p>"Não envidieis uns aos outros, não façais lances uns sobre os outros (em compras), não odieis uns aos outros, não vos afasteis uns dos outros, e não façais intrigas uns contra os outros. Sede servos de Allah como irmãos."</p>
+                        <p>"Não envidieis, não façais lances sobre outros, não odieis, não vos afasteis, não façais intrigas. Sede irmãos."</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>Hadith 17: Gentileza</h4>
-                        <p>"A gentileza (Rifq) não está em coisa alguma sem que a embeleze, e não é removida de coisa alguma sem que a desfigure."</p>
-                    </div>
-
-                    <div class="content-section">
-                        <h4>Hadith 18: Temor a Allah em Toda Parte</h4>
-                        <p>"Temei a Allah onde quer que estejais, sigam um mau ato com um bom (que apagará), e tratem as pessoas com bom caráter."</p>
+                        <h4>Hadith 18: Temor a Allah</h4>
+                        <p>"Temei a Allah onde quer que estejais, sigam um mau ato com um bom, e tratem as pessoas com bom caráter."</p>
                     </div>
 
                     <div class="content-section">
@@ -1354,393 +1250,150 @@
                     </div>
 
                     <div class="content-section">
-                        <h4>Hadith 24: Proibições Maiores</h4>
-                        <p>"Evitem os sete destruidores: associar parceiros a Allah, magia, matar sem justiça, comer juros, comer o dinheiro do órfão, fugir do campo de batalha, e acusar de adultério mulheres virtuosas."</p>
-                    </div>
-
-                    <div class="content-section">
-                        <h4>Hadith 33: Conselho</h4>
-                        <p>"A religião é o conselho (Nasiha)." Dissemos: "Para quem?" Ele disse: "Para Allah, Seu Livro, Seu Mensageiro, líderes dos muçulmanos e suas massas."</p>
-                    </div>
-
-                    <div class="content-section">
-                        <h4>Hadith 40: Ser Feliz ou Infeliz</h4>
-                        <p>"Feliz aquele que é guiado ao Islam, tem sustento suficiente e é contente com o que Allah lhe deu."</p>
+                        <h4>Hadith 24: Sete Destruidores</h4>
+                        <p>"Evitem: associar parceiros a Allah, magia, matar sem justiça, comer juros, comer dinheiro do órfão, fugir da batalha, acusar mulheres virtuosas."</p>
                     </div>
                 </div>
 
-                <!-- FIQ - Conteúdo Completo -->
+                <!-- FIQ -->
                 <div id="fiq" class="lesson-tab">
-                    <h3 style="color: var(--primary-green);">Fiq (Jurisprudência Islâmica) - Nível 1</h3>
+                    <h3 style="color: var(--primary-green);">Fiq (Jurisprudência) - Nível 1</h3>
 
                     <div class="content-section">
-                        <h4>1. Tahara (Purificação)</h4>
-                        <p><strong>Tipos de água permitida:</strong></p>
-                        <ul>
-                            <li>Água de chuva, rios, mares, poços</li>
-                            <li>Água que mantém cor, cheiro e gosto originais</li>
-                            <li>Não pode ter sido usada para purificação anterior</li>
-                        </ul>
-                        
-                        <p><strong>Najasah (Impuridades):</strong></p>
-                        <ul>
-                            <li>Urina e fezes de humanos e animais não comestíveis</li>
-                            <li>Sangue menstrual</li>
-                            <li>Carne de porco e álcool</li>
-                            <li>Cães e porcos (contato requer lavagem 7x, uma com terra)</li>
-                        </ul>
+                        <h4>Tahara (Purificação)</h4>
+                        <p><strong>Águas permitidas:</strong> Chuva, rios, mares, poços (que mantêm cor, cheiro, gosto)</p>
+                        <p><strong>Najasah (Impuridades):</strong> Urina, fezes, sangue menstrual, carne de porco, álcool</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>2. Wudu (Ablução Menor) - Detalhado</h4>
-                        <p><strong>Obrigatório (Fard):</strong></p>
-                        <ul>
-                            <li>Lavar rosto (de cabelo da testa ao queixo, de orelha a orelha)</li>
-                            <li>Lavar braços até cotovelos (incluindo cotovelos)</li>
-                            <li>Passar mão molhada na cabeça (1/4 da cabeça mínimo)</li>
-                            <li>Lavar pés até tornozelos (incluindo tornozelos)</li>
-                        </ul>
-                        
-                        <p><strong>Sunnah:</strong></p>
-                        <ul>
-                            <li>Intenção (Niyyah)</li>
-                            <li>Dizer Bismillah</li>
-                            <li>Lavar mãos 3x antes</li>
-                            <li>Enxaguar boca e nariz</li>
-                            <li>Ordem correta</li>
-                            <li>Continuidade (não secar entre partes)</li>
-                        </ul>
-
-                        <p><strong>Quebra o Wudu:</strong></p>
-                        <ul>
-                            <li>Qualquer descarga dos órgãos genitais ou ânus</li>
-                            <li>Sono profundo (perda de consciência)</li>
-                            <li>Perda dos sentidos (loucura, desmaio)</li>
-                            <li>Tocar partes privadas com palma da mão ou dedos</li>
-                        </ul>
+                        <h4>Wudu (Ablução Menor)</h4>
+                        <p><strong>Obrigatório:</strong> Rosto, braços até cotovelos, cabeça (1/4), pés até tornozelos</p>
+                        <p><strong>Sunnah:</strong> Intenção, Bismillah, lavar mãos 3x, boca, nariz</p>
+                        <p><strong>Quebra Wudu:</strong> Descargas, sono profundo, perda de sentidos, tocar partes privadas</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>3. Ghusl (Banho Ritual)</h4>
-                        <p><strong>Obrigatório quando:</strong></p>
-                        <ul>
-                            <li>Ejaculação (sempre, mesmo sem prazer)</li>
-                            <li>Relação sexual (penetração, mesmo sem ejaculação)</li>
-                            <li>Fim do período menstrual (Hayd)</li>
-                            <li>Fim do sangramento pós-parto (Nifas)</li>
-                            <li>Morte (para o falecido)</li>
-                        </ul>
-
-                        <p><strong>Como fazer:</strong></p>
-                        <ul>
-                            <li>Intenção</li>
-                            <li>Lavar as mãos 3x</li>
-                            <li>Lavar órgãos genitais</li>
-                            <li>Fazer Wudu completo (exceto pés)</li>
-                            <li>Derramar água na cabeça 3x</li>
-                            <li>Lavar corpo inteiro (deixar água alcançar toda pele)</li>
-                            <li>Lavar pés</li>
-                        </ul>
+                        <h4>Ghusl (Banho Ritual)</h4>
+                        <p><strong>Obrigatório quando:</strong> Ejaculação, relação sexual, fim da menstruação, pós-parto</p>
+                        <p><strong>Como fazer:</strong> Intenção, lavar mãos, genitais, Wudu (sem pés), água na cabeça 3x, corpo inteiro, pés</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>4. Tayammum (Purificação com Terra)</h4>
-                        <p><strong>Quando permitido:</strong></p>
-                        <ul>
-                            <li>Falta de água</li>
-                            <li>Doença que piora com água</li>
-                            <li>Água extremamente fria que pode causar doença</li>
-                            <li>Perigo de vida (fugir de animal, inimigo)</li>
-                        </ul>
-
-                        <p><strong>Como fazer:</strong></p>
-                        <ul>
-                            <li>Bater as mãos na terra limpa</li>
-                            <li>Soprar o excesso</li>
-                            <li>Passar no rosto</li>
-                            <li>Bater novamente</li>
-                            <li>Passar nas mãos até cotovelos</li>
-                        </ul>
+                        <h4>Salat (Oração)</h4>
+                        <p><strong>Condições:</strong> Islam, sanidade, puberdade, purificação, cobrir Awrah, tempo correto, Qibla, intenção</p>
+                        <p><strong>Pilares:</strong> Qiyam, Al-Fatiha, Ruku, I'tidal, Sujud, Jalsa, Tashahhud, Taslim</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>5. Salat (Oração) - Requisitos</h4>
-                        <p><strong>Condições (Shurut):</strong></p>
-                        <ul>
-                            <li>Islam</li>
-                            <li>Sanidade mental</li>
-                            <li>Puberdade</li>
-                            <li>Purificação de impurezas maiores (Ghusl se necessário)</li>
-                            <li>Purificação de impurezas menores (Wudu)</li>
-                            <li>Cobrir Awrah</li>
-                            <li>Tempo correto</li>
-                            <li>Face à Qibla (Makkah)</li>
-                            <li>Intenção (Niyyah)</li>
-                        </ul>
-
-                        <p><strong>Pilares (Arkan):</strong></p>
-                        <ul>
-                            <li>De pé (Qiyam)</li>
-                            <li>Recitação de Al-Fatiha</li>
-                            <li>Inclinação (Ruku)</li>
-                            <li>Levantar da inclinação (I'tidal)</li>
-                            <li>Prostração (Sujud)</li>
-                            <li>Sentar entre prostrações (Jalsa)</li>
-                            <li>Sentar para Tashahhud final</li>
-                            <li>Recitação do Tashahhud</li>
-                            <li>Taslim (saudação final)</li>
-                            <li>Ordem correta</li>
-                        </ul>
+                        <h4>Zakat (Caridade Obrigatória)</h4>
+                        <p><strong>Nisab:</strong> 85g de ouro ou equivalente</p>
+                        <p><strong>Taxa:</strong> 2.5% sobre dinheiro, ouro, prata, mercadorias</p>
+                        <p><strong>Quem recebe:</strong> 8 categorias (pobres, necessitados, administradores, etc.)</p>
                     </div>
 
                     <div class="content-section">
-                        <h4>6. Zakat (Caridade Obrigatória)</h4>
-                        <p><strong>Quem deve pagar:</strong></p>
-                        <ul>
-                            <li>Muçulmano livre</li>
-                            <li>Posse de Nisab (85g de ouro ou equivalente)</li>
-                            <li>Posse por 1 ano lunar completo</li>
-                            <li>Dívida não superior ao patrimônio</li>
-                        </ul>
-
-                        <p><strong>Taxas:</strong></p>
-                        <ul>
-                            <li>Dinheiro, ouro, prata: 2.5%</li>
-                            <li>Produtos agrícolas irrigados naturalmente: 10%</li>
-                            <li>Produtos agrícolas irrigados artificialmente: 5%</li>
-                            <li>Gado, minerais, mercadorias: regras específicas</li>
-                        </ul>
-
-                        <p><strong>Quem recebe (8 categorias):</strong></p>
-                        <ul>
-                            <li>Pobres (Fuqara)</li>
-                            <li>Necessitados (Masakin)</li>
-                            <li>Administradores de Zakat</li>
-                            <li>Muçulmanos recentes (Muallaf)</li>
-                            <li>Escravos para libertação</li>
-                            <li>Endividados</li>
-                            <li>Na causa de Allah</li>
-                            <li>Viajantes necessitados</li>
-                        </ul>
-                    </div>
-
-                    <div class="content-section">
-                        <h4>7. Sawm (Jejum) - Ramadan</h4>
-                        <p><strong>Obrigatório:</strong></p>
-                        <ul>
-                            <li>Muçulmano, adulto, são</li>
-                            <li>Residente (não viajante)</li>
-                            <li>Mulheres fora de menstruação/pós-parto</li>
-                        </ul>
-
-                        <p><strong>Invalida o jejum:</strong></p>
-                        <ul>
-                            <li>Comer ou beber intencionalmente</li>
-                            <li>Relação sexual</li>
-                            <li>Ejaculação intencional</li>
-                            <li>Menstruação/pós-parto</li>
-                            <td>Insanidade</td>
-                        </ul>
-
-                        <p><strong>Não invalida:</strong></p>
-                        <ul>
-                            <li>Esquecimento (comer/beber sem lembrar)</li>
-                            <li>Vômito involuntário</li>
-                            <li>Engolir saliva</li>
-                            <li>Teste de glicose no sangue</li>
-                            <li>Injeções não nutricionais</li>
-                        </ul>
-
-                        <p><strong>Qada (repor) e Kaffarah (expiação):</strong></p>
-                        <ul>
-                            <li>Doença, viagem, menstruação: apenas Qada (1 dia por dia)</li>
-                            <li>Relação sexual intencional: Qada + libertar escravo (ou jejuar 60 dias ou alimentar 60 pobres)</li>
-                        </ul>
-                    </div>
-
-                    <div class="content-section">
-                        <h4>8. Hajj (Peregrinação)</h4>
-                        <p><strong>Condições:</strong></p>
-                        <ul>
-                            <li>Islam</li>
-                            <li>Puberdade</li>
-                            <li>Sanidade</li>
-                            <li>Liberdade</li>
-                            <li>Capacidade física e financeira (ida e volta)</li>
-                            <li>Mahram para mulheres (exceto se idosa com grupo)</li>
-                        </ul>
-
-                        <p><strong>Pilares:</strong></p>
-                        <ul>
-                            <li>Ihram (intenção sacra)</li>
-                            <li>Permanência em Arafah (dia 9 de Dhul-Hijjah)</li>
-                            <li>Tawaf Al-Ifadah (circunavegação)</li>
-                            <li>Sa'y (caminhada entre Safa e Marwah)</li>
-                        </ul>
+                        <h4>Sawm (Jejum)</h4>
+                        <p><strong>Obrigatório:</strong> Ramadan, para quem é adulto, são, residente</p>
+                        <p><strong>Invalida:</strong> Comer/beber intencional, relação sexual, ejaculação intencional, menstruação</p>
+                        <p><strong>Não invalida:</strong> Esquecimento, vômito involuntário, saliva</p>
                     </div>
                 </div>
 
-                <!-- SIRAT - Conteúdo Completo -->
+                <!-- SIRAT -->
                 <div id="sirat" class="lesson-tab">
-                    <h3 style="color: var(--primary-green);">Sirat An-Nabi (Vida do Profeta Muhammad)</h3>
+                    <h3 style="color: var(--primary-green);">Sirat An-Nabi (Vida do Profeta)</h3>
 
                     <div class="content-section">
-                        <h4>Antes do Nascimento - A Era da Ignorância (Jahiliyyah)</h4>
+                        <h4>Antes do Nascimento</h4>
                         <ul>
-                            <li>Arábia pré-islâmica: sociedade tribal, politeísmo</li>
-                            <li>A Casa Sagrada (Ka'bah) construída por Ibrahim (Abraão)</li>
-                            <li>Adoração de ídolos: Hubal, Al-Lat, Al-Uzza, Manat</li>
-                            <li>Práticas negativas: infanticídio feminino, usura, vingança sangrenta</li>
-                            <li>Alcorão chama de "Jahiliyyah" (ignorância)</li>
-                            <li>Ano do Elefante (570 d.C.): Abraha tenta destruir Ka'bah, derrotado por pássaros (Surat Al-Fil)</li>
+                            <li>Arábia pré-islâmica: politeísmo, tribalismo</li>
+                            <li>Ka'bah construída por Ibrahim</li>
+                            <li>Ano do Elefante (570 d.C.): Abraha derrotado</li>
                         </ul>
                     </div>
 
                     <div class="content-section">
-                        <h4>Nascimento e Infância (570-576 d.C.)</h4>
+                        <h4>Nascimento e Infância (570-576)</h4>
                         <ul>
-                            <li><strong>Nascimento:</strong> Segunda-feira, 12 Rabi' Al-Awwal, Ano do Elefante (aprox. 20 de abril de 570 d.C.)</li>
-                            <li><strong>Pai:</strong> Abdullah (falecido antes do nascimento)</li>
-                            <li><strong>Mãe:</strong> Aminah bint Wahb</li>
-                            <li><strong>Nome:</strong> Muhammad (o Louvado) e Ahmad (o Mais Louvado)</li>
-                            <li><strong>Amamentação:</strong> Halimah As-Sa'diyah (amã de deserto)</li>
-                            <li><strong>Milagre infantil:</strong> Seu coração foi purificado por anjos quando criança</li>
-                            <li><strong>Morte da mãe:</strong> Aos 6 anos, em Abwa</li>
-                            <li><strong>Cuidado:</strong> Abd al-Muttalib (avô), depois Abu Talib (tio)</li>
+                            <li>Nascimento: 12 Rabi' Al-Awwal, Ano do Elefante</li>
+                            <li>Pai: Abdullah (falecido antes do nascimento)</li>
+                            <li>Mãe: Aminah bint Wahb</li>
+                            <li>Amamentação: Halimah As-Sa'diyah</li>
+                            <li>Morte da mãe: aos 6 anos</li>
                         </ul>
                     </div>
 
                     <div class="content-section">
-                        <h4>Juventude e Vida em Makkah (576-610 d.C.)</h4>
+                        <h4>Juventude (576-595)</h4>
                         <ul>
-                            <li>Trabalho como pastor de ovelhas</li>
-                            <li>Participação na Guerra de Fijar (justa, não sangrenta)</li>
-                            <li>Al-Fudul: pacto de justiça social</li>
-                            <li>Comércio com caravanas (Síria)</li>
+                            <li>Pastor de ovelhas</li>
+                            <li>Comerciante (caravanas para Síria)</li>
                             <li>Reputação de "Al-Amin" (o Confiável)</li>
-                            <li>Conserto da Ka'bah (colocação da Pedra Negra)</li>
-                            <li>Meditação na Caverna de Hira</li>
+                            <li>Conserto da Ka'bah</li>
                         </ul>
                     </div>
 
                     <div class="content-section">
-                        <h4>Casamento com Khadijah (595 d.C.)</h4>
+                        <h4>Casamento com Khadijah (595)</h4>
                         <ul>
-                            <li>Khadijah bint Khuwaylid: viúva rica, comerciante</li>
-                            <li>Proposta feita por ela (através de amiga)</li>
-                            <li>Idade: Ele 25 anos, ela 40 anos</li>
-                            <li>Matrimônio feliz por 25 anos</li>
-                            <li>Filhos: Al-Qasim (falecido infantil), Zaynab, Ruqayyah, Umm Kulthum, Fatimah, Abdullah (Al-Tayyib)</li>
-                            <li>Ibrahim (com Maria Al-Qibtiyyah, depois de Khadijah)</li>
+                            <li>Khadijah: viúva rica, comerciante</li>
+                            <li>Idade: Ele 25, ela 40</li>
+                            <li>25 anos de casamento feliz</li>
+                            <li>Filhos: Qasim, Zaynab, Ruqayyah, Umm Kulthum, Fatimah, Abdullah</li>
                         </ul>
                     </div>
 
                     <div class="content-section">
-                        <h4>A Primeira Revelação (610 d.C.)</h4>
+                        <h4>Primeira Revelação (610)</h4>
                         <ul>
-                            <li>Mês de Ramadan</li>
-                            <li>Caverna de Hira (Monte Nur)</li>
-                            <li>Anjo Gabriel aparece</li>
-                            <li>Comando: "Iqra'" (Lê!) ou "Recita!"</li>
-                            <li>Primeiros versículos de Surat Al-Alaq (96:1-5):</li>
-                        </ul>
-                        <div class="arabic-text-display" style="font-size: 1.2rem;">
-                            ٱقْرَأْ بِٱسْمِ رَبِّكَ ٱلَّذِى خَلَقَ ۝ خَلَقَ ٱلْإِنسَٰنَ مِنْ عَلَقٍ ۝ ٱقْرَأْ وَرَبُّكَ ٱلْأَكْرَمُ ۝ ٱلَّذِى عَلَّمَ بِٱلْقَلَمِ ۝ عَلَّمَ ٱلْإِنسَٰنَ مَا لَمْ يَعْلَمْ
-                        </div>
-                        <ul>
-                            <li>Medo inicial, conforto por Khadijah</li>
-                            <li>Waraqah ibn Nawfal (primo de Khadijah) confirma profecia</li>
-                            <li>Intervalo de revelações (Fatrah)</li>
+                            <li>Caverna de Hira, Ramadan</li>
+                            <li>Anjo Gabriel: "Iqra'!" (Lê!)</li>
+                            <li>Surat Al-Alaq (96:1-5)</li>
+                            <li>Conforto de Khadijah e Waraqah</li>
                         </ul>
                     </div>
 
                     <div class="content-section">
-                        <h4>Período de Makkah (610-622 d.C.)</h4>
-                        <p><strong>3 anos de chamada secreta:</strong></p>
+                        <h4>Período de Makkah (610-622)</h4>
                         <ul>
-                            <li>Conversões: Ali ibn Abi Talib (primo), Abu Bakr (amigo), Zayd ibn Harithah (escravo libertado)</li>
-                            <li>Primeira mesquita: Dar Al-Arqam (casa de Arqam)</li>
-                        </ul>
-
-                        <p><strong>Chamada pública (3 anos depois):</strong></p>
-                        <ul>
-                            <li>Discurso no Monte Safa</li>
-                            <li>Perseguição aumenta</li>
-                            <li>Boycott dos Banu Hashim (3 anos de isolamento no vale de Abu Talib)</li>
-                            <li>Ano da Tristeza (619 d.C.): morte de Khadijah e Abu Talib</li>
-                            <li>Isra e Mi'raj (Viagem Noturna e Ascensão)</li>
-                            <li>Oferta de Ta'if (rejeitada)</li>
-                            <li>Primeiras Bai'ahs (juramentos) de Al-Aqabah</li>
+                            <li>3 anos de chamada secreta</li>
+                            <li>Primeiros convertidos: Ali, Abu Bakr, Zayd</li>
+                            <li>Dar Al-Arqam (casa de Arqam)</li>
+                            <li>Perseguição e boycott</li>
+                            <li>Isra e Mi'raj (viagem noturna)</li>
                         </ul>
                     </div>
 
                     <div class="content-section">
-                        <h4>Hijrah (Emigração) para Madinah (622 d.C.)</h4>
+                        <h4>Hijrah para Madinah (622)</h4>
                         <ul>
-                            <li>Conspiração para assassinar o Profeta</li>
-                            <li>Fuga secreta com Abu Bakr</li>
-                            <li>Caverna de Thawr (3 dias escondidos)</li>
-                            <li>Camelo de Abu Bakr guiado por Allah</li>
-                            <li>Construção da primeira mesquita em Quba</li>
-                            <li>Entrada em Madinah (Yathrib) - sexta-feira</li>
-                            <li>Constituição de Madinah (primeira constituição escrita)</li>
-                            <li>Início do calendário islâmico (1º Anno Hegirae)</li>
+                            <li>Conspiração para assassinato</li>
+                            <li>Fuga com Abu Bakr</li>
+                            <li>Caverna de Thawr</li>
+                            <li>Constituição de Madinah</li>
+                            <li>Início do calendário islâmico</li>
                         </ul>
                     </div>
 
                     <div class="content-section">
-                        <h4>Período de Madinah (622-632 d.C.)</h4>
-                        <p><strong>Construção da sociedade islâmica:</strong></p>
+                        <h4>Período de Madinah (622-632)</h4>
                         <ul>
-                            <li>Mesquita do Profeta (construída com mãos dos companheiros)</li>
-                            <li>Fraternidade entre Muhajirun (emigrantes) e Ansar (ajudantes)</li>
-                            <li>Cartas aos reis (César, Cosroes, Negus, etc.)</li>
+                            <li>Batalha de Badr (624) - vitória</li>
+                            <li>Batalha de Uhud (625) - lição de obediência</li>
+                            <li>Trincheira (627) - proteção divina</li>
+                            <li>Acordo de Hudaybiyyah (628)</li>
+                            <li>Conquista de Makkah (630)</li>
                         </ul>
+                    </div>
 
-                        <p><strong>Batalhas principais:</strong></p>
+                    <div class="content-section">
+                        <h4>Falecimento (632)</h4>
                         <ul>
-                            <li>Badr (624 d.C.): 313 muçulmanos vs. 1000 de Makkah, vitória divina</li>
-                            <li>Uhud (625 d.C.): derrota parcial, lição sobre obediência</li>
-                            <li>Trincheira (627 d.C.): cerco de 10.000, proteção divina</li>
-                            <li>Acordo de Hudaybiyyah (628 d.C.): tratado aparentemente desfavorável, mas vitória estratégica</li>
-                            <li>Conquista de Makkah (630 d.C.): entrada pacífica, perdão geral</li>
-                            <li>Hunayn e Ta'if: últimas resistências</li>
-                        </ul>
-
-                        <p><strong>Últimos anos:</strong></p>
-                        <ul>
-                            <li>Peregrinação de despedida (Hajjat Al-Wada')</li>
+                            <li>Hajjat Al-Wada' (peregrinação de despedida)</li>
                             <li>Sermão de despedida no Monte Arafah</li>
                             <li>Doença final (febre)</li>
-                            <li>Últimas palavras: "A oração, a oração... e o que suas mãos possuem (escravos, tratem bem)..."</li>
-                            <li>Falecimento: segunda-feira, 12 Rabi' Al-Awwal, 11 AH (8 de junho de 632 d.C.)</li>
-                            <li>Enterro em sua casa (agora parte da Mesquita do Profeta)</li>
-                        </ul>
-                    </div>
-
-                    <div class="content-section">
-                        <h4>Características Físicas e Morais</h4>
-                        <p><strong>Aparência:</strong></p>
-                        <ul>
-                            <li>Estatura média, nem alto nem baixo</li>
-                            <li>Cabelo nem muito cacheado nem liso</li>
-                            <li>Rosto radiante (lunar)</li>
-                            <li>Olhos grandes negros</li>
-                            <li>Barba densa</li>
-                            <li>Costas largas entre os ombros</li>
-                            <li>Andava rapidamente (como descendo uma ladeira)</li>
-                        </ul>
-
-                        <p><strong>Caráter:</strong></p>
-                        <ul>
-                            <li>Mais generoso que vento fresco</li>
-                            <li>Mais corajoso na batalha</li>
-                            <li>Mais modesto que jovem donzela</li>
-                            <li>Servia sua família</li>
-                            <li>Consertava próprios sapatos e remendava roupas</li>
-                            <li>Nunca disse "não" a quem pedia</li>
-                            <li>Ria pouco, sorria muito</li>
-                            <li>Tratava igualmente ricos e pobres</li>
+                            <li>Falecimento: 12 Rabi' Al-Awwal, 11 AH</li>
+                            <li>Enterro em sua casa (Mesquita do Profeta)</li>
                         </ul>
                     </div>
                 </div>
@@ -1753,7 +1406,7 @@
                 <h2 class="section-title">Horários de Aula</h2>
                 <p style="text-align: center; margin-bottom: 2rem;">
                     Escolha um dos três horários disponíveis. Aulas de 45 minutos, de Segunda a Sexta.<br>
-                    Sábados: Testes (1h30) | Domingos: Revisão e publicação de notas às 12:30
+                    Sábados: Testes (1h30) | Domingos: Revisão e notas às 12:30
                 </p>
                 <div class="time-slots">
                     <div class="time-slot" onclick="selectTime(this, '09:30')">
@@ -1772,7 +1425,7 @@
             </div>
         </section>
 
-        <!-- Dashboard -->
+        <!-- Student Dashboard -->
         <section id="dashboard" class="dashboard">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                 <div>
@@ -1816,84 +1469,124 @@
         <section id="testSection" class="test-section">
             <div class="test-timer" id="testTimer">90:00</div>
             <h2 style="text-align: center; color: var(--primary-green);">Teste Semanal</h2>
-            
-            <div id="questionsContainer">
-                <!-- Perguntas geradas dinamicamente -->
-            </div>
-
+            <div id="questionsContainer"></div>
             <div style="text-align: center; margin-top: 2rem;">
                 <button class="btn btn-success" onclick="submitTest()">Finalizar Teste</button>
             </div>
         </section>
 
-        <!-- Admin Panel -->
+        <!-- ADMIN PANEL - PROTEGIDO COM LOGIN WALL -->
         <section id="adminPanel" class="admin-panel">
-            <div class="admin-header">
-                <h2>🛡️ Painel Administrativo</h2>
-                <p>Anacleto Bebane | PIN: 6300 | Tel: 860407269</p>
+            
+            <!-- TELA DE LOGIN DO ADMIN (inicialmente visível) -->
+            <div id="adminLoginWall" class="admin-login-wall">
+                <h2>🔒 Área Administrativa</h2>
+                <p>Esta área é restrita ao administrador do sistema.</p>
+                
+                <div class="security-notice">
+                    <strong>⚠️ Aviso de Segurança:</strong><br>
+                    Tentativas de acesso não autorizado são registradas.<br>
+                    Após 3 tentativas falhas, o acesso será bloqueado por 30 minutos.
+                </div>
+
+                <div class="form-group" style="max-width: 300px; margin: 2rem auto;">
+                    <label>Telefone Administrador</label>
+                    <input type="tel" id="adminPhoneInput" placeholder="860407269" value="860407269" style="text-align: center;">
+                </div>
+
+                <div class="form-group" style="max-width: 300px; margin: 0 auto 2rem auto;">
+                    <label>PIN de Segurança (4 dígitos)</label>
+                    <input type="password" id="adminPinInput" class="pin-input" maxlength="4" placeholder="••••" style="text-align: center; letter-spacing: 0.5rem;">
+                </div>
+
+                <button class="btn" onclick="verifyAdminAccess()" style="width: 200px;">Acessar Painel</button>
+                
+                <p style="margin-top: 2rem; font-size: 0.9rem; color: #666;">
+                    Esqueceu o PIN? Contacte: Anacleto Bebane<br>
+                    WhatsApp: 860407269
+                </p>
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h4 id="pendingCount">0</h4>
-                    <p>Pendentes</p>
+            <!-- CONTEÚDO DO ADMIN (inicialmente escondido) -->
+            <div id="adminContent" class="admin-data-hidden">
+                <div class="admin-header">
+                    <div>
+                        <h2>🛡️ Painel Administrativo</h2>
+                        <p style="margin: 0; opacity: 0.9;">Administrador: Anacleto Bebane | Tel: 860407269</p>
+                    </div>
+                    <button class="admin-logout-btn" onclick="adminLogout()">🔒 Encerrar Sessão Admin</button>
                 </div>
-                <div class="stat-card">
-                    <h4 id="approvedCount">0</h4>
-                    <p>Aprovados</p>
-                </div>
-                <div class="stat-card">
-                    <h4 id="totalStudents">0</h4>
-                    <p>Total</p>
-                </div>
-                <div class="stat-card">
-                    <h4 id="testsToGrade">0</h4>
-                    <p>Testes</p>
-                </div>
-            </div>
 
-            <div style="margin-top: 2rem;">
-                <h3 style="color: var(--primary-green); margin-bottom: 1rem;">Alunos Pendentes</h3>
-                <table id="pendingTable">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Telefone</th>
-                            <th>País</th>
-                            <th>Província</th>
-                            <th>Horário</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="pendingTableBody"></tbody>
-                </table>
-            </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4 id="pendingCount">0</h4>
+                        <p>Pendentes</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 id="approvedCount">0</h4>
+                        <p>Aprovados</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 id="totalStudents">0</h4>
+                        <p>Total</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 id="testsToGrade">0</h4>
+                        <p>Testes</p>
+                    </div>
+                </div>
 
-            <div style="margin-top: 3rem;">
-                <h3 style="color: var(--primary-green); margin-bottom: 1rem;">Todos os Alunos</h3>
-                <table id="allStudentsTable">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Telefone</th>
-                            <th>Horário</th>
-                            <th>Progresso</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="allStudentsBody"></tbody>
-                </table>
-            </div>
+                <div style="margin-top: 2rem;">
+                    <h3 style="color: var(--primary-green); margin-bottom: 1rem;">Alunos Pendentes de Aprovação</h3>
+                    <div style="overflow-x: auto;">
+                        <table id="pendingTable">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Telefone</th>
+                                    <th>País</th>
+                                    <th>Província</th>
+                                    <th>Horário</th>
+                                    <th>Data</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
 
-            <div style="margin-top: 3rem; background: var(--light-bg); padding: 2rem; border-radius: 15px;">
-                <h3 style="margin-bottom: 1rem;">⚡ Ações Admin</h3>
-                <button class="btn" onclick="adminSkipLesson()">Pular Aula</button>
-                <button class="btn btn-secondary" onclick="adminForceTest()">Forçar Teste</button>
-                <button class="btn btn-success" onclick="adminViewAllGrades()">Ver Todas Notas</button>
+                <div style="margin-top: 3rem;">
+                    <h3 style="color: var(--primary-green); margin-bottom: 1rem;">Todos os Alunos</h3>
+                    <div style="overflow-x: auto;">
+                        <table id="allStudentsTable">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Telefone</th>
+                                    <th>Horário</th>
+                                    <th>Progresso</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allStudentsBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div style="margin-top: 3rem; background: var(--light-bg); padding: 2rem; border-radius: 15px;">
+                    <h3 style="margin-bottom: 1rem; color: var(--primary-green);">⚡ Ações Administrativas</h3>
+                    <p style="margin-bottom: 1rem; font-size: 0.9rem;">Estas ações permitem violar regras de tempo para testes:</p>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn" onclick="adminSkipLesson()">Pular para Próxima Aula</button>
+                        <button class="btn btn-secondary" onclick="adminForceTest()">Forçar Teste Imediato</button>
+                        <button class="btn btn-success" onclick="adminViewAllGrades()">Ver Todas as Notas</button>
+                    </div>
+                </div>
             </div>
         </section>
+
     </div>
 
     <!-- Modals -->
@@ -1980,7 +1673,7 @@
     </footer>
 
     <script>
-        // Firebase Configuration - CONECTADO AO SEU PROJETO
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDummyKeyForDemo",
             authDomain: "madrassa-online-b851c.firebaseapp.com",
@@ -1991,12 +1684,15 @@
             appId: "1:123456789:web:abcdef"
         };
 
-        // Initialize Firebase
         let app, db, auth;
         let currentUser = null;
         let isAdmin = false;
+        let adminSessionActive = false;
         let testTimerInterval;
         let testTimeRemaining = 90 * 60;
+        let selectedAnswers = {};
+        let adminLoginAttempts = 0;
+        let adminLockoutTime = null;
 
         // Admin credentials
         const ADMIN_PHONE = "860407269";
@@ -2005,15 +1701,13 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Firebase
             try {
                 app = firebase.initializeApp(firebaseConfig);
                 db = firebase.database();
                 auth = firebase.auth();
-                console.log("Firebase conectado com sucesso!");
+                console.log("Firebase conectado");
             } catch (e) {
                 console.error("Erro Firebase:", e);
-                // Fallback para localStorage se Firebase falhar
             }
             
             checkSession();
@@ -2021,6 +1715,7 @@
 
         // Navigation
         function showSection(sectionId) {
+            // Hide all sections
             document.querySelectorAll('.section-content').forEach(s => s.classList.add('hidden'));
             document.getElementById('dashboard').classList.remove('active');
             document.getElementById('adminPanel').classList.remove('active');
@@ -2034,11 +1729,18 @@
                     openModal('loginModal');
                 }
             } else if (sectionId === 'admin') {
-                if (isAdmin) {
-                    document.getElementById('adminPanel').classList.add('active');
-                    loadAdminData();
+                // SEMPRE mostrar o painel admin, mas verificar se está logado
+                document.getElementById('adminPanel').classList.add('active');
+                
+                // Se não estiver logado como admin, mostrar tela de login
+                if (!adminSessionActive) {
+                    document.getElementById('adminLoginWall').style.display = 'block';
+                    document.getElementById('adminContent').classList.add('admin-data-hidden');
                 } else {
-                    showAlert('Acesso restrito!', 'danger');
+                    // Se já estiver logado, mostrar dados
+                    document.getElementById('adminLoginWall').style.display = 'none';
+                    document.getElementById('adminContent').classList.remove('admin-data-hidden');
+                    loadAdminData();
                 }
             } else {
                 const section = document.getElementById(sectionId);
@@ -2063,6 +1765,99 @@
             document.getElementById(modalId).classList.remove('active');
         }
 
+        // Admin Security Functions
+        function verifyAdminAccess() {
+            const phone = document.getElementById('adminPhoneInput').value;
+            const pin = document.getElementById('adminPinInput').value;
+            
+            // Check lockout
+            if (adminLockoutTime && Date.now() < adminLockoutTime) {
+                const remaining = Math.ceil((adminLockoutTime - Date.now()) / 60000);
+                showAlert(`Acesso bloqueado. Tente novamente em ${remaining} minutos.`, 'danger');
+                return;
+            }
+            
+            // Verify credentials
+            if (phone === ADMIN_PHONE && pin === ADMIN_PIN) {
+                // Success
+                adminSessionActive = true;
+                adminLoginAttempts = 0;
+                isAdmin = true;
+                currentUser = { nome: ADMIN_NAME, telefone: ADMIN_PHONE, role: 'admin' };
+                
+                // Save session with timestamp
+                localStorage.setItem('madrassa_admin_session', JSON.stringify({
+                    timestamp: Date.now(),
+                    phone: phone
+                }));
+                
+                // Hide login wall, show content
+                document.getElementById('adminLoginWall').style.display = 'none';
+                document.getElementById('adminContent').classList.remove('admin-data-hidden');
+                
+                loadAdminData();
+                showAlert('Acesso concedido. Bem-vindo, Administrador.', 'success');
+                
+                // Auto-logout after 30 minutes of inactivity
+                resetAdminTimeout();
+                
+            } else {
+                // Failed
+                adminLoginAttempts++;
+                
+                if (adminLoginAttempts >= 3) {
+                    adminLockoutTime = Date.now() + (30 * 60 * 1000); // 30 minutes
+                    showAlert('Muitas tentativas falhas. Acesso bloqueado por 30 minutos.', 'danger');
+                } else {
+                    showAlert(`PIN incorreto. Tentativa ${adminLoginAttempts} de 3.`, 'warning');
+                }
+                
+                document.getElementById('adminPinInput').value = '';
+            }
+        }
+
+        let adminTimeout;
+        function resetAdminTimeout() {
+            clearTimeout(adminTimeout);
+            adminTimeout = setTimeout(() => {
+                adminLogout();
+                showAlert('Sessão administrativa expirada por inatividade.', 'warning');
+            }, 30 * 60 * 1000); // 30 minutes
+        }
+
+        function adminLogout() {
+            adminSessionActive = false;
+            isAdmin = false;
+            currentUser = null;
+            localStorage.removeItem('madrassa_admin_session');
+            
+            // Reset UI
+            document.getElementById('adminLoginWall').style.display = 'block';
+            document.getElementById('adminContent').classList.add('admin-data-hidden');
+            document.getElementById('adminPinInput').value = '';
+            
+            showSection('home');
+            showAlert('Sessão administrativa encerrada.', 'success');
+        }
+
+        // Check for existing admin session
+        function checkAdminSession() {
+            const session = localStorage.getItem('madrassa_admin_session');
+            if (session) {
+                const data = JSON.parse(session);
+                // Check if less than 30 minutes old
+                if (Date.now() - data.timestamp < 30 * 60 * 1000) {
+                    adminSessionActive = true;
+                    isAdmin = true;
+                    currentUser = { nome: ADMIN_NAME, telefone: ADMIN_PHONE, role: 'admin' };
+                    return true;
+                } else {
+                    localStorage.removeItem('madrassa_admin_session');
+                }
+            }
+            return false;
+        }
+
         // Registration
         async function handleRegister(event) {
             event.preventDefault();
@@ -2080,33 +1875,25 @@
                 aulasCompletadas: 0,
                 testesRealizados: 0,
                 mediaGeral: 0,
-                notas: [],
-                aprovadoPor: null,
-                dataAprovacao: null,
-                ultimaAula: null,
-                streak: 0
+                notas: []
             };
 
             try {
-                // Salvar no Firebase Realtime Database - nó madrassa_nivel1
                 if (db) {
                     const newStudentRef = db.ref('madrassa_nivel1/alunos').push();
                     await newStudentRef.set(studentData);
-                    console.log('Salvo no Firebase:', newStudentRef.key);
                 }
                 
-                // Backup local
                 let students = JSON.parse(localStorage.getItem('madrassa_students') || '[]');
                 studentData.id = 'local_' + Date.now();
                 students.push(studentData);
                 localStorage.setItem('madrassa_students', JSON.stringify(students));
                 
-                showAlert('Inscrição realizada! Aguarde aprovação.', 'success');
+                showAlert('Inscrição realizada! Aguarde aprovação do administrador.', 'success');
                 closeModal('registerModal');
                 document.getElementById('registerForm').reset();
                 
             } catch (error) {
-                console.error('Erro ao salvar:', error);
                 showAlert('Erro ao registrar. Tente novamente.', 'danger');
             }
         }
@@ -2119,62 +1906,21 @@
             const password = document.getElementById('loginPassword').value;
             const isAdminCheck = document.getElementById('isAdmin').checked;
             
-            // Admin login
-            if (isAdminCheck || (phone === ADMIN_PHONE && password === ADMIN_PIN)) {
-                isAdmin = true;
-                currentUser = { nome: ADMIN_NAME, telefone: ADMIN_PHONE, role: 'admin' };
-                
-                localStorage.setItem('madrassa_session', JSON.stringify({
-                    user: currentUser,
-                    isAdmin: true,
-                    timestamp: Date.now()
-                }));
-                
-                updateUIForUser();
-                closeModal('loginModal');
-                showAlert(`Bem-vindo, ${ADMIN_NAME}!`, 'success');
-                showSection('admin');
-                return;
+            // Admin login via modal (different from admin panel access)
+            if (isAdminCheck) {
+                if (phone === ADMIN_PHONE && password === ADMIN_PIN) {
+                    // Redirect to admin panel with login wall
+                    closeModal('loginModal');
+                    showSection('admin');
+                    return;
+                } else {
+                    showAlert('Credenciais de administrador incorretas.', 'danger');
+                    return;
+                }
             }
             
-            // Student login - check Firebase first
+            // Student login
             try {
-                if (db) {
-                    const snapshot = await db.ref('madrassa_nivel1/alunos')
-                        .orderByChild('telefone')
-                        .equalTo(phone)
-                        .once('value');
-                    
-                    if (snapshot.exists()) {
-                        const data = snapshot.val();
-                        const studentId = Object.keys(data)[0];
-                        const student = data[studentId];
-                        
-                        if (student.senha === password) {
-                            if (student.status !== 'aprovado') {
-                                showAlert('Conta pendente de aprovação.', 'warning');
-                                return;
-                            }
-                            
-                            currentUser = { ...student, id: studentId };
-                            isAdmin = false;
-                            
-                            localStorage.setItem('madrassa_session', JSON.stringify({
-                                user: currentUser,
-                                isAdmin: false,
-                                timestamp: Date.now()
-                            }));
-                            
-                            updateUIForUser();
-                            closeModal('loginModal');
-                            showAlert(`Bem-vindo, ${student.nome}!`, 'success');
-                            showSection('dashboard');
-                            return;
-                        }
-                    }
-                }
-                
-                // Fallback localStorage
                 let students = JSON.parse(localStorage.getItem('madrassa_students') || '[]');
                 const student = students.find(s => s.telefone === phone && s.senha === password);
                 
@@ -2198,12 +1944,10 @@
                     showAlert(`Bem-vindo, ${student.nome}!`, 'success');
                     showSection('dashboard');
                 } else {
-                    showAlert('Credenciais inválidas.', 'danger');
+                    showAlert('Telefone ou senha incorretos.', 'danger');
                 }
-                
             } catch (error) {
-                console.error('Erro login:', error);
-                showAlert('Erro ao conectar.', 'danger');
+                showAlert('Erro ao fazer login.', 'danger');
             }
         }
 
@@ -2217,6 +1961,7 @@
         }
 
         function checkSession() {
+            // Check student session
             const session = localStorage.getItem('madrassa_session');
             if (session) {
                 const data = JSON.parse(session);
@@ -2228,6 +1973,9 @@
                     localStorage.removeItem('madrassa_session');
                 }
             }
+            
+            // Check admin session (for panel access)
+            checkAdminSession();
         }
 
         function updateUIForUser() {
@@ -2235,7 +1983,7 @@
             const registerLink = document.getElementById('registerLink');
             const userInfo = document.getElementById('userInfo');
             
-            if (currentUser) {
+            if (currentUser && !isAdmin) {
                 loginLink.classList.add('hidden');
                 registerLink.classList.add('hidden');
                 userInfo.classList.remove('hidden');
@@ -2248,11 +1996,11 @@
             }
         }
 
-        // Dashboard
+        // Dashboard functions
         function loadDashboardData() {
             if (!currentUser || isAdmin) return;
             
-            document.getElementById('dashboardUserName').textContent = currentUser.nome || currentUser.name;
+            document.getElementById('dashboardUserName').textContent = currentUser.nome;
             document.getElementById('lessonsCompleted').textContent = currentUser.aulasCompletadas || 0;
             document.getElementById('testsTaken').textContent = currentUser.testesRealizados || 0;
             document.getElementById('averageScore').textContent = (currentUser.mediaGeral || 0) + '%';
@@ -2269,7 +2017,6 @@
                 document.getElementById('startLessonBtn').disabled = true;
             }
             
-            // Check test day (Saturday = 6)
             const today = new Date().getDay();
             if (today === 6) {
                 checkForTest();
@@ -2279,19 +2026,14 @@
         function startLesson() {
             // Check time slot
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const currentTime = `${hours}:${minutes}`;
-            
             const allowedTimes = ['09:30', '14:30', '20:30'];
-            let canStart = isAdmin; // Admin can skip
+            let canStart = isAdmin;
             
             if (!canStart) {
                 for (let time of allowedTimes) {
                     const [h, m] = time.split(':').map(Number);
                     const slotMinutes = h * 60 + m;
                     const currentMinutes = now.getHours() * 60 + now.getMinutes();
-                    
                     if (Math.abs(currentMinutes - slotMinutes) <= 30) {
                         canStart = true;
                         break;
@@ -2304,19 +2046,14 @@
                 return;
             }
             
-            // Check if already did lesson today
             const today = now.toISOString().split('T')[0];
             if (currentUser.ultimaAula === today && !isAdmin) {
                 showAlert('Você já completou a aula de hoje.', 'warning');
                 return;
             }
             
-            showAlert('Iniciando aula de 45 minutos...', 'success');
-            
-            // Simulate lesson (45 min = 5 seconds for demo)
-            setTimeout(() => {
-                completeLesson();
-            }, 5000);
+            showAlert('Iniciando aula...', 'success');
+            setTimeout(() => completeLesson(), 5000);
         }
 
         async function completeLesson() {
@@ -2324,23 +2061,12 @@
             currentUser.ultimaAula = new Date().toISOString().split('T')[0];
             currentUser.progresso = Math.min(100, (currentUser.aulasCompletadas / 90) * 100);
             
-            // Update Firebase
-            if (db && currentUser.id && !currentUser.id.startsWith('local_')) {
-                await db.ref(`madrassa_nivel1/alunos/${currentUser.id}`).update({
-                    aulasCompletadas: currentUser.aulasCompletadas,
-                    ultimaAula: currentUser.ultimaAula,
-                    progresso: currentUser.progresso
-                });
-            }
-            
-            // Update local
             updateStudentData(currentUser);
             showAlert('Aula completada!', 'success');
             loadDashboardData();
         }
 
-        async function updateStudentData(student) {
-            // Update localStorage
+        function updateStudentData(student) {
             let students = JSON.parse(localStorage.getItem('madrassa_students') || '[]');
             const index = students.findIndex(s => s.id === student.id || s.telefone === student.telefone);
             if (index !== -1) {
@@ -2348,7 +2074,6 @@
                 localStorage.setItem('madrassa_students', JSON.stringify(students));
             }
             
-            // Update session
             const session = JSON.parse(localStorage.getItem('madrassa_session') || '{}');
             session.user = student;
             localStorage.setItem('madrassa_session', JSON.stringify(session));
@@ -2371,7 +2096,7 @@
             const container = document.getElementById('questionsContainer');
             const questions = [
                 {
-                    q: "Qual é a primeira letra do alfabeto árabe (direita para esquerda)?",
+                    q: "Qual é a primeira letra do alfabeto árabe (lendo da direita para esquerda)?",
                     options: ["Ya (ي)", "Alif (ا)", "Ba (ب)", "Ta (ت)"],
                     correct: 1
                 },
@@ -2384,11 +2109,6 @@
                     q: "Quantas vezes devemos recitar Surat Al-Fatiha na oração?",
                     options: ["Uma vez total", "Em cada rak'ah", "Apenas no início", "Nos testes"],
                     correct: 1
-                },
-                {
-                    q: "Qual é o ponto de articulação (Makhraj) da letra ق (Qaf)?",
-                    options: ["Garganta", "Lábios", "Palato profundo", "Ponta da língua"],
-                    correct: 2
                 }
             ];
             
@@ -2408,8 +2128,6 @@
             container.innerHTML = html;
         }
 
-        let selectedAnswers = {};
-
         function selectOption(element, question, answer) {
             element.parentElement.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
             element.classList.add('selected');
@@ -2427,17 +2145,14 @@
                 document.getElementById('testTimer').textContent = 
                     `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
                 
-                if (testTimeRemaining <= 0) {
-                    submitTest();
-                }
+                if (testTimeRemaining <= 0) submitTest();
             }, 1000);
         }
 
-        async function submitTest() {
+        function submitTest() {
             clearInterval(testTimerInterval);
             
-            // Calculate score
-            const correctAnswers = [1, 1, 1, 2]; // Indices of correct answers
+            const correctAnswers = [1, 1, 1];
             let score = 0;
             
             for (let i = 0; i < correctAnswers.length; i++) {
@@ -2446,39 +2161,26 @@
             
             const percentage = Math.round((score / correctAnswers.length) * 100);
             
-            // Save grade
             if (!currentUser.notas) currentUser.notas = [];
             currentUser.notas.push({
                 data: new Date().toISOString().split('T')[0],
-                nota: percentage,
-                respostas: selectedAnswers
+                nota: percentage
             });
             
             currentUser.testesRealizados = (currentUser.testesRealizados || 0) + 1;
-            
-            // Update average
             const total = currentUser.notas.reduce((sum, n) => sum + n.nota, 0);
             currentUser.mediaGeral = Math.round(total / currentUser.notas.length);
-            
-            // Update Firebase
-            if (db && currentUser.id && !currentUser.id.startsWith('local_')) {
-                await db.ref(`madrassa_nivel1/alunos/${currentUser.id}`).update({
-                    notas: currentUser.notas,
-                    testesRealizados: currentUser.testesRealizados,
-                    mediaGeral: currentUser.mediaGeral
-                });
-            }
             
             updateStudentData(currentUser);
             
             document.getElementById('testSection').classList.remove('active');
-            showAlert(`Teste finalizado! Nota: ${percentage}%. Resultado publicado domingo às 12:30.`, 'success');
+            showAlert(`Teste finalizado! Nota: ${percentage}%`, 'success');
             loadDashboardData();
         }
 
         function viewGrades() {
             if (!currentUser.notas || currentUser.notas.length === 0) {
-                showAlert('Nenhum teste realizado ainda.', 'warning');
+                showAlert('Nenhum teste realizado.', 'warning');
                 return;
             }
             
@@ -2490,27 +2192,14 @@
             showAlert(html, 'success', true);
         }
 
-        // Admin functions
+        // Admin functions (PROTEGIDAS)
         async function loadAdminData() {
-            let students = [];
+            if (!adminSessionActive) return;
             
-            // Try Firebase first
-            try {
-                if (db) {
-                    const snapshot = await db.ref('madrassa_nivel1/alunos').once('value');
-                    if (snapshot.exists()) {
-                        const data = snapshot.val();
-                        students = Object.keys(data).map(key => ({ ...data[key], id: key }));
-                    }
-                }
-            } catch (e) {
-                console.log('Usando localStorage');
-            }
+            // Reset timeout on activity
+            resetAdminTimeout();
             
-            // Fallback to localStorage
-            if (students.length === 0) {
-                students = JSON.parse(localStorage.getItem('madrassa_students') || '[]');
-            }
+            let students = JSON.parse(localStorage.getItem('madrassa_students') || '[]');
             
             // Pending table
             const pendingBody = document.getElementById('pendingTableBody');
@@ -2524,7 +2213,7 @@
                     <td>${student.pais}</td>
                     <td>${student.provincia}</td>
                     <td>${student.horario}</td>
-                    <td><span class="status-badge status-pending">Pendente</span></td>
+                    <td>${new Date(student.dataInscricao).toLocaleDateString()}</td>
                     <td>
                         <button class="btn btn-small btn-success" onclick="approveStudent('${student.id}')">Aprovar</button>
                         <button class="btn btn-small btn-danger" onclick="rejectStudent('${student.id}')">Rejeitar</button>
@@ -2552,7 +2241,7 @@
                 allBody.appendChild(row);
             });
             
-            // Update stats
+            // Stats
             document.getElementById('pendingCount').textContent = students.filter(s => s.status === 'pendente').length;
             document.getElementById('approvedCount').textContent = students.filter(s => s.status === 'aprovado').length;
             document.getElementById('totalStudents').textContent = students.length;
@@ -2560,64 +2249,49 @@
         }
 
         async function approveStudent(studentId) {
-            try {
-                if (db) {
-                    await db.ref(`madrassa_nivel1/alunos/${studentId}`).update({
-                        status: 'aprovado',
-                        aprovadoPor: ADMIN_NAME,
-                        dataAprovacao: new Date().toISOString()
-                    });
-                }
-                
-                // Update local
-                let students = JSON.parse(localStorage.getItem('madrassa_students') || '[]');
-                const idx = students.findIndex(s => s.id === studentId);
-                if (idx !== -1) {
-                    students[idx].status = 'aprovado';
-                    students[idx].aprovadoPor = ADMIN_NAME;
-                    localStorage.setItem('madrassa_students', JSON.stringify(students));
-                }
+            if (!adminSessionActive) return;
+            resetAdminTimeout();
+            
+            let students = JSON.parse(localStorage.getItem('madrassa_students') || '[]');
+            const idx = students.findIndex(s => s.id === studentId);
+            
+            if (idx !== -1) {
+                students[idx].status = 'aprovado';
+                students[idx].aprovadoPor = ADMIN_NAME;
+                students[idx].dataAprovacao = new Date().toISOString();
+                localStorage.setItem('madrassa_students', JSON.stringify(students));
                 
                 showAlert('Aluno aprovado!', 'success');
                 loadAdminData();
-                
-            } catch (error) {
-                showAlert('Erro ao aprovar.', 'danger');
             }
         }
 
         async function rejectStudent(studentId) {
-            try {
-                if (db) {
-                    await db.ref(`madrassa_nivel1/alunos/${studentId}`).update({
-                        status: 'rejeitado'
-                    });
-                }
-                
-                let students = JSON.parse(localStorage.getItem('madrassa_students') || '[]');
-                const idx = students.findIndex(s => s.id === studentId);
-                if (idx !== -1) {
-                    students[idx].status = 'rejeitado';
-                    localStorage.setItem('madrassa_students', JSON.stringify(students));
-                }
+            if (!adminSessionActive) return;
+            resetAdminTimeout();
+            
+            let students = JSON.parse(localStorage.getItem('madrassa_students') || '[]');
+            const idx = students.findIndex(s => s.id === studentId);
+            
+            if (idx !== -1) {
+                students[idx].status = 'rejeitado';
+                localStorage.setItem('madrassa_students', JSON.stringify(students));
                 
                 showAlert('Aluno rejeitado.', 'warning');
                 loadAdminData();
-                
-            } catch (error) {
-                showAlert('Erro ao rejeitar.', 'danger');
             }
         }
 
         // Admin override functions
         function adminSkipLesson() {
-            if (!isAdmin) return;
+            if (!adminSessionActive) return;
+            resetAdminTimeout();
             showAlert('Admin: Pulando restrição de tempo!', 'success');
-            // Allow immediate lesson start regardless of time
         }
 
         function adminForceTest() {
-            if (!isAdmin) return;
+            if (!adminSessionActive) return;
+            resetAdminTimeout();
             document.getElementById('testSection').classList.add('active');
             generateQuestions();
             startTestTimer();
@@ -2625,8 +2299,8 @@
         }
 
         function adminViewAllGrades() {
-            if (!isAdmin) return;
-            // Implementation to view all grades
+            if (!adminSessionActive) return;
+            resetAdminTimeout();
             showAlert('Visualizando todas as notas...', 'success');
         }
 
@@ -2639,7 +2313,6 @@
 
         function playLetter(letter) {
             showAlert(`Reproduzindo: ${letter}`, 'success');
-            // Here you would implement actual audio playback
         }
 
         function showAlert(message, type, isHtml = false) {
@@ -2657,6 +2330,15 @@
                 event.target.classList.remove('active');
             }
         }
+
+        // Track activity for admin timeout
+        document.addEventListener('click', () => {
+            if (adminSessionActive) resetAdminTimeout();
+        });
+        
+        document.addEventListener('keypress', () => {
+            if (adminSessionActive) resetAdminTimeout();
+        });
     </script>
 </body>
 </html>
