@@ -1,0 +1,2305 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islam Moçambique - Madrassa Online Nível 1</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #0d4a38;
+            --secondary-green: #1a6b52;
+            --accent-gold: #d4af37;
+            --light-gold: #f4e4c1;
+            --white: #ffffff;
+            --light-bg: #f5f5f0;
+            --text-dark: #2c3e50;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f5f0 0%, #e8e6d9 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: var(--white);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary-green);
+            font-weight: bold;
+        }
+
+        .logo-text h1 {
+            font-family: 'Amiri', serif;
+            font-size: 1.8rem;
+            margin: 0;
+            color: var(--accent-gold);
+        }
+
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-gold);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-green);
+            font-weight: bold;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: var(--white);
+            padding: 4rem 2rem;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(13, 74, 56, 0.2);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero h2 {
+            font-family: 'Amiri', serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent-gold);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--accent-gold);
+            color: var(--primary-green);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            background: #e5c158;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-gold);
+            color: var(--primary-green);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid var(--accent-gold);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--light-gold) 0%, var(--accent-gold) 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-green);
+        }
+
+        .card h3 {
+            font-family: 'Amiri', serif;
+            font-size: 1.5rem;
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+        }
+
+        .card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Schedule Section */
+        .schedule-section {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-family: 'Amiri', serif;
+            font-size: 2.5rem;
+            color: var(--primary-green);
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--accent-gold);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .time-slot {
+            background: linear-gradient(135deg, var(--light-bg) 0%, var(--white) 100%);
+            border: 2px solid var(--accent-gold);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .time-slot::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .time-slot:hover::before {
+            opacity: 1;
+        }
+
+        .time-slot.active {
+            background: var(--primary-green);
+            color: var(--white);
+            border-color: var(--primary-green);
+        }
+
+        .time-slot h4 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .time-slot p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideIn 0.3s ease-out;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            background: var(--light-bg);
+            color: var(--danger);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-green);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-card h4 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-gold);
+        }
+
+        .stat-card p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .lesson-timeline {
+            background: var(--light-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: -1.5rem;
+            width: 2px;
+            background: var(--accent-gold);
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-content {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 10px;
+            flex: 1;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .timeline-content h4 {
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            display: none;
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .admin-header h2 {
+            font-family: 'Amiri', serif;
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: var(--primary-green);
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: var(--light-bg);
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+            border-radius: 5px;
+        }
+
+        /* Lesson Content */
+        .lesson-content {
+            display: none;
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .lesson-content.active {
+            display: block;
+        }
+
+        .lesson-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .lesson-nav button {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary-green);
+            background: transparent;
+            color: var(--primary-green);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .lesson-nav button.active {
+            background: var(--primary-green);
+            color: var(--white);
+        }
+
+        .lesson-nav button:hover {
+            background: var(--primary-green);
+            color: var(--white);
+        }
+
+        .lesson-tab {
+            display: none;
+        }
+
+        .lesson-tab.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            font-size: 2rem;
+            color: var(--primary-green);
+            text-align: center;
+            margin: 2rem 0;
+            line-height: 2;
+        }
+
+        .noorani-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .letter-card {
+            background: linear-gradient(135deg, var(--light-gold) 0%, var(--white) 100%);
+            border: 2px solid var(--accent-gold);
+            border-radius: 15px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .letter-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .letter-card .arabic-letter {
+            font-family: 'Amiri', serif;
+            font-size: 2.5rem;
+            color: var(--primary-green);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .letter-card .letter-name {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Test Section */
+        .test-section {
+            display: none;
+            background: linear-gradient(135deg, #fff9e6 0%, var(--white) 100%);
+            border: 3px solid var(--accent-gold);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .test-section.active {
+            display: block;
+        }
+
+        .test-timer {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--danger);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .question-container {
+            margin-bottom: 2rem;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-green);
+            font-weight: 600;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .option {
+            background: var(--white);
+            border: 2px solid #e0e0e0;
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            border-color: var(--accent-gold);
+            background: var(--light-gold);
+        }
+
+        .option.selected {
+            border-color: var(--primary-green);
+            background: rgba(13, 74, 56, 0.1);
+        }
+
+        .option.correct {
+            border-color: var(--success);
+            background: rgba(39, 174, 96, 0.1);
+        }
+
+        .option.wrong {
+            border-color: var(--danger);
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 999;
+            text-decoration: none;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
+        }
+
+        .whatsapp-tooltip {
+            position: fixed;
+            bottom: 2rem;
+            right: 5rem;
+            background: var(--primary-green);
+            color: white;
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            white-space: nowrap;
+            z-index: 998;
+        }
+
+        .whatsapp-btn:hover + .whatsapp-tooltip {
+            opacity: 1;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary-green);
+            color: var(--white);
+            padding: 3rem 0;
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer h3 {
+            font-family: 'Amiri', serif;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+        }
+
+        .footer p {
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer .contact-info {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin: 2rem 0;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--accent-gold) 0%, var(--secondary-green) 100%);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .time-slots {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .lesson-content {
+                padding: 1.5rem;
+            }
+
+            .arabic-text {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border-left-color: var(--accent-gold);
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Hidden Elements */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Print Styles */
+        @media print {
+            .header, .footer, .whatsapp-btn, .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">☪</div>
+                <div class="logo-text">
+                    <h1>Islam Moçambique</h1>
+                    <p>Madrassa Online - Nível 1</p>
+                </div>
+            </div>
+            <nav class="nav-links" id="mainNav">
+                <a onclick="showSection('home')">Início</a>
+                <a onclick="showSection('curriculum')">Currículo</a>
+                <a onclick="showSection('schedule')">Horários</a>
+                <a onclick="openModal('loginModal')" id="loginLink">Entrar</a>
+                <a onclick="openModal('registerModal')" id="registerLink" class="btn" style="padding: 0.5rem 1.5rem;">Inscrever-se</a>
+                <div class="user-info hidden" id="userInfo">
+                    <span id="userName"></span>
+                    <div class="user-avatar" id="userAvatar"></div>
+                    <a onclick="logout()" style="cursor: pointer; margin-left: 1rem;">Sair</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- Alert Container -->
+        <div id="alertContainer"></div>
+
+        <!-- Hero Section -->
+        <section id="home" class="section-content">
+            <div class="hero">
+                <div class="hero-content">
+                    <h2>Bem-vindo à Madrassa Online</h2>
+                    <p>Aprenda o Alfabeto Árabe, Noorani Qaida, Kalimah, Duãs, Salat, Adab, Hadith, Fiq e Sirat de forma estruturada e aprovada por scholars. Curso completo de Nível 1 com duração de 3 meses.</p>
+                    <a onclick="openModal('registerModal')" class="btn">Começar Agora</a>
+                    <a onclick="showSection('curriculum')" class="btn btn-secondary" style="margin-left: 1rem;">Ver Currículo</a>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">📖</div>
+                    <h3>Noorani Qaida</h3>
+                    <p>Aprenda o alfabeto árabe e as regras básicas de Tajweed com o método Noorani Qaida, reconhecido mundialmente.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🤲</div>
+                    <h3>Kalimah & Duãs</h3>
+                    <p>Memorize as Kalimah fundamentais e as duãs diárias essenciais para a vida de todo muçulmano.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🕌</div>
+                    <h3>Salat & Adab</h3>
+                    <p>Aprenda como realizar a oração (Salat) corretamente e os bons modos (Adab) no Islam.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📚</div>
+                    <h3>Hadith & Fiq</h3>
+                    <p>Estude os hadiths selecionados e os fundamentos do Fiq (jurisprudência islâmica).</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🌟</div>
+                    <h3>Sirat</h3>
+                    <p>Conheça a biografia do Profeta Muhammad (S.A.W.) e sua nobre trajetória.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">⏰</div>
+                    <h3>Horários Flexíveis</h3>
+                    <p>Escolha entre três horários diários: 9:30, 14:30 ou 20:30. Uma aula por dia, 45 minutos cada.</p>
+                </div>
+            </div>
+
+            <div class="schedule-section">
+                <h2 class="section-title">Horários Disponíveis</h2>
+                <p style="text-align: center; margin-bottom: 2rem; color: #666;">Selecione o melhor horário para suas aulas diárias de 45 minutos</p>
+                <div class="time-slots">
+                    <div class="time-slot" onclick="selectTime(this, '09:30')">
+                        <h4>09:30</h4>
+                        <p>Manhã</p>
+                    </div>
+                    <div class="time-slot" onclick="selectTime(this, '14:30')">
+                        <h4>14:30</h4>
+                        <p>Tarde</p>
+                    </div>
+                    <div class="time-slot" onclick="selectTime(this, '20:30')">
+                        <h4>20:30</h4>
+                        <p>Noite</p>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn" onclick="openModal('registerModal')">Confirmar Inscrição</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Curriculum Section -->
+        <section id="curriculum" class="section-content hidden">
+            <div class="lesson-content active">
+                <h2 class="section-title">Currículo Completo - Nível 1</h2>
+                
+                <div class="lesson-nav">
+                    <button class="active" onclick="showLesson('noorani')">Noorani Qaida</button>
+                    <button onclick="showLesson('kalimah')">Kalimah</button>
+                    <button onclick="showLesson('duas')">Duãs</button>
+                    <button onclick="showLesson('salat')">Salat</button>
+                    <button onclick="showLesson('adab')">Adab</button>
+                    <button onclick="showLesson('hadith')">Hadith</button>
+                    <button onclick="showLesson('fiq')">Fiq</button>
+                    <button onclick="showLesson('sirat')">Sirat</button>
+                </div>
+
+                <!-- Noorani Qaida Tab -->
+                <div id="noorani" class="lesson-tab active">
+                    <h3 style="color: var(--primary-green); margin-bottom: 1rem;">Lição 1: Alif Ba Ta (O Alfabeto Árabe)</h3>
+                    <p style="margin-bottom: 2rem;">O Noorani Qaida é o método fundamental para aprender a ler o Alcorão corretamente. Começamos com as letras individuais.</p>
+                    
+                    <div class="noorani-grid">
+                        <div class="letter-card" onclick="playSound('alif')">
+                            <span class="arabic-letter">ا</span>
+                            <span class="letter-name">Alif</span>
+                        </div>
+                        <div class="letter-card" onclick="playSound('ba')">
+                            <span class="arabic-letter">ب</span>
+                            <span class="letter-name">Ba</span>
+                        </div>
+                        <div class="letter-card" onclick="playSound('ta')">
+                            <span class="arabic-letter">ت</span>
+                            <span class="letter-name">Ta</span>
+                        </div>
+                        <div class="letter-card" onclick="playSound('tha')">
+                            <span class="arabic-letter">ث</span>
+                            <span class="letter-name">Tha</span>
+                        </div>
+                        <div class="letter-card" onclick="playSound('jim')">
+                            <span class="arabic-letter">ج</span>
+                            <span class="letter-name">Jim</span>
+                        </div>
+                        <div class="letter-card" onclick="playSound('ha')">
+                            <span class="arabic-letter">ح</span>
+                            <span class="letter-name">Ha</span>
+                        </div>
+                        <div class="letter-card" onclick="playSound('kha')">
+                            <span class="arabic-letter">خ</span>
+                            <span class="letter-name">Kha</span>
+                        </div>
+                        <div class="letter-card" onclick="playSound('dal')">
+                            <span class="arabic-letter">د</span>
+                            <span class="letter-name">Dal</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-container">
+                        <p><strong>Progresso da Lição:</strong></p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%;">0%</div>
+                        </div>
+                    </div>
+
+                    <div style="background: var(--light-bg); padding: 1.5rem; border-radius: 10px; margin-top: 2rem;">
+                        <h4 style="color: var(--primary-green); margin-bottom: 1rem;">📋 Estrutura do Noorani Qaida:</h4>
+                        <ul style="list-style: none; line-height: 2;">
+                            <li>✅ Lição 1: Alif Ba Ta (Letras individuais)</li>
+                            <li>✅ Lição 2: Letras compostas (Murakkabat)</li>
+                            <li>✅ Lição 3: Movimentos (Harakat: Fatha, Kasra, Damma)</li>
+                            <li>✅ Lição 4: Tanween</li>
+                            <li>✅ Lição 5: Madd (Prolongamento)</li>
+                            <li>✅ Lição 6: Sukoon e Shaddah</li>
+                            <li>✅ Lição 7: Regras de Noon Sakinah</li>
+                            <li>✅ Lição 8: Leitura de palavras completas</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Kalimah Tab -->
+                <div id="kalimah" class="lesson-tab">
+                    <h3 style="color: var(--primary-green); margin-bottom: 1rem;">As Seis Kalimah</h3>
+                    <div class="arabic-text">
+                        <p>1. Kalimah Tayyibah (A palavra pura):</p>
+                        <p style="font-size: 2.5rem; color: var(--accent-gold);">لَا إِلَٰهَ إِلَّا ٱللَّٰهُ مُحَمَّدٌ رَسُولُ ٱللَّٰهِ</p>
+                        <p style="font-size: 1rem; margin-top: 1rem;">"Não há deus senão Allah, e Muhammad é o Mensageiro de Allah"</p>
+                    </div>
+                    
+                    <div style="background: var(--light-bg); padding: 2rem; border-radius: 15px; margin-top: 2rem;">
+                        <h4 style="margin-bottom: 1rem;">As Seis Kalimah Fundamentais:</h4>
+                        <ol style="line-height: 2.5; padding-left: 1.5rem;">
+                            <li><strong>Kalimah Tayyibah</strong> - A confissão de fé</li>
+                            <li><strong>Kalimah Shahadah</strong> - Testemunho de fé detalhado</li>
+                            <li><strong>Kalimah Tamjeed</strong> - Glorificação de Allah</li>
+                            <li><strong>Kalimah Tawhid</strong> - Unicidade de Allah</li>
+                            <li><strong>Kalimah Istighfar</strong> - Pedido de perdão</li>
+                            <li><strong>Kalimah Radd Kufr</strong> - Rejeição da descrença</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Duas Tab -->
+                <div id="duas" class="lesson-tab">
+                    <h3 style="color: var(--primary-green); margin-bottom: 1rem;">Duãs Diárias Essenciais</h3>
+                    
+                    <div class="timeline-item" style="margin-bottom: 2rem;">
+                        <div class="timeline-content" style="width: 100%;">
+                            <h4>1. Duã ao acordar</h4>
+                            <p class="arabic-text" style="font-size: 1.5rem; margin: 1rem 0;">
+                                ٱلْحَمْدُ لِلَّٰهِ ٱلَّذِى أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ ٱلنُّشُورُ
+                            </p>
+                            <p>"Louvado seja Allah que nos deu a vida após nos ter dado a morte, e a Ele é o retorno"</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" style="margin-bottom: 2rem;">
+                        <div class="timeline-content" style="width: 100%;">
+                            <h4>2. Duã antes de comer</h4>
+                            <p class="arabic-text" style="font-size: 1.5rem; margin: 1rem 0;">
+                                بِسْمِ ٱللَّٰهِ وَبَرَكَةِ ٱللَّٰهِ
+                            </p>
+                            <p>"Em nome de Allah e com a bênção de Allah"</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" style="margin-bottom: 2rem;">
+                        <div class="timeline-content" style="width: 100%;">
+                            <h4>3. Duã após comer</h4>
+                            <p class="arabic-text" style="font-size: 1.5rem; margin: 1rem 0;">
+                                ٱلْحَمْدُ لِلَّٰهِ ٱلَّذِى أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مِنَ ٱلْمُسْلِمِينَ
+                            </p>
+                            <p>"Louvado seja Allah que nos alimentou e deu de beber, e nos fez muçulmanos"</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Salat Tab -->
+                <div id="salat" class="lesson-tab">
+                    <h3 style="color: var(--primary-green); margin-bottom: 1rem;">Como Fazer a Salat</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                        <div class="card">
+                            <h4>1. Takbir</h4>
+                            <p>Levantar as mãos e dizer "Allahu Akbar" para iniciar a oração</p>
+                        </div>
+                        <div class="card">
+                            <h4>2. Qiyam (Em pé)</h4>
+                            <p>Recitar Surat Al-Fatiha e outra Surah</p>
+                        </div>
+                        <div class="card">
+                            <h4>3. Ruku (Inclinar)</h4>
+                            <p>Inclinar-se e segurar os joelhos, dizindo "Subhana Rabbiyal Adheem"</p>
+                        </div>
+                        <div class="card">
+                            <h4>4. Sujud (Prostrar)</h4>
+                            <p>Prostrar-se com testa, nariz, palmas, joelhos e dedos dos pés no chão</p>
+                        </div>
+                        <div class="card">
+                            <h4>5. Jalsa (Sentar)</h4>
+                            <p>Sentar entre os dois sujud</p>
+                        </div>
+                        <div class="card">
+                            <h4>6. Tashahhud</h4>
+                            <p>Recitar a testemunha final sentado</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other tabs placeholder -->
+                <div id="adab" class="lesson-tab">
+                    <h3 style="color: var(--primary-green);">Adab (Bons Modos)</h3>
+                    <p>Conteúdo sobre etiqueta islâmica, comportamento, respeito aos pais, e boas maneiras.</p>
+                </div>
+
+                <div id="hadith" class="lesson-tab">
+                    <h3 style="color: var(--primary-green);">Hadith Selecionados</h3>
+                    <p>Coleção de hadiths autênticos sobre fé, prática e caráter moral.</p>
+                </div>
+
+                <div id="fiq" class="lesson-tab">
+                    <h3 style="color: var(--primary-green);">Fiq (Jurisprudência)</h3>
+                    <p>Fundamentos da jurisprudência islâmica para iniciantes.</p>
+                </div>
+
+                <div id="sirat" class="lesson-tab">
+                    <h3 style="color: var(--primary-green);">Sirat (Biografia)</h3>
+                    <p>Vida do Profeta Muhammad (S.A.W.) - Parte 1: Nascimento e infância.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Student Dashboard -->
+        <section id="dashboard" class="dashboard">
+            <div class="dashboard-header">
+                <div>
+                    <h2 style="font-family: 'Amiri', serif; color: var(--primary-green);">Meu Painel de Estudos</h2>
+                    <p>Bem-vindo, <span id="dashboardUserName"></span></p>
+                </div>
+                <div>
+                    <span class="status-badge status-pending" id="approvalStatus">Aguardando Aprovação</span>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4 id="lessonsCompleted">0</h4>
+                    <p>Aulas Completadas</p>
+                </div>
+                <div class="stat-card">
+                    <h4 id="testsTaken">0</h4>
+                    <p>Testes Realizados</p>
+                </div>
+                <div class="stat-card">
+                    <h4 id="averageScore">0%</h4>
+                    <p>Média Geral</p>
+                </div>
+                <div class="stat-card">
+                    <h4 id="currentStreak">0</h4>
+                    <p>Dias Consecutivos</p>
+                </div>
+            </div>
+
+            <div class="lesson-timeline">
+                <h3 style="margin-bottom: 1.5rem; color: var(--primary-green);">Progresso do Curso</h3>
+                <div id="courseTimeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>Semana 1: Introdução ao Noorani Qaida</h4>
+                            <p>Alif Ba Ta até Jim - Letras individuais</p>
+                            <span class="status-badge status-pending">Pendente</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>Semana 2: Letras Compostas</h4>
+                            <p>Murakkabat e junção de letras</p>
+                            <span class="status-badge status-pending">Pendente</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <h4>Semana 3: Harakat (Movimentos)</h4>
+                            <p>Fatha, Kasra e Damma</p>
+                            <span class="status-badge status-pending">Pendente</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; text-align: center;">
+                <button class="btn" onclick="startLesson()" id="startLessonBtn" disabled>Iniciar Próxima Aula</button>
+                <button class="btn btn-secondary" onclick="viewGrades()">Ver Notas</button>
+            </div>
+        </section>
+
+        <!-- Test Section -->
+        <section id="testSection" class="test-section">
+            <div class="test-timer" id="testTimer">90:00</div>
+            <h2 style="text-align: center; color: var(--primary-green); margin-bottom: 2rem;">Teste Semanal - Sábado</h2>
+            
+            <div id="questionsContainer">
+                <div class="question-container">
+                    <p class="question">1. Qual é a primeira letra do alfabeto árabe?</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 1, 'A')">A) ب (Ba)</div>
+                        <div class="option" onclick="selectOption(this, 1, 'B')">B) ا (Alif)</div>
+                        <div class="option" onclick="selectOption(this, 1, 'C')">C) ت (Ta)</div>
+                        <div class="option" onclick="selectOption(this, 1, 'D')">D) ث (Tha)</div>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <p class="question">2. O que significa "Kalimah Tayyibah"?</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 2, 'A')">A) A palavra pura/confissão de fé</div>
+                        <div class="option" onclick="selectOption(this, 2, 'B')">B) Pedido de perdão</div>
+                        <div class="option" onclick="selectOption(this, 2, 'C')">C) Glorificação</div>
+                        <div class="option" onclick="selectOption(this, 2, 'D')">D) Rejeição da descrença</div>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <p class="question">3. Quantas vezes devemos recitar Surat Al-Fatiha na oração?</p>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 3, 'A')">A) Uma vez</div>
+                        <div class="option" onclick="selectOption(this, 3, 'B')">B) Duas vezes</div>
+                        <div class="option" onclick="selectOption(this, 3, 'C')">C) Em cada rak'ah (ciclo de oração)</div>
+                        <div class="option" onclick="selectOption(this, 3, 'D')">D) Apenas na oração da sexta-feira</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-success" onclick="submitTest()">Finalizar Teste</button>
+            </div>
+        </section>
+
+        <!-- Admin Panel -->
+        <section id="adminPanel" class="admin-panel">
+            <div class="admin-header">
+                <h2>🛡️ Painel Administrativo</h2>
+                <p>Gerenciamento de alunos e aprovações - Madrassa Nível 1</p>
+                <div style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.9;">
+                    Administrador: Anacleto Bebane | PIN: 6300
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4 id="pendingCount">0</h4>
+                    <p>Pendentes</p>
+                </div>
+                <div class="stat-card">
+                    <h4 id="approvedCount">0</h4>
+                    <p>Aprovados</p>
+                </div>
+                <div class="stat-card">
+                    <h4 id="totalStudents">0</h4>
+                    <p>Total de Alunos</p>
+                </div>
+                <div class="stat-card">
+                    <h4 id="testsToGrade">0</h4>
+                    <p>Testes para Avaliar</p>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <h3 style="margin-bottom: 1rem; color: var(--primary-green);">Alunos Pendentes de Aprovação</h3>
+                <table id="pendingTable">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Telefone</th>
+                            <th>País</th>
+                            <th>Província</th>
+                            <th>Horário</th>
+                            <th>Data de Inscrição</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingTableBody">
+                        <!-- Preenchido via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-container" style="margin-top: 3rem;">
+                <h3 style="margin-bottom: 1rem; color: var(--primary-green);">Todos os Alunos</h3>
+                <table id="allStudentsTable">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Telefone</th>
+                            <th>Horário</th>
+                            <th>Progresso</th>
+                            <th>Último Teste</th>
+                            <th>Status</th>
+                            <th>Ações Admin</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allStudentsBody">
+                        <!-- Preenchido via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 3rem; background: var(--light-bg); padding: 2rem; border-radius: 15px;">
+                <h3 style="margin-bottom: 1rem; color: var(--primary-green);">⚡ Ações Administrativas Especiais</h3>
+                <p style="margin-bottom: 1rem; font-size: 0.9rem;">Como administrador, você pode violar regras de tempo para fins de avaliação:</p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn" onclick="adminSkipLesson()">Pular para Próxima Aula</button>
+                    <button class="btn btn-secondary" onclick="adminForceTest()">Forçar Teste Imediato</button>
+                    <button class="btn btn-success" onclick="adminViewAllGrades()">Ver Todas as Notas</button>
+                    <button class="btn btn-danger" onclick="adminResetProgress()">Resetar Progresso (Cuidado)</button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('registerModal')">&times;</button>
+            <h2 style="font-family: 'Amiri', serif; color: var(--primary-green); margin-bottom: 1.5rem; text-align: center;">
+                Inscrição - Madrassa Nível 1
+            </h2>
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label>Nome Completo *</label>
+                    <input type="text" id="regName" required placeholder="Seu nome completo">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Telefone/WhatsApp *</label>
+                        <input type="tel" id="regPhone" required placeholder="Ex: 860407269" value="860407269">
+                    </div>
+                    <div class="form-group">
+                        <label>País *</label>
+                        <select id="regCountry" required>
+                            <option value="">Selecione...</option>
+                            <option value="Moçambique" selected>Moçambique</option>
+                            <option value="Portugal">Portugal</option>
+                            <option value="Brasil">Brasil</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Província *</label>
+                    <input type="text" id="regProvince" required placeholder="Ex: Maputo" value="Maputo">
+                </div>
+
+                <div class="form-group">
+                    <label>Horário Preferido *</label>
+                    <select id="regTime" required>
+                        <option value="">Selecione...</option>
+                        <option value="09:30">09:30 - Manhã</option>
+                        <option value="14:30">14:30 - Tarde</option>
+                        <option value="20:30" selected>20:30 - Noite</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Senha *</label>
+                    <input type="password" id="regPassword" required placeholder="Crie uma senha (mín. 6 caracteres)">
+                </div>
+
+                <div style="background: var(--light-gold); padding: 1rem; border-radius: 10px; margin-bottom: 1.5rem; font-size: 0.9rem;">
+                    <strong>⚠️ Importante:</strong> Após a inscrição, seu acesso estará pendente de aprovação do administrador. Você receberá uma notificação quando for aprovado.
+                </div>
+
+                <button type="submit" class="btn" style="width: 100%;">Confirmar Inscrição</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('loginModal')">&times;</button>
+            <h2 style="font-family: 'Amiri', serif; color: var(--primary-green); margin-bottom: 1.5rem; text-align: center;">
+                Entrar na Plataforma
+            </h2>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Telefone ou Email</label>
+                    <input type="text" id="loginPhone" required placeholder="Número de telefone">
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="loginPassword" required placeholder="Sua senha">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="isAdmin"> Entrar como Administrador
+                    </label>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Entrar</button>
+                <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem;">
+                    Não tem conta? <a onclick="closeModal('loginModal'); openModal('registerModal')" style="color: var(--primary-green); cursor: pointer; font-weight: 600;">Inscreva-se</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/258860407269?text=Tenho%20uma%20dúvida%20web%20madrassa%201º%20nível" target="_blank" class="whatsapp-btn">
+        💬
+    </a>
+    <div class="whatsapp-tooltip">Tenho uma dúvida web madrassa 1º nível</div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <h3>Islam Moçambique</h3>
+            <p>Educação Islâmica de Qualidade para Todos</p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span>📱</span>
+                    <span>+258 860407269</span>
+                </div>
+                <div class="contact-item">
+                    <span>📧</span>
+                    <span>Islammocambique@gmail.com</span>
+                </div>
+                <div class="contact-item">
+                    <span>🕌</span>
+                    <span>Moçambique</span>
+                </div>
+            </div>
+            <p style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.8;">
+                © 2026 Islam Moçambique - Madrassa Online. Todos os direitos reservados.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummyKeyForMadrassaOnline",
+            authDomain: "madrassa-online-b851c.firebaseapp.com",
+            databaseURL: "https://madrassa-online-b851c-default-rtdb.firebaseio.com",
+            projectId: "madrassa-online-b851c",
+            storageBucket: "madrassa-online-b851c.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef123456"
+        };
+
+        // Initialize Firebase (simulated for demo)
+        let app, database, auth;
+        let currentUser = null;
+        let isAdmin = false;
+        let testTimerInterval;
+        let testTimeRemaining = 90 * 60; // 90 minutes in seconds
+        let selectedAnswers = {};
+
+        // Admin credentials
+        const ADMIN_PHONE = "860407269";
+        const ADMIN_PIN = "6300";
+        const ADMIN_NAME = "Anacleto Bebane";
+
+        // Mock data for demonstration
+        const mockStudents = [
+            {
+                id: "student1",
+                name: "Ahmad Mussa",
+                phone: "841234567",
+                country: "Moçambique",
+                province: "Maputo",
+                timeSlot: "09:30",
+                status: "pending",
+                registrationDate: "2026-03-25",
+                progress: 0,
+                lessonsCompleted: 0,
+                testsTaken: 0,
+                averageScore: 0
+            },
+            {
+                id: "student2",
+                name: "Fatima Omar",
+                phone: "842345678",
+                country: "Moçambique",
+                province: "Beira",
+                timeSlot: "14:30",
+                status: "approved",
+                registrationDate: "2026-03-20",
+                progress: 35,
+                lessonsCompleted: 12,
+                testsTaken: 2,
+                averageScore: 85
+            }
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate Firebase initialization
+            console.log("Firebase initialized (simulated)");
+            
+            // Check for saved session
+            checkSession();
+            
+            // Update admin stats
+            updateAdminStats();
+        });
+
+        // Navigation Functions
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('adminPanel').classList.remove('active');
+            document.getElementById('testSection').classList.remove('active');
+            
+            // Show selected section
+            if (sectionId === 'dashboard') {
+                if (currentUser) {
+                    document.getElementById('dashboard').classList.add('active');
+                    loadDashboardData();
+                } else {
+                    openModal('loginModal');
+                    return;
+                }
+            } else if (sectionId === 'admin') {
+                if (isAdmin) {
+                    document.getElementById('adminPanel').classList.add('active');
+                    loadAdminData();
+                } else {
+                    showAlert('Acesso restrito a administradores', 'danger');
+                    return;
+                }
+            } else {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    section.classList.remove('hidden');
+                }
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function showLesson(lessonId) {
+            // Hide all tabs
+            document.querySelectorAll('.lesson-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.lesson-nav button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(lessonId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Form Handlers
+        function handleRegister(event) {
+            event.preventDefault();
+            
+            const studentData = {
+                id: 'student_' + Date.now(),
+                name: document.getElementById('regName').value,
+                phone: document.getElementById('regPhone').value,
+                country: document.getElementById('regCountry').value,
+                province: document.getElementById('regProvince').value,
+                timeSlot: document.getElementById('regTime').value,
+                password: document.getElementById('regPassword').value,
+                status: 'pending',
+                registrationDate: new Date().toISOString().split('T')[0],
+                progress: 0,
+                lessonsCompleted: 0,
+                testsTaken: 0,
+                averageScore: 0,
+                currentLesson: 0,
+                lastLessonDate: null,
+                grades: [],
+                approvedBy: null,
+                approvalDate: null
+            };
+            
+            // Save to localStorage (simulating Firebase)
+            let students = JSON.parse(localStorage.getItem('madrassa_students') || '[]');
+            students.push(studentData);
+            localStorage.setItem('madrassa_students', JSON.stringify(students));
+            
+            // Create node in Firebase structure (simulated)
+            console.log('Creating node in madrassa_nivel1:', studentData);
+            
+            showAlert('Inscrição realizada com sucesso! Aguarde aprovação do administrador.', 'success');
+            closeModal('registerModal');
+            
+            // Reset form
+            document.getElementById('registerForm').reset();
+            
+            // Update admin stats if admin is viewing
+            updateAdminStats();
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const phone = document.getElementById('loginPhone').value;
+            const password = document.getElementById('loginPassword').value;
+            const adminCheck = document.getElementById('isAdmin').checked;
+            
+            // Check admin login
+            if (adminCheck || (phone === ADMIN_PHONE && password === ADMIN_PIN)) {
+                isAdmin = true;
+                currentUser = {
+                    name: ADMIN_NAME,
+                    phone: ADMIN_PHONE,
+                    role: 'admin'
+                };
+                
+                // Save session
+                localStorage.setItem('madrassa_session', JSON.stringify({
+                    user: currentUser,
+                    isAdmin: true,
+                    timestamp: Date.now()
+                }));
+                
+                updateUIForUser();
+                closeModal('loginModal');
+                showAlert(`Bem-vindo, Administrador ${ADMIN_NAME}!`, 'success');
+                showSection('admin');
+                return;
+            }
+            
+            // Check student login
+            let students = JSON.parse(localStorage.getItem('madrassa_students') || '[]');
+            const student = students.find(s => s.phone === phone && s.password === password);
+            
+            if (student) {
+                if (student.status !== 'approved') {
+                    showAlert('Sua conta está pendente de aprovação. Aguarde a liberação do administrador.', 'warning');
+                    return;
+                }
+                
+                currentUser = student;
+                isAdmin = false;
+                
+                // Save session
+                localStorage.setItem('madrassa_session', JSON.stringify({
+                    user: currentUser,
+                    isAdmin: false,
+                    timestamp: Date.now()
+                }));
+                
+                updateUIForUser();
+                closeModal('loginModal');
+                showAlert(`Bem-vindo de volta, ${student.name}!`, 'success');
+                showSection('dashboard');
+            } else {
+                showAlert('Telefone ou senha incorretos.', 'danger');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            isAdmin = false;
+            localStorage.removeItem('madrassa_session');
+            updateUIForUser();
+            showSection('home');
+            showAlert('Você saiu da plataforma.', 'success');
+        }
+
+        function checkSession() {
+            const session = localStorage.getItem('madrassa_session');
+            if (session) {
+                const data = JSON.parse(session);
+                // Check if session is valid (24 hours)
+                if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) {
+                    currentUser = data.user;
+                    isAdmin = data.isAdmin;
+                    updateUIForUser();
+                    
+                    if (isAdmin) {
+                        loadAdminData();
+                    } else {
+                        loadDashboardData();
+                    }
+                } else {
+                    localStorage.removeItem('madrassa_session');
+                }
+            }
+        }
+
+        function updateUIForUser() {
+            const loginLink = document.getElementById('loginLink');
+            const registerLink = document.getElementById('registerLink');
+            const userInfo = document.getElementById('userInfo');
+            
+            if (currentUser) {
+                loginLink.classList.add('hidden');
+                registerLink.classList.add('hidden');
+                userInfo.classList.remove('hidden');
+                document.getElementById('userName').textContent = currentUser.name;
+                document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+            } else {
+                loginLink.classList.remove('hidden');
+                registerLink.classList.remove('hidden');
+                userInfo.classList.add('hidden');
+            }
+        }
+
+        // Dashboard Functions
+        function loadDashboardData() {
+            if (!currentUser || isAdmin) return;
+            
+            document.getElementById('dashboardUserName').textContent = currentUser.name;
+            
+            // Update stats
+            document.getElementById('lessonsCompleted').textContent = currentUser.lessonsCompleted || 0;
+            document.getElementById('testsTaken').textContent = currentUser.testsTaken || 0;
+            document.getElementById('averageScore').textContent = (currentUser.averageScore || 0) + '%';
+            
+            // Calculate streak
+            const streak = calculateStreak(currentUser);
+            document.getElementById('currentStreak').textContent = streak;
+            
+            // Update approval status badge
+            const statusBadge = document.getElementById('approvalStatus');
+            if (currentUser.status === 'approved') {
+                statusBadge.textContent = 'Aprovado';
+                statusBadge.className = 'status-badge status-approved';
+                document.getElementById('startLessonBtn').disabled = false;
+            } else {
+                statusBadge.textContent = 'Pendente';
+                statusBadge.className = 'status-badge status-pending';
+                document.getElementById('startLessonBtn').disabled = true;
+            }
+            
+            // Check if it's test day (Saturday)
+            const today = new Date().getDay();
+            if (today === 6) { // Saturday
+                checkForTest();
+            }
+        }
+
+        function calculateStreak(student) {
+            // Simplified streak calculation
+            return student.lessonsCompleted > 0 ? Math.min(student.lessonsCompleted, 30) : 0;
+        }
+
+        function startLesson() {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const currentTime = `${String(currentHour).padStart(2, '0')}:${String(currentMinute).padStart(2, '0')}`;
+            
+            // Check if within allowed time slots (with 15 min tolerance)
+            const allowedTimes = ['09:30', '14:30', '20:30'];
+            let canStart = false;
+            
+            for (let time of allowedTimes) {
+                const [h, m] = time.split(':').map(Number);
+                const slotTime = h * 60 + m;
+                const nowTime = currentHour * 60 + currentMinute;
+                
+                // Allow starting from 15 min before until 30 min after
+                if (Math.abs(nowTime - slotTime) <= 30) {
+                    canStart = true;
+                    break;
+                }
+            }
+            
+            if (!canStart && !isAdmin) {
+                showAlert('Você só pode iniciar aulas nos horários marcados: 9:30, 14:30 ou 20:30', 'warning');
+                return;
+            }
+            
+            // Check if already did lesson today
+            const lastLesson = currentUser.lastLessonDate;
+            const today = now.toISOString().split('T')[0];
+            
+            if (lastLesson === today && !isAdmin) {
+                showAlert('Você já completou sua aula de hoje. Volte amanhã!', 'warning');
+                return;
+            }
+            
+            // Start lesson
+            showAlert('Iniciando aula... Prepare-se para 45 minutos de aprendizado!', 'success');
+            
+            // Simulate lesson completion after 45 minutes (for demo, we'll use 5 seconds)
+            setTimeout(() => {
+                completeLesson();
+            }, 5000);
+        }
+
+        function completeLesson() {
+            currentUser.lessonsCompleted++;
+            currentUser.lastLessonDate = new Date().toISOString().split('T')[0];
+            currentUser.progress = Math.min(100, (currentUser.lessonsCompleted / 90) * 100); // 90 lessons total
+            
+            // Update in storage
+            updateStudentData(currentUser);
+            
+            showAlert('Aula completada com sucesso! Progresso salvo.', 'success');
+            loadDashboardData();
+        }
+
+        function updateStudentData(student) {
+            let students = JSON.parse(localStorage.getItem('madrassa_students') || '[]');
+            const index = students.findIndex(s => s.id === student.id);
+            if (index !== -1) {
+                students[index] = student;
+                localStorage.setItem('madrassa_students', JSON.stringify(students));
+                
+                // Update session
+                const session = JSON.parse(localStorage.getItem('madrassa_session') || '{}');
+                session.user = student;
+                localStorage.setItem('madrassa_session', JSON.stringify(session));
+            }
+        }
+
+        // Test Functions
+        function checkForTest() {
+            // Check if student hasn't taken test this week
+            const lastTest = currentUser.grades && currentUser.grades.length > 0 ? 
+                currentUser.grades[currentUser.grades.length - 1].date : null;
+            
+            const today = new Date().toISOString().split('T')[0];
+            
+            if (lastTest !== today) {
+                document.getElementById('testSection').classList.add('active');
+                startTestTimer();
+            }
+        }
+
+        function startTestTimer() {
+            testTimeRemaining = 90 * 60; // 90 minutes
+            
+            testTimerInterval = setInterval(() => {
+                testTimeRemaining--;
+                
+                const minutes = Math.floor(testTimeRemaining / 60);
+                const seconds = testTimeRemaining % 60;
+                document.getElementById('testTimer').textContent = 
+                    `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                
+                if (testTimeRemaining <= 0) {
+                    submitTest();
+                }
+            }, 1000);
+        }
+
+        function selectOption(element, questionNum, answer) {
+            // Remove selected from siblings
+            element.parentElement.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedAnswers[questionNum] = answer;
+        }
+
+        function submitTest() {
+            clearInterval(testTimerInterval);
+            
+            // Calculate score (mock)
+            const correctAnswers = {1: 'B', 2: 'A', 3: 'C'};
+            let score = 0;
+            let total = Object.keys(correctAnswers).length;
+            
+            for (let q in selectedAnswers) {
+                if (selectedAnswers[q] === correctAnswers[q]) {
+                    score++;
+                }
+            }
+            
+            const percentage = Math.round((score / total) * 100);
+            
+            // Save grade
+            if (!currentUser.grades) currentUser.grades = [];
+            currentUser.grades.push({
+                date: new Date().toISOString().split('T')[0],
+                score: percentage,
+                answers: selectedAnswers
+            });
+            
+            currentUser.testsTaken++;
+            
+            // Update average
+            const totalScore = currentUser.grades.reduce((sum, g) => sum + g.score, 0);
+            currentUser.averageScore = Math.round(totalScore / currentUser.grades.length);
+            
+            updateStudentData(currentUser);
+            
+            // Hide test
+            document.getElementById('testSection').classList.remove('active');
+            
+            showAlert(`Teste finalizado! Sua nota: ${percentage}%. Resultado publicado aos domingos às 12:30.`, 'success');
+            
+            // Reload dashboard
+            loadDashboardData();
+        }
+
+        function viewGrades() {
+            if (!currentUser.grades || currentUser.grades.length === 0) {
+                showAlert('Você ainda não realizou nenhum teste.', 'warning');
+                return;
+            }
+            
+            let gradesHtml = '<h3>Suas Notas:</h3><ul>';
+            currentUser.grades.forEach((grade, index) => {
+                gradesHtml += `<li>Teste ${index + 1} (${grade.date}): ${grade.score}%</li>`;
+            });
+            gradesHtml += '</ul>';
+            
+            showAlert(gradesHtml, 'success', true);
+        }
+
+        // Admin Functions
+        function loadAdminData() {
+            const students = JSON.parse(localStorage.getItem('madrassa_students') || '[]');
+            
+            // Pending table
+            const pendingBody = document.getElementById('pendingTableBody');
+            pendingBody.innerHTML = '';
+            
+            students.filter(s => s.status === 'pending').forEach(student => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${student.name}</td>
+                    <td>${student.phone}</td>
+                    <td>${student.country}</td>
+                    <td>${student.province}</td>
+                    <td>${student.timeSlot}</td>
+                    <td>${student.registrationDate}</td>
+                    <td><span class="status-badge status-pending">Pendente</span></td>
+                    <td class="action-btns">
+                        <button class="btn btn-small btn-success" onclick="approveStudent('${student.id}')">Aprovar</button>
+                        <button class="btn btn-small btn-danger" onclick="rejectStudent('${student.id}')">Rejeitar</button>
+                    </td>
+                `;
+                pendingBody.appendChild(row);
+            });
+            
+            // All students table
+            const allBody = document.getElementById('allStudentsBody');
+            allBody.innerHTML = '';
+            
+            students.forEach(student => {
+                const row = document.createElement('tr');
+                const lastTest = student.grades && student.grades.length > 0 ? 
+                    student.grades[student.grades.length - 1].date : 'Nenhum';
+                
+                row.innerHTML = `
+                    <td>${student.name}</td>
+                    <td>${student.phone}</td>
+                    <td>${student.timeSlot}</td>
+                    <td>${student.progress || 0}%</td>
+                    <td>${lastTest}</td>
+                    <td><span class="status-badge status-${student.status}">${student.status}</span></td>
+                    <td class="action-btns">
+                        <button class="btn btn-small" onclick="viewStudentDetails('${student.id}')">Ver</button>
+                        <button class="btn btn-small btn-secondary" onclick="editStudent('${student.id}')">Editar</button>
+                    </td>
+                `;
+                allBody.appendChild(row);
+            });
+        }
+
+        function updateAdminStats() {
+            const students = JSON.parse(localStorage.getItem('madrassa_students') || '[]');
+            
+            const pending = students.filter(s => s.status === 'pending').length;
+            const approved = students.filter(s => s.status === 'approved').length;
+            const total = students.length;
+            
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('approvedCount').textContent = approved;
+            document.getElementById('totalStudents').textContent = total;
+            
+            // Count tests to grade (simulated)
+            const testsToGrade = students.reduce((sum, s) => sum + (s.grades ? s.grades.length : 0), 0);
+            document.getElementById('testsToGrade').textContent = testsToGrade;
+        }
+
+        function approveStudent(studentId) {
+            let students = JSON.parse(localStorage.getItem('madrassa_students') || '[]');
+            const index = students.findIndex(s => s.id === studentId);
+            
+            if (index !== -1) {
+                students[index].status = 'approved';
+                students[index].approvedBy = ADMIN_NAME;
+                students[index].approvalDate = new Date().toISOString();
+                localStorage.setItem('madrassa_students', JSON.stringify(students));
+                
+                showAlert(`Aluno ${students[index].name} aprovado com sucesso!`, 'success');
+                loadAdminData();
+                updateAdminStats();
+            }
+        }
+
+        function rejectStudent(studentId) {
+            let students = JSON.parse(localStorage.getItem('madrassa_students') || '[]');
+            const index = students.findIndex(s => s.id === studentId);
+            
+            if (index !== -1) {
+                students[index].status = 'rejected';
+                localStorage.setItem('madrassa_students', JSON.stringify(students));
+                
+                showAlert(`Aluno ${students[index].name} rejeitado.`, 'warning');
+                loadAdminData();
+                updateAdminStats();
+            }
+        }
+
+        // Admin override functions
+        function adminSkipLesson() {
+            if (!isAdmin) return;
+            showAlert('Modo Admin: Pulando para próxima aula...', 'success');
+            // Logic to skip lesson time restrictions
+        }
+
+        function adminForceTest() {
+            if (!isAdmin) return;
+            document.getElementById('testSection').classList.add('active');
+            startTestTimer();
+            showAlert('Modo Admin: Teste iniciado imediatamente!', 'success');
+        }
+
+        function adminViewAllGrades() {
+            if (!isAdmin) return;
+            const students = JSON.parse(localStorage.getItem('madrassa_students') || '[]');
+            
+            let allGrades = '<h3>Todas as Notas:</h3>';
+            students.forEach(s => {
+                if (s.grades && s.grades.length > 0) {
+                    allGrades += `<p><strong>${s.name}:</strong> ${s.grades.map(g => g.score + '%').join(', ')}</p>`;
+                }
+            });
+            
+            showAlert(allGrades, 'success', true);
+        }
+
+        function adminResetProgress() {
+            if (!isAdmin) return;
+            if (confirm('ATENÇÃO: Isso resetará todo o progresso de todos os alunos. Deseja continuar?')) {
+                localStorage.removeItem('madrassa_students');
+                showAlert('Progresso resetado. Recarregando...', 'success');
+                setTimeout(() => location.reload(), 2000);
+            }
+        }
+
+        // Utility Functions
+        function selectTime(element, time) {
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.classList.remove('active');
+            });
+            element.classList.add('active');
+            
+            // Save preference
+            localStorage.setItem('preferred_time', time);
+        }
+
+        function showAlert(message, type, isHtml = false) {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} show`;
+            
+            if (isHtml) {
+                alert.innerHTML = message;
+            } else {
+                alert.textContent = message;
+            }
+            
+            container.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        function playSound(letter) {
+            // Simulate audio playback
+            showAlert(`Reproduzindo som da letra: ${letter}`, 'success');
+        }
+
+        // Close modals on outside click
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.classList.remove('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
