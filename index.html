@@ -3,84 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Islam Moçambique - Aulas de Madrassa</title>
+    <title>Islam Moçambique - Madrassa Digital</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #006633; /* Verde Islâmico */
-            --secondary-color: #d4af37; /* Dourado */
-            --light-bg: #f4f7f6;
-            --dark-text: #333;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --primary: #004d26;
+            --gold: #c5a021;
+            --light: #f9f9f9;
         }
 
         body {
-            background-color: var(--light-bg);
-            color: var(--dark-text);
-            line-height: 1.6;
-        }
-
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 2rem 1rem;
-            text-align: center;
-            border-bottom: 4px solid var(--secondary-color);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        .intro-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .lesson-section {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        .lesson-header {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
             display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: var(--light);
+        }
+
+        /* Topo */
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
-            color: var(--primary-color);
+            border-bottom: 3px solid var(--gold);
         }
 
-        .lesson-header i {
-            font-size: 1.5rem;
-            margin-right: 10px;
-        }
-
-        /* Contentor para o PDF */
-        .pdf-viewer {
-            width: 100%;
-            height: 800px; /* Altura ideal para leitura */
-            border: 2px solid #eee;
-            border-radius: 8px;
+        /* Layout Principal */
+        .main-layout {
+            display: flex;
+            flex: 1;
             overflow: hidden;
+        }
+
+        /* Sidebar - Índice de Aulas */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #ddd;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .sidebar h3 {
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 5px;
+        }
+
+        .lesson-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .lesson-item {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .lesson-item:hover {
+            background: #f0f7f3;
+            color: var(--primary);
+        }
+
+        /* Área do PDF */
+        .content-area {
+            flex: 1;
+            background: #525659;
+            display: flex;
+            flex-direction: column;
         }
 
         iframe {
@@ -89,84 +88,62 @@
             border: none;
         }
 
-        /* Botão WhatsApp Flutuante */
-        .whatsapp-float {
-            position: fixed;
-            width: 60px;
-            height: 60px;
-            bottom: 40px;
-            right: 40px;
-            background-color: #25d366;
-            color: #FFF;
-            border-radius: 50px;
-            text-align: center;
-            font-size: 30px;
-            box-shadow: 2px 2px 3px #999;
-            z-index: 100;
+        /* Botão WhatsApp */
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
             display: flex;
             align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            transition: transform 0.3s;
+            gap: 8px;
+            transition: 0.3s;
         }
 
-        .whatsapp-float:hover {
-            transform: scale(1.1);
-            color: white;
+        .btn-whatsapp:hover {
+            background: #128c7e;
+            transform: translateY(-2px);
         }
 
-        footer {
-            text-align: center;
-            padding: 2rem;
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        @media (max-width: 600px) {
-            .pdf-viewer {
-                height: 500px;
-            }
-            header h1 {
-                font-size: 1.8rem;
-            }
+        @media (max-width: 768px) {
+            .sidebar { display: none; } /* Esconde sidebar no telemóvel para focar no PDF */
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Islam Moçambique</h1>
-        <p>Centro de Aprendizagem e Ensino Alcorânico</p>
+        <div>
+            <h2 style="margin:0;">Islam Moçambique</h2>
+            <small>Yassarnal Qur'aan - Parte 1</small>
+        </div>
+        <a href="https://wa.me/258860407269" class="btn-whatsapp" target="_blank">
+            <i class="fab fa-whatsapp"></i> Suporte
+        </a>
     </header>
 
-    <div class="container">
-        <div class="intro-card">
-            <h2>Bem-vindo à sua Madrassa Digital</h2>
-            <p>Abaixo, poderá acompanhar as lições do <strong>Yassarnal Qur'aan (Parte 1)</strong> de forma organizada e simples.</p>
-        </div>
+    <div class="main-layout">
+        <aside class="sidebar">
+            <h3>Conteúdo das Aulas</h3>
+            <ul class="lesson-list">
+                <li class="lesson-item"><b>Lição 1:</b> Lesson on Nouqu't</li>
+                <li class="lesson-item"><b>Lição 2:</b> Single Letters (Letras Simples)</li>
+                <li class="lesson-item"><b>Lição 3-9:</b> Joint Forms (Formas Unidas)</li>
+                <li class="lesson-item"><b>Lição 10:</b> Takhti</li>
+                <li class="lesson-item"><b>Lição 19:</b> Letras com Hurrakaat</li>
+                <li class="lesson-item"><b>Lição 31:</b> Lesson on Soukoon (Jazm)</li>
+            </ul>
+            <p style="margin-top:20px; font-size: 0.8rem; color: #666;">
+                <i>Dica: Role o PDF à direita para navegar entre as páginas.</i>
+            </p>
+        </aside>
 
-        <section class="lesson-section">
-            <div class="lesson-header">
-                <i class="fas fa-book-open"></i>
-                <h3>Manual de Aula: Yassarnal Qur'aan</h3>
-            </div>
-            
-            <div class="pdf-viewer">
-                <iframe src="Yassarna 1ª Parte.pdf#toolbar=0" type="application/pdf">
-                    <p>O seu navegador não suporta a visualização de PDFs. 
-                    <a href="Yassarna 1ª Parte.pdf">Clique aqui para descarregar o PDF.</a></p>
-                </iframe>
-            </div>
-        </section>
+        <main class="content-area">
+            <iframe src="Yassarna 1ª Parte.pdf#toolbar=1" type="application/pdf"></iframe>
+        </main>
     </div>
-
-    <a href="https://wa.me/258860407269?text=Assalamu+Alaikum%2C+gostaria+de+saber+mais+sobre+as+aulas+da+Madrassa" class="whatsapp-float" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-
-    <footer>
-        <p>&copy; 2026 Islam Moçambique. Todos os direitos reservados.</p>
-    </footer>
 
 </body>
 </html>
