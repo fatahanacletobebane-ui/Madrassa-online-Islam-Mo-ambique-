@@ -1,506 +1,275 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Islam Moçambique - Portal</title>
-    
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-    
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Fonte -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Islam Moçambique</title>
 
-    <style>
-        body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #0D3328 0%, #1B5E20 50%, #0D3328 100%); min-height: 100vh; }
-        .glass { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
-        .card-hover:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        .gold-btn { background: linear-gradient(135deg, #FFD700 0%, #FFA000 100%); color: #0D3328; }
-        .gold-btn:hover { box-shadow: 0 5px 20px rgba(255,215,0,0.5); }
-        .loading { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #FFD700; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .pattern { background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FFD700' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
-    </style>
+<style>
+body {
+    font-family: Arial;
+    margin: 0;
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    color: white;
+    text-align: center;
+}
+
+.container {
+    padding: 20px;
+}
+
+.card {
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    margin: 10px;
+    border-radius: 15px;
+}
+
+button {
+    width: 90%;
+    padding: 12px;
+    margin: 8px;
+    border-radius: 10px;
+    border: none;
+    background: #00c853;
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
+</style>
 </head>
-<body class="text-white pattern">
 
-    <!-- Firebase Config EXATA que você forneceu -->
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyD2rNS7HSJyek3OCrRquudFgqQSWXZJYrY",
-            authDomain: "madrassa-online-b851c.firebaseapp.com",
-            databaseURL: "https://madrassa-online-b851c-default-rtdb.firebaseio.com",
-            projectId: "madrassa-online-b851c",
-            storageBucket: "madrassa-online-b851c.firebasestorage.app",
-            messagingSenderId: "360782668012",
-            appId: "1:360782668012:web:d501ef187911db632445c9",
-            measurementId: "G-RV9GD4S22T"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.database();
-    </script>
+<body>
 
-    <!-- TELA LOGIN -->
-    <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
-        <div class="glass rounded-3xl p-8 max-w-md w-full">
-            <div class="text-center mb-8">
-                <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
-                    <i class="fas fa-moon text-3xl text-green-900"></i>
-                </div>
-                <h1 class="text-3xl font-bold text-yellow-400 mb-2">Islam Moçambique</h1>
-                <p class="text-gray-300 text-sm">Portal de Acesso</p>
-            </div>
+<div class="container">
 
-            <div id="loginForm">
-                <div class="mb-6">
-                    <label class="block text-sm mb-2 text-gray-300">Número de Telefone</label>
-                    <div class="relative">
-                        <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">+258</span>
-                        <input type="tel" id="phoneInput" placeholder="860407269" class="w-full pl-16 pr-4 py-4 rounded-xl bg-white/10 border border-white/20 text-white focus:outline-none focus:border-yellow-400">
-                    </div>
-                </div>
+<h1>🌙 Islam Moçambique</h1>
 
-                <button onclick="sendWhatsApp()" class="w-full gold-btn font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-all mb-4">
-                    <i class="fab fa-whatsapp text-xl"></i>
-                    <span>Verificar via WhatsApp</span>
-                </button>
-                <p class="text-xs text-gray-400 text-center">Será redirecionado para WhatsApp do administrador</p>
-            </div>
+<!-- LOGIN -->
+<div id="auth">
+<input id="numero"><br><br>
+<input id="pin" type="password"><br><br>
 
-            <div id="waitingScreen" class="hidden text-center py-8">
-                <div class="loading mx-auto mb-4"></div>
-                <h3 class="text-xl font-semibold mb-2 text-yellow-400">Aguardando Aprovação</h3>
-                <p class="text-gray-300 mb-4">Envie a mensagem no WhatsApp e aguarde...</p>
-                <div class="bg-white/10 rounded-lg p-4 mb-4">
-                    <p class="text-xs text-gray-400">Mensagem enviada para 860407269:</p>
-                    <p class="text-sm mt-1 italic">"peço a confirmação da minha inscrição na website Islam Moçambique para <span id="showPhone"></span>"</p>
-                </div>
-            </div>
-        </div>
-    </div>
+<button onclick="registrar()">Registar</button>
+<button onclick="login()">Entrar</button>
+</div>
 
-    <!-- DASHBOARD -->
-    <div id="dashboard" class="hidden min-h-screen">
-        <header class="glass sticky top-0 z-50 px-6 py-4">
-            <div class="max-w-7xl mx-auto flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center">
-                        <i class="fas fa-moon text-green-900"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-bold text-yellow-400">Islam Moçambique</h1>
-                        <p class="text-xs text-gray-300">github.com/fatahanacleto</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <span id="userPhone" class="hidden md:block text-sm text-gray-300"></span>
-                    <button onclick="logout()" class="px-4 py-2 rounded-lg bg-red-500/20 text-red-300 text-sm">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </button>
-                </div>
-            </div>
-        </header>
+<!-- APP -->
+<div id="app" class="hidden">
 
-        <main class="max-w-7xl mx-auto px-6 py-12">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold mb-4">Bem-vindo ao <span class="text-yellow-400">Islam Moçambique</span></h2>
-                <p class="text-gray-300">Escolha uma aplicação para aceder</p>
-            </div>
+<p>⭐ <span id="stars"></span></p>
+<p><span id="nivel"></span></p>
 
-            <!-- 7 CARDS DAS PASTAS DO GITHUB -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="appsGrid">
-                
-                <!-- 1. Alcorão -->
-                <div onclick="openApp('alcorao/index.html')" class="glass rounded-2xl overflow-hidden card-hover cursor-pointer transition-all duration-300">
-                    <div class="h-40 bg-gradient-to-br from-blue-600 to-indigo-800 flex items-center justify-center relative">
-                        <i class="fas fa-book-open text-6xl text-white/80"></i>
-                        <div class="absolute top-3 right-3 px-3 py-1 bg-black/30 rounded-full text-xs">Ler & Escutar</div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2 text-yellow-400">Alcorão</h3>
-                        <p class="text-gray-400 text-sm mb-4">Leitura e audição do Alcorão Sagrado</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs px-2 py-1 bg-white/10 rounded">114 Suratas</span>
-                            <i class="fas fa-arrow-right text-yellow-400"></i>
-                        </div>
-                    </div>
-                </div>
+<div class="card">
 
-                <!-- 2. Alfabeto Árabe -->
-                <div onclick="openApp('alfabeto_arabe/index.html')" class="glass rounded-2xl overflow-hidden card-hover cursor-pointer transition-all duration-300">
-                    <div class="h-40 bg-gradient-to-br from-emerald-600 to-teal-800 flex items-center justify-center relative">
-                        <i class="fas fa-font text-6xl text-white/80"></i>
-                        <div class="absolute top-3 right-3 px-3 py-1 bg-black/30 rounded-full text-xs">Aprendizado</div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2 text-yellow-400">Alfabeto Árabe</h3>
-                        <p class="text-gray-400 text-sm mb-4">Aprenda as letras do alfabeto árabe</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs px-2 py-1 bg-white/10 rounded">28 Letras</span>
-                            <i class="fas fa-arrow-right text-yellow-400"></i>
-                        </div>
-                    </div>
-                </div>
+<button onclick="abrir('horario_de_salat')">Horário de Salat</button>
+<button onclick="abrir('alcorao')">Alcorão</button>
+<button onclick="abrir('reversao_novo_muculmano')">Novo Muçulmano</button>
+<button onclick="abrir('alfabeto_arabe')">Alfabeto Árabe</button>
+<button onclick="abrir('tasbih_digital')">Tasbih Digital</button>
+<button onclick="abrir('yassarna_parte_1')">Yassarna Parte 1</button>
+<button onclick="abrir('yassarna_2_parte')">Yassarna Parte 2</button>
 
-                <!-- 3. Horário de Salat -->
-                <div onclick="openApp('horario_de_salat/index.html')" class="glass rounded-2xl overflow-hidden card-hover cursor-pointer transition-all duration-300">
-                    <div class="h-40 bg-gradient-to-br from-purple-600 to-pink-800 flex items-center justify-center relative">
-                        <i class="fas fa-clock text-6xl text-white/80"></i>
-                        <div class="absolute top-3 right-3 px-3 py-1 bg-black/30 rounded-full text-xs">Orações</div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2 text-yellow-400">Horário de Salat</h3>
-                        <p class="text-gray-400 text-sm mb-4">Horários das orações diárias</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs px-2 py-1 bg-white/10 rounded">5 Tempos</span>
-                            <i class="fas fa-arrow-right text-yellow-400"></i>
-                        </div>
-                    </div>
-                </div>
+<button onclick="mostrarApoio()">Apoio</button>
+<button onclick="ganhar()">Ganhar Estrelas</button>
 
-                <!-- 4. Reversão Novo Muçulmano -->
-                <div onclick="openApp('reversao_novo_muculmano/index.html')" class="glass rounded-2xl overflow-hidden card-hover cursor-pointer transition-all duration-300">
-                    <div class="h-40 bg-gradient-to-br from-amber-600 to-orange-800 flex items-center justify-center relative">
-                        <i class="fas fa-star-and-crescent text-6xl text-white/80"></i>
-                        <div class="absolute top-3 right-3 px-3 py-1 bg-black/30 rounded-full text-xs">Guia</div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2 text-yellow-400">Reversão Novo Muçulmano</h3>
-                        <p class="text-gray-400 text-sm mb-4">Guia para novos convertidos</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs px-2 py-1 bg-white/10 rounded">Educativo</span>
-                            <i class="fas fa-arrow-right text-yellow-400"></i>
-                        </div>
-                    </div>
-                </div>
+</div>
 
-                <!-- 5. Tasbih Digital -->
-                <div onclick="openApp('tasbih_digital/index.html')" class="glass rounded-2xl overflow-hidden card-hover cursor-pointer transition-all duration-300">
-                    <div class="h-40 bg-gradient-to-br from-cyan-600 to-blue-800 flex items-center justify-center relative">
-                        <i class="fas fa-calculator text-6xl text-white/80"></i>
-                        <div class="absolute top-3 right-3 px-3 py-1 bg-black/30 rounded-full text-xs">Dhikr</div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2 text-yellow-400">Tasbih Digital</h3>
-                        <p class="text-gray-400 text-sm mb-4">Contador digital para dhikr</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs px-2 py-1 bg-white/10 rounded">Digital</span>
-                            <i class="fas fa-arrow-right text-yellow-400"></i>
-                        </div>
-                    </div>
-                </div>
+</div>
 
-                <!-- 6. Yassarna Parte 1 -->
-                <div onclick="openApp('yassarna_parte_1/index.html')" class="glass rounded-2xl overflow-hidden card-hover cursor-pointer transition-all duration-300">
-                    <div class="h-40 bg-gradient-to-br from-rose-600 to-red-800 flex items-center justify-center relative">
-                        <i class="fas fa-book text-6xl text-white/80"></i>
-                        <div class="absolute top-3 right-3 px-3 py-1 bg-black/30 rounded-full text-xs">Nível 1</div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2 text-yellow-400">Yassarna Parte 1</h3>
-                        <p class="text-gray-400 text-sm mb-4">Primeira parte do curso Yassarna</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs px-2 py-1 bg-white/10 rounded">Iniciante</span>
-                            <i class="fas fa-arrow-right text-yellow-400"></i>
-                        </div>
-                    </div>
-                </div>
+<!-- APOIO -->
+<div id="apoio" class="hidden card">
+<p>
+A islam Moçambique tem trabalhado arduamente para difundir o din de Allah.<br><br>
 
-                <!-- 7. Yassarna Parte 2 -->
-                <div onclick="openApp('yassarna_2_parte/index.html')" class="glass rounded-2xl overflow-hidden card-hover cursor-pointer transition-all duration-300">
-                    <div class="h-40 bg-gradient-to-br from-violet-600 to-purple-800 flex items-center justify-center relative">
-                        <i class="fas fa-graduation-cap text-6xl text-white/80"></i>
-                        <div class="absolute top-3 right-3 px-3 py-1 bg-black/30 rounded-full text-xs">Nível 2</div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2 text-yellow-400">Yassarna Parte 2</h3>
-                        <p class="text-gray-400 text-sm mb-4">Segunda parte do curso Yassarna</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs px-2 py-1 bg-white/10 rounded">Avançado</span>
-                            <i class="fas fa-arrow-right text-yellow-400"></i>
-                        </div>
-                    </div>
-                </div>
+Mpesa: 1228803 (Bebane)<br>
+E-mola: 860407269 (Anacleto Bebane)<br>
+Millennium BIM NIB: 000100000012473356257<br><br>
 
-            </div>
-        </main>
+Que Allah recompense. Ameen
+</p>
+<button onclick="voltar()">Voltar</button>
+</div>
 
-        <footer class="mt-20 glass py-8 px-6">
-            <div class="max-w-7xl mx-auto text-center">
-                <p class="text-gray-400 text-sm mb-2">Contacto: 860407269 | Islammocambique@gmail.com</p>
-                <div class="flex justify-center gap-4 mb-4">
-                    <a href="https://wa.me/258860407269" class="w-10 h-10 rounded-full bg-green-600/20 flex items-center justify-center">
-                        <i class="fab fa-whatsapp text-green-400"></i>
-                    </a>
-                    <a href="mailto:Islammocambique@gmail.com" class="w-10 h-10 rounded-full bg-red-600/20 flex items-center justify-center">
-                        <i class="fas fa-envelope text-red-400"></i>
-                    </a>
-                </div>
-                <p class="text-gray-500 text-xs">© 2024 Islam Moçambique</p>
-            </div>
-        </footer>
-    </div>
+<!-- TAREFAS -->
+<div id="tarefas" class="hidden card">
 
-    <!-- PAINEL ADMIN -->
-    <div id="adminPanel" class="hidden min-h-screen bg-gray-900 p-6">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex items-center justify-between mb-8">
-                <h1 class="text-3xl font-bold text-yellow-400"><i class="fas fa-shield-alt mr-3"></i>Consola Admin</h1>
-                <button onclick="showDashboard()" class="px-4 py-2 bg-gray-700 rounded-lg">Voltar</button>
-            </div>
+<button onclick="partilhar()">Partilhar (+2⭐)</button>
+<button onclick="ads()">Ver (+4⭐)</button>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="lg:col-span-2 bg-gray-800 rounded-2xl p-6 border border-gray-700">
-                    <h2 class="text-xl font-semibold mb-4 flex items-center">
-                        <i class="fas fa-clock text-yellow-500 mr-2"></i>Pendentes
-                    </h2>
-                    <div id="pendingList" class="space-y-3">
-                        <p class="text-gray-500 text-center py-8">Carregando...</p>
-                    </div>
-                </div>
+<br><br>
 
-                <div class="bg-gray-800 rounded-2xl p-6 border border-gray-700">
-                    <h3 class="text-lg font-semibold mb-4">Estatísticas</h3>
-                    <div class="space-y-4">
-                        <div class="flex justify-between p-3 bg-gray-700/50 rounded-lg">
-                            <span class="text-gray-300">Total Users</span>
-                            <span class="text-2xl font-bold text-yellow-400" id="statTotal">0</span>
-                        </div>
-                        <div class="flex justify-between p-3 bg-gray-700/50 rounded-lg">
-                            <span class="text-gray-300">Pendentes</span>
-                            <span class="text-2xl font-bold text-yellow-500" id="statPending">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<input id="codigoPro" type="password"><br><br>
+<button onclick="ativarPro()">Ativar PRO</button>
 
-    <!-- TOAST -->
-    <div id="toast" class="fixed top-4 right-4 z-50 hidden">
-        <div class="glass rounded-xl p-4 flex items-center gap-3 max-w-sm">
-            <div id="toastIcon" class="w-10 h-10 rounded-full flex items-center justify-center"></div>
-            <div>
-                <h4 id="toastTitle" class="font-semibold"></h4>
-                <p id="toastMessage" class="text-sm text-gray-300"></p>
-            </div>
-        </div>
-    </div>
+<p id="timer"></p>
 
-    <script>
-        // VARIÁVEIS
-        let currentPhone = '';
-        let checkInterval = null;
+<button onclick="voltar()">Voltar</button>
+</div>
 
-        // VERIFICAR AUTH
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                db.ref('users/' + user.uid).once('value').then(snap => {
-                    const data = snap.val();
-                    if (data?.approved) {
-                        showDashboard();
-                        document.getElementById('userPhone').textContent = data.phone;
-                        if (data.isAdmin) addAdminBtn();
-                    } else {
-                        showWaiting(data?.phone);
-                    }
-                });
-            } else {
-                showLogin();
-            }
-        });
+</div>
 
-        // ENVIAR WHATSAPP
-        function sendWhatsApp() {
-            const phone = document.getElementById('phoneInput').value.trim();
-            if (!phone || phone.length < 9) {
-                toast('Erro', 'Número inválido', 'error');
-                return;
-            }
+<script>
 
-            currentPhone = '+258' + phone;
-            document.getElementById('showPhone').textContent = phone;
+let user = null
 
-            // Mensagem exata
-            const msg = `peço a confirmação da minha inscrição na website Islam Moçambique para ${phone}`;
-            const url = `https://wa.me/258860407269?text=${encodeURIComponent(msg)}`;
-            
-            window.open(url, '_blank');
+function getData(){
+    return JSON.parse(localStorage.getItem("db")) || {}
+}
 
-            // Salvar no Firebase
-            db.ref('pendingRequests').push({
-                phone: currentPhone,
-                timestamp: firebase.database.ServerValue.TIMESTAMP,
-                status: 'pending'
-            }).then(() => {
-                showWaiting(phone);
-                startChecking();
-            });
+function saveData(db){
+    localStorage.setItem("db", JSON.stringify(db))
+}
+
+// CONVERTER NUMERO -> LETRAS
+function converter(numero){
+    let mapa = ["A","B","C","D","E","F","G","H","I","J"]
+    return numero.split("").map(n => mapa[n]).join("")
+}
+
+function registrar(){
+    let n = document.getElementById("numero").value
+    let p = document.getElementById("pin").value
+
+    let db = getData()
+
+    if(db[n]) return alert("Existe")
+
+    db[n] = {
+        pin: p,
+        estrelas: 50,
+        pro: false,
+        expira: 0
+    }
+
+    saveData(db)
+    alert("OK")
+}
+
+function login(){
+    let n = document.getElementById("numero").value
+    let p = document.getElementById("pin").value
+
+    let db = getData()
+
+    if(db[n] && db[n].pin === p){
+        user = n
+        document.getElementById("auth").classList.add("hidden")
+        document.getElementById("app").classList.remove("hidden")
+        atualizar()
+    } else {
+        alert("Erro")
+    }
+}
+
+function atualizar(){
+    let db = getData()
+    let u = db[user]
+
+    if(u.pro && Date.now() > u.expira){
+        u.pro = false
+    }
+
+    document.getElementById("stars").innerText = u.estrelas
+    document.getElementById("nivel").innerText = u.pro ? "PRO ATIVO" : "NORMAL"
+
+    saveData(db)
+}
+
+function abrir(pasta){
+    let db = getData()
+    let u = db[user]
+
+    if(!u.pro){
+        if(u.estrelas < 5) return alert("Sem estrelas")
+        u.estrelas -= 5
+    }
+
+    saveData(db)
+    atualizar()
+
+    window.location.href =
+    "https://fatahanacletobebane-ui.github.io/web_IM/" + pasta + "/index.html"
+}
+
+function mostrarApoio(){
+    hideAll()
+    document.getElementById("apoio").classList.remove("hidden")
+}
+
+function ganhar(){
+    hideAll()
+    document.getElementById("tarefas").classList.remove("hidden")
+}
+
+function voltar(){
+    hideAll()
+    document.getElementById("app").classList.remove("hidden")
+}
+
+function hideAll(){
+    document.getElementById("app").classList.add("hidden")
+    document.getElementById("apoio").classList.add("hidden")
+    document.getElementById("tarefas").classList.add("hidden")
+}
+
+// PARTILHA
+function partilhar(){
+    let texto = "https://fatahanacletobebane-ui.github.io/web_IM/"
+    window.open("https://wa.me/?text=" + texto)
+
+    let db = getData()
+    db[user].estrelas += 2
+    saveData(db)
+    atualizar()
+}
+
+// ADS
+function ads(){
+    let t = 10
+    let el = document.getElementById("timer")
+
+    let i = setInterval(()=>{
+        el.innerText = t
+        t--
+
+        if(t < 0){
+            clearInterval(i)
+
+            let db = getData()
+            db[user].estrelas += 4
+            saveData(db)
+            atualizar()
+
+            el.innerText = "OK"
         }
+    },1000)
+}
 
-        // MOSTRAR TELAS
-        function showLogin() {
-            document.getElementById('loginScreen').classList.remove('hidden');
-            document.getElementById('dashboard').classList.add('hidden');
-            document.getElementById('adminPanel').classList.add('hidden');
-            document.getElementById('loginForm').classList.remove('hidden');
-            document.getElementById('waitingScreen').classList.add('hidden');
-        }
+// PRO
+function ativarPro(){
+    let codigo = document.getElementById("codigoPro").value
 
-        function showWaiting(phone) {
-            document.getElementById('loginForm').classList.add('hidden');
-            document.getElementById('waitingScreen').classList.remove('hidden');
-            document.getElementById('showPhone').textContent = phone.replace('+258', '');
-        }
+    let esperado = converter(user)
 
-        function showDashboard() {
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('adminPanel').classList.add('hidden');
-            document.getElementById('dashboard').classList.remove('hidden');
-            updateStats();
-        }
+    if(codigo === esperado){
+        let db = getData()
 
-        function showAdmin() {
-            document.getElementById('dashboard').classList.add('hidden');
-            document.getElementById('adminPanel').classList.remove('hidden');
-            loadPending();
-        }
+        db[user].pro = true
+        db[user].expira = Date.now() + (35*24*60*60*1000)
 
-        // VERIFICAR APROVAÇÃO
-        function startChecking() {
-            if (checkInterval) clearInterval(checkInterval);
-            checkInterval = setInterval(() => {
-                db.ref('pendingRequests').orderByChild('phone').equalTo(currentPhone).once('value').then(snap => {
-                    snap.forEach(child => {
-                        if (child.val().status === 'approved') {
-                            clearInterval(checkInterval);
-                            createUser();
-                        }
-                    });
-                });
-            }, 3000);
-        }
+        saveData(db)
+        atualizar()
 
-        function createUser() {
-            auth.signInAnonymously().then(cred => {
-                db.ref('users/' + cred.user.uid).set({
-                    phone: currentPhone,
-                    approved: true,
-                    createdAt: firebase.database.ServerValue.TIMESTAMP
-                }).then(() => {
-                    toast('Aprovado!', 'Bem-vindo', 'success');
-                    showDashboard();
-                });
-            });
-        }
+        alert("PRO ativado")
+    } else {
+        alert("Código inválido")
+    }
+}
 
-        // ABRIR APPS
-        function openApp(folder) {
-            // Substitua pelo seu usuário GitHub real
-            const githubUser = 'fatahanacleto';
-            const url = `https://${githubUser}.github.io/web_IM/${folder}/`;
-            window.open(url, '_blank');
-        }
+</script>
 
-        // ADMIN
-        function addAdminBtn() {
-            const header = document.querySelector('header .max-w-7xl');
-            const btn = document.createElement('button');
-            btn.className = 'px-3 py-2 bg-yellow-400 text-green-900 rounded-lg font-bold text-sm ml-2';
-            btn.innerHTML = 'ADMIN';
-            btn.onclick = showAdmin;
-            header.appendChild(btn);
-        }
-
-        function loadPending() {
-            db.ref('pendingRequests').orderByChild('status').equalTo('pending').on('value', snap => {
-                const list = document.getElementById('pendingList');
-                if (!snap.exists()) {
-                    list.innerHTML = '<p class="text-gray-500 text-center py-8">Nenhum pendente</p>';
-                    return;
-                }
-                let html = '';
-                snap.forEach(child => {
-                    const data = child.val();
-                    html += `
-                        <div class="bg-gray-700/50 rounded-xl p-4 flex justify-between items-center">
-                            <div>
-                                <div class="font-semibold">${data.phone}</div>
-                                <div class="text-xs text-gray-400">${new Date(data.timestamp).toLocaleString()}</div>
-                            </div>
-                            <div class="flex gap-2">
-                                <button onclick="approve('${child.key}', '${data.phone}')" class="px-3 py-2 bg-green-600 rounded-lg text-sm">Aprovar</button>
-                                <button onclick="reject('${child.key}')" class="px-3 py-2 bg-red-600/50 rounded-lg text-sm">Rejeitar</button>
-                            </div>
-                        </div>
-                    `;
-                });
-                list.innerHTML = html;
-            });
-        }
-
-        function approve(id, phone) {
-            db.ref('pendingRequests/' + id).update({
-                status: 'approved',
-                approvedAt: firebase.database.ServerValue.TIMESTAMP
-            });
-            toast('Aprovado', phone, 'success');
-            updateStats();
-        }
-
-        function reject(id) {
-            db.ref('pendingRequests/' + id).update({
-                status: 'rejected',
-                rejectedAt: firebase.database.ServerValue.TIMESTAMP
-            });
-            toast('Rejeitado', '', 'info');
-        }
-
-        function updateStats() {
-            db.ref('users').once('value', s => document.getElementById('statTotal').textContent = s.numChildren());
-            db.ref('pendingRequests').orderByChild('status').equalTo('pending').once('value', s => {
-                document.getElementById('statPending').textContent = s.numChildren();
-            });
-        }
-
-        function logout() {
-            auth.signOut();
-            if (checkInterval) clearInterval(checkInterval);
-        }
-
-        // TOAST
-        function toast(title, msg, type) {
-            const t = document.getElementById('toast');
-            const icon = document.getElementById('toastIcon');
-            const colors = { success: 'bg-green-500/20', error: 'bg-red-500/20', info: 'bg-blue-500/20' };
-            const icons = { success: '<i class="fas fa-check text-green-400"></i>', error: '<i class="fas fa-exclamation text-red-400"></i>', info: '<i class="fas fa-info text-blue-400"></i>' };
-            
-            icon.className = `w-10 h-10 rounded-full flex items-center justify-center ${colors[type]}`;
-            icon.innerHTML = icons[type];
-            document.getElementById('toastTitle').textContent = title;
-            document.getElementById('toastMessage').textContent = msg;
-            
-            t.classList.remove('hidden');
-            setTimeout(() => t.classList.add('hidden'), 4000);
-        }
-
-        // ATALHO ADMIN: clique 5x no logo
-        let clickCount = 0;
-        document.querySelector('.fa-moon').parentElement.addEventListener('click', () => {
-            clickCount++;
-            if (clickCount === 5) {
-                const pass = prompt('Senha admin:');
-                if (pass === 'islam2024') showAdmin();
-                clickCount = 0;
-            }
-        });
-    </script>
 </body>
 </html>
