@@ -4,48 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Islam Moçambique</title>
-
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#00c853">
-
 <style>
-body{
-font-family:Arial;
-background:linear-gradient(to right,#0f2027,#203a43,#2c5364);
-color:white;text-align:center;
-margin:0;padding:0;
-}
-
-input{
-width:85%;
-padding:10px;
-border-radius:8px;
-border:none;
-margin:5px;
-}
-
-button{
-width:90%;
-padding:12px;
-margin:6px;
-border:none;
-border-radius:10px;
-background:#00c853;
-color:white;
-}
-
-.card{
-background:rgba(255,255,255,0.1);
-padding:15px;
-margin:10px;
-border-radius:15px;
-}
-
+body{font-family:Arial;background:linear-gradient(to right,#0f2027,#203a43,#2c5364);color:white;text-align:center;margin:0;padding:0;}
+input{width:85%;padding:10px;border-radius:8px;border:none;margin:5px;}
+button{width:90%;padding:12px;margin:6px;border:none;border-radius:10px;background:#00c853;color:white;}
+.card{background:rgba(255,255,255,0.1);padding:15px;margin:10px;border-radius:15px;}
 .hidden{display:none;}
 iframe{width:95%;height:80vh;border:none;border-radius:10px;margin:10px;}
+img,video{max-width:90%;border-radius:10px;}
 </style>
 </head>
-
 <body>
 
 <h2>🌙 Islam Moçambique</h2>
@@ -54,7 +24,6 @@ iframe{width:95%;height:80vh;border:none;border-radius:10px;margin:10px;}
 <div id="auth">
 <input id="numero" placeholder="84/86/82xxxxxxx"><br><br>
 <input id="otp" type="password" placeholder="digital PIN"><br><br>
-
 <button onclick="enviarOTP()">Receber código</button>
 <button onclick="login()">Entrar</button>
 </div>
@@ -74,6 +43,7 @@ iframe{width:95%;height:80vh;border:none;border-radius:10px;margin:10px;}
 <button onclick="abrir('yassarna_2_parte')">Yassarna 2</button>
 
 <button onclick="tarefas()">Ganhar Estrelas</button>
+<button onclick="apoio()">Apoio</button>
 </div>
 </div>
 
@@ -87,13 +57,10 @@ iframe{width:95%;height:80vh;border:none;border-radius:10px;margin:10px;}
 <div id="tarefas" class="hidden card">
 <button onclick="partilhar()">Partilhar (+2⭐)</button>
 <button onclick="verAds()">Ver anúncio (+3⭐)</button>
-
 <br><br>
 <input id="codigoPro" type="password" placeholder="digital PIN"><br><br>
 <button onclick="ativarPro()">Ativar PRO</button>
-
 <p id="timer"></p>
-
 <button onclick="voltarAnterior()">Voltar</button>
 <button onclick="voltarMenu()">Menu Principal</button>
 </div>
@@ -108,231 +75,96 @@ iframe{width:95%;height:80vh;border:none;border-radius:10px;margin:10px;}
 </div>
 
 <script>
-
-let user=null
-let adsIndex=0
-let telaAnterior=null
-
-const ADS=[
+let user=null;
+let adsIndex=0;
+let telaAnterior=null;
+let ADS=[
 "ads1.jpg","ads2.png","ads3.jpg","ads4.png","ads5.jpg",
 "ads6.mp4","ads7.mp4","ads8.mp4","ads9.mp4","ads10.mp4"
-]
+];
 
-// BASE
 function getDB(){return JSON.parse(localStorage.getItem("db"))||{}}
 function saveDB(db){localStorage.setItem("db",JSON.stringify(db))}
+function converter(n){let m=["A","B","C","D","E","F","G","H","I","J"];return n.split("").map(x=>m[x]).join("")}
+function gerarOTP(numero){return converter(numero.slice(-4))}
 
-// CONVERSÃO
-function converter(n){
-let m=["A","B","C","D","E","F","G","H","I","J"]
-return n.split("").map(x=>m[x]).join("")
-}
-
-// OTP
-function gerarOTP(numero){
-return converter(numero.slice(-4))
-}
-
-// WHATSAPP
 function enviarOTP(){
-let numero = document.getElementById("numero").value
-let otp = gerarOTP(numero)
-let msg = "Seu código de acesso é: " + otp
+let numero = document.getElementById("numero").value;
+let otp = gerarOTP(numero);
+let msg = "Seu código de acesso é: " + otp;
 window.open("https://wa.me/"+numero+"?text="+encodeURIComponent(msg))
 }
 
-// LOGIN
+// LOGIN SEGURANÇA
 function login(){
-let n = numero.value
-let o = otp.value
-let db = getDB()
-
-if(o === gerarOTP(n)){
-
-if(!db[n]){
-db[n]={estrelas:50,pro:false,expira:0,shares:0,data:Date.now()}
+let n = numero.value;
+let o = otp.value;
+let db = getDB();
+if(!db[n]){alert("Número não registrado. Confirme seu número via WhatsApp com o administrador."); return;}
+if(o===gerarOTP(n)){
+user=n;
+saveDB(db);
+auth.classList.add("hidden");
+app.classList.remove("hidden");
+update();
+avisoPro();
+}else alert("Código inválido");
 }
 
-user=n
-saveDB(db)
-
-auth.classList.add("hidden")
-app.classList.remove("hidden")
-
-update()
-avisoPro()
-
-}else alert("Código inválido")
-}
-
-// UPDATE
 function update(){
-let db=getDB()
-let u=db[user]
-
-if(new Date().toDateString()!=new Date(u.data).toDateString()){
-u.shares=0
-u.data=Date.now()
+let db=getDB();
+let u=db[user];
+if(new Date().toDateString()!=new Date(u.data).toDateString()){u.shares=0; u.data=Date.now();}
+if(u.pro && Date.now()>u.expira){u.pro=false;}
+stars.innerText=u.estrelas;
+nivel.innerText=u.pro?"PRO ATIVO":"NORMAL";
+saveDB(db);
+if(!u.pro){setTimeout(avisoPro,3000);}
 }
 
-if(u.pro && Date.now()>u.expira){
-u.pro=false
-}
+function avisoPro(){let db=getDB();let u=db[user];if(!u.pro){alert("Ative o PRO e use sem gastar estrelas por 35 dias (somente admin pode ativar)");}}
 
-stars.innerText=u.estrelas
-nivel.innerText=u.pro?"PRO ATIVO":"NORMAL"
-
-saveDB(db)
-
-if(!u.pro){
-setTimeout(avisoPro,3000)
-}
-}
-
-// AVISO PRO
-function avisoPro(){
-let db=getDB()
-let u=db[user]
-if(!u.pro){
-alert("Ative o PRO e use sem gastar estrelas por 35 dias")
-}
-}
-
-// ABRIR - AGORA USA IFRAME
+// ABRIR IFRAME
 function abrir(p){
-telaAnterior='app'
-let db=getDB()
-let u=db[user]
-
-avisoPro()
-
-if(!u.pro){
-if(u.estrelas<8)return alert("Sem estrelas")
-u.estrelas-=8
+telaAnterior='app';
+let db=getDB();
+let u=db[user];
+if(!u.pro){if(u.estrelas<8){alert("Sem estrelas");return;} u.estrelas-=8;}
+saveDB(db);
+update();
+app.classList.add("hidden");
+iframeContainer.classList.remove("hidden");
+iframe.src="https://fatahanacletobebane-ui.github.io/web_IM/"+p+"/index.html";
 }
-
-saveDB(db)
-update()
-
-app.classList.add("hidden")
-iframeContainer.classList.remove("hidden")
-iframe.src="https://fatahanacletobebane-ui.github.io/web_IM/"+p+"/index.html"
-}
-
-// FECHAR IFRAME
-function fecharIframe(){
-iframe.src=""
-iframeContainer.classList.add("hidden")
-app.classList.remove("hidden")
-}
+function fecharIframe(){iframe.src=""; iframeContainer.classList.add("hidden"); app.classList.remove("hidden");}
 
 // PARTILHAR
 function partilhar(){
-telaAnterior='tarefas'
-let db=getDB()
-let u=db[user]
-
-if(u.shares>=10)return alert("Limite diário")
-
-window.open("https://wa.me/?text=https://fatahanacletobebane-ui.github.io/web_IM/")
-
-u.estrelas+=2
-u.shares++
-
-saveDB(db)
-update()
+let db=getDB(); let u=db[user];
+if(u.shares>=10){alert("Limite diário"); return;}
+window.open("https://wa.me/?text=https://fatahanacletobebane-ui.github.io/web_IM/");
+u.estrelas+=2; u.shares++;
+saveDB(db); update();
 }
 
 // ADS
-function verAds(){
-telaAnterior='tarefas'
-hide()
-ads.classList.remove("hidden")
-mostrarAds()
-}
-
-function mostrarAds(){
-let file=ADS[adsIndex]
-
-if(file.includes(".mp4")){
-adsBox.innerHTML=`<video src="${file}" autoplay></video>`
-}else{
-adsBox.innerHTML=`<img src="${file}">`
-}
-
-tempoAds()
-}
-
-function tempoAds(){
-let t=10
-tempo.innerText=t
-
-let i=setInterval(()=>{
-t--
-tempo.innerText=t
-
-if(t<=0){
-clearInterval(i)
-let db=getDB()
-db[user].estrelas+=3
-saveDB(db)
-update()
-}
-},1000)
-}
-
-function proximoAds(){
-adsIndex=(adsIndex+1)%ADS.length
-mostrarAds()
-}
+function verAds(){telaAnterior='tarefas'; hide(); ads.classList.remove("hidden"); mostrarAds();}
+function mostrarAds(){let file=ADS[adsIndex]; if(file.includes(".mp4")){adsBox.innerHTML=`<video src="${file}" autoplay></video>`;}else{adsBox.innerHTML=`<img src="${file}">`;} tempoAds();}
+function tempoAds(){let t=10; tempo.innerText=t; let i=setInterval(()=>{t--; tempo.innerText=t; if(t<=0){clearInterval(i); let db=getDB(); db[user].estrelas+=3; saveDB(db); update();}},1000);}
+function proximoAds(){adsIndex=(adsIndex+1)%ADS.length; mostrarAds();}
 
 // PRO
-function ativarPro(){
-let code=codigoPro.value
+function ativarPro(){let code=codigoPro.value; if(code===converter(user)){let db=getDB(); db[user].pro=true; db[user].expira=Date.now()+35*24*60*60*1000; saveDB(db); update(); alert("PRO ativado pelo admin");} else{alert("Código inválido");}}
 
-if(code===converter(user)){
-let db=getDB()
-db[user].pro=true
-db[user].expira=Date.now()+35*24*60*60*1000
+// VOLTAR
+function voltarAnterior(){hide(); if(telaAnterior) document.getElementById(telaAnterior).classList.remove("hidden"); telaAnterior=null;}
+function voltarMenu(){hide(); app.classList.remove("hidden"); telaAnterior=null;}
+function tarefas(){hide(); tarefas.classList.remove("hidden"); telaAnterior='app';}
+function hide(){app.classList.add("hidden"); tarefas.classList.add("hidden"); ads.classList.add("hidden"); iframeContainer.classList.add("hidden");}
 
-saveDB(db)
-update()
-
-}else{
-alert("Código inválido")
-}
-
-// Não exibe popup ao ativar
-}
-
-// VOLTAR UM PASSO
-function voltarAnterior(){
-hide()
-if(telaAnterior) document.getElementById(telaAnterior).classList.remove("hidden")
-telaAnterior=null
-}
-
-// VOLTAR AO MENU PRINCIPAL
-function voltarMenu(){
-hide()
-app.classList.remove("hidden")
-telaAnterior=null
-}
-
-// UI
-function tarefas(){hide();tarefas.classList.remove("hidden");telaAnterior='app'}
-function hide(){
-app.classList.add("hidden")
-tarefas.classList.add("hidden")
-ads.classList.add("hidden")
-iframeContainer.classList.add("hidden")
-}
-
-</script>
-
-<script>
-if ("serviceWorker" in navigator) {
-navigator.serviceWorker.register("sw.js")
+// APOIO
+function apoio(){
+alert("A Islam Moçambique tem trabalhado arduamente para difundir o din de Allah.\n\nMpesa paga fácil: 1228803 (Bebane)\nE-mola: 860407269 (Anacleto Bebane)\nMillennium BIM NIB: 000100000012473356257\n\nQue Allah triplique. Ameen");
 }
 </script>
 
