@@ -13,6 +13,7 @@ body{
 font-family:Arial;
 background:linear-gradient(to right,#0f2027,#203a43,#2c5364);
 color:white;text-align:center;
+margin:0;padding:0;
 }
 
 input{
@@ -41,7 +42,7 @@ border-radius:15px;
 }
 
 .hidden{display:none;}
-img,video{max-width:90%;border-radius:10px;}
+iframe{width:95%;height:80vh;border:none;border-radius:10px;margin:10px;}
 </style>
 </head>
 
@@ -76,9 +77,14 @@ img,video{max-width:90%;border-radius:10px;}
 </div>
 </div>
 
+<!-- IFRAME PARA SITES SECUNDÁRIOS -->
+<div id="iframeContainer" class="hidden">
+<button onclick="fecharIframe()">⬅ Voltar ao menu principal</button>
+<iframe id="iframe"></iframe>
+</div>
+
 <!-- TAREFAS -->
 <div id="tarefas" class="hidden card">
-
 <button onclick="partilhar()">Partilhar (+2⭐)</button>
 <button onclick="verAds()">Ver anúncio (+3⭐)</button>
 
@@ -88,7 +94,8 @@ img,video{max-width:90%;border-radius:10px;}
 
 <p id="timer"></p>
 
-<button onclick="voltar()">Voltar</button>
+<button onclick="voltarAnterior()">Voltar</button>
+<button onclick="voltarMenu()">Menu Principal</button>
 </div>
 
 <!-- ADS -->
@@ -96,13 +103,15 @@ img,video{max-width:90%;border-radius:10px;}
 <div id="adsBox"></div>
 <p id="tempo"></p>
 <button onclick="proximoAds()">Ganhar mais estrelas</button>
-<button onclick="voltar()">Voltar</button>
+<button onclick="voltarAnterior()">Voltar</button>
+<button onclick="voltarMenu()">Menu Principal</button>
 </div>
 
 <script>
 
 let user=null
 let adsIndex=0
+let telaAnterior=null
 
 const ADS=[
 "ads1.jpg","ads2.png","ads3.jpg","ads4.png","ads5.jpg",
@@ -189,8 +198,9 @@ alert("Ative o PRO e use sem gastar estrelas por 35 dias")
 }
 }
 
-// ABRIR
+// ABRIR - AGORA USA IFRAME
 function abrir(p){
+telaAnterior='app'
 let db=getDB()
 let u=db[user]
 
@@ -204,11 +214,21 @@ u.estrelas-=8
 saveDB(db)
 update()
 
-location.href="https://fatahanacletobebane-ui.github.io/web_IM/"+p+"/index.html"
+app.classList.add("hidden")
+iframeContainer.classList.remove("hidden")
+iframe.src="https://fatahanacletobebane-ui.github.io/web_IM/"+p+"/index.html"
+}
+
+// FECHAR IFRAME
+function fecharIframe(){
+iframe.src=""
+iframeContainer.classList.add("hidden")
+app.classList.remove("hidden")
 }
 
 // PARTILHAR
 function partilhar(){
+telaAnterior='tarefas'
 let db=getDB()
 let u=db[user]
 
@@ -225,6 +245,7 @@ update()
 
 // ADS
 function verAds(){
+telaAnterior='tarefas'
 hide()
 ads.classList.remove("hidden")
 mostrarAds()
@@ -280,15 +301,31 @@ update()
 }else{
 alert("Código inválido")
 }
+
+// Não exibe popup ao ativar
+}
+
+// VOLTAR UM PASSO
+function voltarAnterior(){
+hide()
+if(telaAnterior) document.getElementById(telaAnterior).classList.remove("hidden")
+telaAnterior=null
+}
+
+// VOLTAR AO MENU PRINCIPAL
+function voltarMenu(){
+hide()
+app.classList.remove("hidden")
+telaAnterior=null
 }
 
 // UI
-function tarefas(){hide();tarefas.classList.remove("hidden")}
-function voltar(){hide();app.classList.remove("hidden")}
+function tarefas(){hide();tarefas.classList.remove("hidden");telaAnterior='app'}
 function hide(){
 app.classList.add("hidden")
 tarefas.classList.add("hidden")
 ads.classList.add("hidden")
+iframeContainer.classList.add("hidden")
 }
 
 </script>
