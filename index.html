@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Islam Moçambique - Aprenda a Ler o Alcorão</title>
+    <title>Islam Moçambique - Sistema de Aprendizado Personalizado</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -16,6 +16,9 @@
             --dark: #1a1a1a;
             --gold: #c9a227;
             --cream: #faf8f3;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --error: #f44336;
         }
 
         * {
@@ -29,10 +32,80 @@
             background-color: var(--cream);
             color: var(--dark);
             line-height: 1.6;
-            overflow-x: hidden;
         }
 
-        /* Header & Navigation */
+        /* Login Overlay */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .login-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .login-logo {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .login-box h2 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-box p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Header */
         header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
@@ -65,462 +138,514 @@
             font-size: 2rem;
         }
 
-        .nav-links {
+        .user-info {
             display: flex;
-            list-style: none;
-            gap: 2rem;
+            align-items: center;
+            gap: 1rem;
         }
 
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark);
+            font-weight: 700;
+            cursor: pointer;
             position: relative;
         }
 
-        .nav-links a::after {
-            content: '';
+        .user-menu {
             position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--secondary);
-            transition: width 0.3s;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .mobile-menu {
+            top: 50px;
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            min-width: 200px;
             display: none;
-            font-size: 1.5rem;
-            cursor: pointer;
+            overflow: hidden;
         }
 
-        /* Hero Section */
-        .hero {
+        .user-menu.show {
+            display: block;
+        }
+
+        .user-menu-item {
+            padding: 1rem;
+            color: var(--dark);
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-menu-item:hover {
+            background: var(--cream);
+        }
+
+        /* Dashboard */
+        .dashboard {
             margin-top: 80px;
-            background: linear-gradient(rgba(26, 95, 74, 0.9), rgba(13, 61, 46, 0.9)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%231a5f4a" width="100" height="100"/><path fill="%230d3d2e" d="M0 50 Q25 30 50 50 T100 50 L100 100 L0 100 Z"/></svg>');
-            background-size: cover;
+            padding: 2rem 5%;
+            background: white;
+            border-bottom: 1px solid #eee;
+        }
+
+        .dashboard-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
             color: white;
-            padding: 5rem 5%;
-            text-align: center;
+            padding: 1.5rem;
+            border-radius: 15px;
             position: relative;
             overflow: hidden;
         }
 
-        .hero::before {
-            content: 'بسم الله الرحمن الرحيم';
+        .stat-card::before {
+            content: '';
             position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: 'Amiri', serif;
-            font-size: 2rem;
-            opacity: 0.3;
-            color: var(--secondary);
+            top: -20px;
+            right: -20px;
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
         }
 
-        .hero-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .hero-content p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
             opacity: 0.9;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 1rem 2.5rem;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-            font-weight: 600;
-        }
-
-        .btn-primary {
-            background: var(--secondary);
-            color: var(--dark);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn-secondary:hover {
-            background: white;
-            color: var(--primary);
-        }
-
-        /* Progress Tracker */
-        .progress-section {
-            background: white;
-            padding: 2rem 5%;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .progress-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .progress-stats {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .stat {
-            text-align: center;
         }
 
         .stat-value {
             font-size: 2rem;
             font-weight: 700;
-            color: var(--primary);
+            margin-bottom: 0.2rem;
         }
 
         .stat-label {
-            color: #666;
             font-size: 0.9rem;
+            opacity: 0.9;
         }
 
-        .progress-bar-container {
-            flex: 1;
-            min-width: 300px;
-            background: #e0e0e0;
-            height: 10px;
-            border-radius: 5px;
-            overflow: hidden;
-            position: relative;
+        .stat-change {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: rgba(255,255,255,0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
         }
 
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            width: 0%;
-            transition: width 1s ease;
-            border-radius: 5px;
-        }
-
-        /* Course Sections */
-        .section {
-            padding: 4rem 5%;
+        /* Main Content */
+        .main-container {
             max-width: 1400px;
             margin: 0 auto;
+            padding: 2rem 5%;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
         }
 
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Lesson Section */
+        .lesson-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .section-title h2 {
-            font-size: 2.5rem;
             color: var(--primary);
-            margin-bottom: 0.5rem;
-            position: relative;
-            display: inline-block;
+            font-size: 1.8rem;
         }
 
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 4px;
-            background: var(--secondary);
-            border-radius: 2px;
+        .progress-indicator {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--cream);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
         }
 
-        .section-title p {
-            color: #666;
-            margin-top: 1rem;
-        }
-
-        /* Alphabet Grid */
-        .alphabet-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .letter-card {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem 1rem;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s;
-            cursor: pointer;
-            border: 2px solid transparent;
-            position: relative;
+        .progress-bar {
+            width: 150px;
+            height: 8px;
+            background: #ddd;
+            border-radius: 4px;
             overflow: hidden;
         }
 
-        .letter-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: var(--secondary);
-            transform: scaleX(0);
-            transition: transform 0.3s;
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 4px;
+            transition: width 0.5s;
         }
 
-        .letter-card:hover::before {
-            transform: scaleX(1);
+        /* Alphabet with Feedback */
+        .alphabet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .letter-card {
+            background: var(--cream);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
         }
 
         .letter-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             border-color: var(--secondary);
         }
 
         .letter-card.learned {
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            border-color: var(--accent);
+            background: #e8f5e9;
+            border-color: var(--success);
         }
 
-        .letter-card.learned::after {
-            content: '\f00c';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            color: var(--primary);
-            font-size: 1.2rem;
+        .letter-card.difficult {
+            background: #fff3e0;
+            border-color: var(--warning);
         }
+
+        .letter-card.mastered {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: white;
+        }
+
+        .status-badge.learned { background: var(--success); }
+        .status-badge.difficult { background: var(--warning); }
+        .status-badge.mastered { background: #2196f3; }
 
         .arabic-letter {
             font-family: 'Amiri', serif;
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: var(--primary);
-            margin-bottom: 0.5rem;
             display: block;
+            margin-bottom: 0.5rem;
         }
 
         .letter-name {
-            font-size: 0.9rem;
-            color: #666;
-            font-weight: 600;
-        }
-
-        .letter-transliteration {
             font-size: 0.8rem;
-            color: #999;
-            margin-top: 0.3rem;
+            font-weight: 600;
+            color: #666;
         }
 
-        /* Learning Modules */
-        .modules-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-        }
-
-        .module-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-
-        .module-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .module-header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            color: white;
-            padding: 2rem;
-            position: relative;
-        }
-
-        .module-number {
-            position: absolute;
-            top: -20px;
-            right: 20px;
-            background: var(--secondary);
-            color: var(--dark);
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
+        /* Feedback Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            display: none;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            backdrop-filter: blur(5px);
         }
 
-        .module-header h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
+        .modal-overlay.show {
+            display: flex;
         }
 
-        .module-content {
+        .modal {
+            background: white;
+            border-radius: 20px;
             padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s;
         }
 
-        .lesson-list {
-            list-style: none;
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        .lesson-item {
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .feedback-form h4 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .difficulty-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .difficulty-btn {
+            flex: 1;
             padding: 1rem;
-            border-bottom: 1px solid #eee;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .difficulty-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .difficulty-btn.selected {
+            border-color: var(--primary);
+            background: var(--cream);
+        }
+
+        .difficulty-btn.easy.selected { background: #e8f5e9; border-color: var(--success); }
+        .difficulty-btn.medium.selected { background: #fff3e0; border-color: var(--warning); }
+        .difficulty-btn.hard.selected { background: #ffebee; border-color: var(--error); }
+
+        .feedback-textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+            margin-bottom: 1rem;
+        }
+
+        .feedback-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            justify-content: center;
+        }
+
+        .star {
+            font-size: 2rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .star.active {
+            color: var(--secondary);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .sidebar-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Activity Feed */
+        .activity-item {
+            display: flex;
             gap: 1rem;
-            cursor: pointer;
-            transition: background 0.3s;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
         }
 
-        .lesson-item:hover {
-            background: #f5f5f5;
-        }
-
-        .lesson-item.completed {
-            color: #aaa;
-        }
-
-        .lesson-item.completed .lesson-icon {
-            background: var(--accent);
-            color: white;
-        }
-
-        .lesson-icon {
+        .activity-icon {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #f0f0f0;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--primary);
-            font-weight: 600;
+            flex-shrink: 0;
         }
 
-        .lesson-info {
+        .activity-icon.success { background: #e8f5e9; color: var(--success); }
+        .activity-icon.warning { background: #fff3e0; color: var(--warning); }
+        .activity-icon.info { background: #e3f2fd; color: #2196f3; }
+
+        .activity-content {
             flex: 1;
         }
 
-        .lesson-title {
+        .activity-title {
             font-weight: 600;
+            font-size: 0.9rem;
             margin-bottom: 0.2rem;
         }
 
-        .lesson-duration {
+        .activity-time {
             font-size: 0.8rem;
             color: #999;
         }
 
+        /* Teacher Feedback */
+        .teacher-note {
+            background: var(--cream);
+            border-left: 4px solid var(--secondary);
+            padding: 1rem;
+            border-radius: 0 10px 10px 0;
+            margin-bottom: 1rem;
+        }
+
+        .teacher-note-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .teacher-note p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Performance Chart */
+        .chart-container {
+            height: 200px;
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        .chart-bar {
+            position: absolute;
+            bottom: 0;
+            width: calc(20% - 10px);
+            background: linear-gradient(to top, var(--primary), var(--accent));
+            border-radius: 5px 5px 0 0;
+            transition: height 1s;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 0.5rem;
+            color: white;
+            font-size: 0.8rem;
+        }
+
         /* Quiz Section */
-        .quiz-container {
+        .quiz-section {
             background: white;
             border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-width: 800px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .quiz-container {
+            max-width: 600px;
             margin: 0 auto;
-        }
-
-        .quiz-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .quiz-progress {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .quiz-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #ddd;
-            transition: all 0.3s;
-        }
-
-        .quiz-dot.active {
-            background: var(--primary);
-            transform: scale(1.2);
-        }
-
-        .quiz-dot.correct {
-            background: #4caf50;
-        }
-
-        .quiz-dot.wrong {
-            background: #f44336;
         }
 
         .question-box {
             background: var(--cream);
             padding: 2rem;
             border-radius: 15px;
-            margin-bottom: 2rem;
             text-align: center;
+            margin-bottom: 2rem;
             border: 2px solid var(--secondary);
-        }
-
-        .question-text {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
         }
 
         .arabic-question {
             font-family: 'Amiri', serif;
-            font-size: 3rem;
-            color: var(--primary-dark);
+            font-size: 4rem;
+            color: var(--primary);
             margin: 1rem 0;
         }
 
         .options-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 1rem;
         }
 
@@ -530,138 +655,32 @@
             background: white;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             transition: all 0.3s;
-            font-family: 'Amiri', serif;
         }
 
         .option-btn:hover {
             border-color: var(--primary);
-            background: #f0f8f5;
+            background: var(--cream);
         }
 
         .option-btn.correct {
             background: #c8e6c9;
-            border-color: #4caf50;
-            color: #2e7d32;
+            border-color: var(--success);
         }
 
         .option-btn.wrong {
             background: #ffcdd2;
-            border-color: #f44336;
-            color: #c62828;
+            border-color: var(--error);
         }
 
-        .quiz-results {
-            text-align: center;
-            display: none;
-        }
-
-        .score-circle {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: conic-gradient(var(--primary) calc(var(--score) * 1%), #eee 0);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 2rem auto;
-            position: relative;
-        }
-
-        .score-circle::before {
-            content: '';
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            background: white;
-            border-radius: 50%;
-        }
-
-        .score-text {
-            position: relative;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        /* Joining Letters Section */
-        .joining-section {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 4rem 5%;
-        }
-
-        .joining-examples {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .join-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .join-display {
-            font-family: 'Amiri', serif;
-            font-size: 3rem;
-            color: var(--primary);
-            margin: 1rem 0;
-            direction: rtl;
-        }
-
-        .join-explanation {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        /* Contact Section */
+        /* Contact */
         .contact-section {
             background: var(--primary-dark);
             color: white;
-            padding: 4rem 5%;
+            padding: 3rem 5%;
+            margin-top: 3rem;
             text-align: center;
-        }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            max-width: 1000px;
-            margin: 3rem auto;
-        }
-
-        .contact-card {
-            background: rgba(255,255,255,0.1);
-            padding: 2rem;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s;
-        }
-
-        .contact-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255,255,255,0.15);
-        }
-
-        .contact-icon {
-            font-size: 3rem;
-            color: var(--secondary);
-            margin-bottom: 1rem;
-        }
-
-        .contact-info h3 {
-            margin-bottom: 0.5rem;
-            color: var(--secondary);
-        }
-
-        .contact-info p {
-            font-size: 1.2rem;
-            opacity: 0.9;
         }
 
         .whatsapp-btn {
@@ -674,7 +693,7 @@
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
-            margin-top: 2rem;
+            margin-top: 1rem;
             transition: transform 0.3s;
         }
 
@@ -682,152 +701,60 @@
             transform: scale(1.05);
         }
 
-        /* Footer */
-        footer {
-            background: #0d1f1a;
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            border-top: 3px solid var(--secondary);
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .social-links {
-            margin: 1rem 0;
-        }
-
-        .social-links a {
-            color: white;
-            font-size: 1.5rem;
-            margin: 0 1rem;
-            transition: color 0.3s;
-        }
-
-        .social-links a:hover {
-            color: var(--secondary);
-        }
-
         /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        .animate {
-            animation: fadeInUp 0.6s ease forwards;
+        .pulse {
+            animation: pulse 2s infinite;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
+            .main-container {
+                padding: 1rem;
             }
-            
-            .mobile-menu {
-                display: block;
-            }
-            
-            .hero-content h1 {
-                font-size: 2rem;
-            }
-            
             .options-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .quiz-container {
-                padding: 1.5rem;
+            .alphabet-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
-        }
-
-        /* Audio Player */
-        .audio-player {
-            background: white;
-            padding: 1rem;
-            border-radius: 50px;
-            display: inline-flex;
-            align-items: center;
-            gap: 1rem;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            margin-top: 1rem;
-        }
-
-        .play-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: transform 0.3s;
-        }
-
-        .play-btn:hover {
-            transform: scale(1.1);
-        }
-
-        /* Achievement Badges */
-        .badge-container {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 2rem;
-        }
-
-        .badge {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--secondary) 0%, #f9d423 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: var(--dark);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            position: relative;
-            opacity: 0.3;
-            transition: all 0.3s;
-        }
-
-        .badge.unlocked {
-            opacity: 1;
-            animation: bounce 0.5s;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-
-        .badge::after {
-            content: attr(data-title);
-            position: absolute;
-            bottom: -25px;
-            font-size: 0.7rem;
-            white-space: nowrap;
-            color: var(--dark);
-            font-weight: 600;
         }
     </style>
 </head>
 <body>
+
+    <!-- Login Overlay -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-box">
+            <div class="login-logo">
+                <i class="fas fa-mosque"></i>
+            </div>
+            <h2>Bem-vindo ao Islam Moçambique</h2>
+            <p>Entre para acessar seu progresso personalizado</p>
+            
+            <div class="input-group">
+                <label for="userName">Seu Nome</label>
+                <input type="text" id="userName" placeholder="Ex: Ahmad" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="userEmail">Email (opcional)</label>
+                <input type="email" id="userEmail" placeholder="seu@email.com">
+            </div>
+            
+            <button class="btn btn-primary" onclick="login()" style="width: 100%; margin-top: 1rem;">
+                Começar Aprendizado
+            </button>
+            
+            <p style="margin-top: 1rem; font-size: 0.8rem; color: #999;">
+                <i class="fas fa-info-circle"></i> Seus dados ficam salvos neste dispositivo
+            </p>
+        </div>
+    </div>
 
     <!-- Header -->
     <header>
@@ -836,473 +763,514 @@
                 <i class="fas fa-mosque"></i>
                 <span>Islam Moçambique</span>
             </div>
-            <ul class="nav-links">
-                <li><a href="#inicio">Início</a></li>
-                <li><a href="#alfabeto">Alfabeto</a></li>
-                <li><a href="#juncao">Junção</a></li>
-                <li><a href="#palavras">Palavras</a></li>
-                <li><a href="#avaliacoes">Avaliações</a></li>
-                <li><a href="#contacto">Contacto</a></li>
-            </ul>
-            <div class="mobile-menu">
-                <i class="fas fa-bars"></i>
+            
+            <div class="user-info">
+                <span id="userDisplayName">Aluno</span>
+                <div class="user-avatar" onclick="toggleUserMenu()">
+                    <span id="userInitial">A</span>
+                    <div class="user-menu" id="userMenu">
+                        <div class="user-menu-item" onclick="showProfile()">
+                            <i class="fas fa-user"></i> Meu Perfil
+                        </div>
+                        <div class="user-menu-item" onclick="showProgress()">
+                            <i class="fas fa-chart-line"></i> Progresso
+                        </div>
+                        <div class="user-menu-item" onclick="resetProgress()">
+                            <i class="fas fa-redo"></i> Reiniciar
+                        </div>
+                        <div class="user-menu-item" onclick="logout()" style="color: var(--error);">
+                            <i class="fas fa-sign-out-alt"></i> Sair
+                        </div>
+                    </div>
+                </div>
             </div>
         </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="inicio">
-        <div class="hero-content animate">
-            <h1>Aprenda a Ler o Alcorão Sagrado</h1>
-            <p>Do alfabeto árabe à recitação completa. Um curso estruturado e interativo para todos os níveis.</p>
-            <div class="cta-buttons">
-                <a href="#alfabeto" class="btn btn-primary">Começar Agora</a>
-                <a href="#contacto" class="btn btn-secondary">Falar Conosco</a>
+    <!-- Dashboard -->
+    <div class="dashboard">
+        <div class="dashboard-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-book-open"></i></div>
+                <div class="stat-value" id="statLetters">0/28</div>
+                <div class="stat-label">Letras Aprendidas</div>
+                <div class="stat-change">+2 hoje</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="stat-value" id="statTime">0h</div>
+                <div class="stat-label">Tempo de Estudo</div>
+                <div class="stat-change">15min hoje</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-star"></i></div>
+                <div class="stat-value" id="statScore">0%</div>
+                <div class="stat-label">Média de Acertos</div>
+                <div class="stat-change">Último: 85%</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-fire"></i></div>
+                <div class="stat-value" id="statStreak">1</div>
+                <div class="stat-label">Dias Seguidos</div>
+                <div class="stat-change">Keep it up!</div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Progress Section -->
-    <section class="progress-section">
-        <div class="progress-container">
-            <div class="progress-stats">
-                <div class="stat">
-                    <div class="stat-value" id="lessonsCompleted">0</div>
-                    <div class="stat-label">Lições</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" id="quizzesPassed">0</div>
-                    <div class="stat-label">Avaliações</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" id="currentStreak">0</div>
-                    <div class="stat-label">Dias Seguidos</div>
-                </div>
-            </div>
-            <div class="progress-bar-container">
-                <div class="progress-bar" id="mainProgress"></div>
-            </div>
-            <div style="min-width: 100px; text-align: right;">
-                <span id="progressPercent">0%</span> Completo
-            </div>
-        </div>
-    </section>
-
-    <!-- Alphabet Section -->
-    <section class="section" id="alfabeto">
-        <div class="section-title animate">
-            <h2>Alfabeto Árabe</h2>
-            <p>Clique em cada letra para ouvir a pronúncia e marcar como aprendida</p>
-        </div>
-        
-        <div class="alphabet-grid" id="alphabetGrid">
-            <!-- Generated by JavaScript -->
-        </div>
-
-        <div class="badge-container">
-            <div class="badge unlocked" data-title="Iniciante">🌟</div>
-            <div class="badge" data-title="Estudante">📚</div>
-            <div class="badge" data-title="Praticante">✨</div>
-            <div class="badge" data-title="Hafiz">🎯</div>
-        </div>
-    </section>
-
-    <!-- Joining Letters Section -->
-    <section class="joining-section" id="juncao">
-        <div class="section-title animate">
-            <h2>Junção de Letras</h2>
-            <p>Aprenda como as letras se conectam para formar palavras</p>
-        </div>
-
-        <div class="joining-examples">
-            <div class="join-card animate">
-                <h3>Conexão Inicial</h3>
-                <div class="join-display">بـ + ـا = با</div>
-                <div class="join-explanation">Ba + Alif = Ba</div>
-            </div>
-            <div class="join-card animate">
-                <h3>Conexão Média</h3>
-                <div class="join-display">ـبـ + ـيـ = ـبيـ</div>
-                <div class="join-explanation">Letras no meio da palavra</div>
-            </div>
-            <div class="join-card animate">
-                <h3>Conexão Final</h3>
-                <div class="join-display">ـب + ـر = ـبر</div>
-                <div class="join-explanation">Letras no fim da palavra</div>
-            </div>
-            <div class="join-card animate">
-                <h3>Palavra Completa</h3>
-                <div class="join-display">ب + ا + ب = باب</div>
-                <div class="join-explanation">Bāb (Porta)</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Modules Section -->
-    <section class="section" id="palavras">
-        <div class="section-title animate">
-            <h2>Módulos de Aprendizagem</h2>
-            <p>Progresso estruturado do básico ao avançado</p>
-        </div>
-
-        <div class="modules-container">
-            <div class="module-card animate">
-                <div class="module-header">
-                    <div class="module-number">01</div>
-                    <h3>Reconhecimento de Letras</h3>
-                    <p>Formas isoladas e conectadas</p>
-                </div>
-                <div class="module-content">
-                    <ul class="lesson-list">
-                        <li class="lesson-item" onclick="toggleLesson(this)">
-                            <div class="lesson-icon">1</div>
-                            <div class="lesson-info">
-                                <div class="lesson-title">Letras Solitárias</div>
-                                <div class="lesson-duration">15 minutos</div>
-                            </div>
-                            <i class="fas fa-check-circle" style="color: #ddd;"></i>
-                        </li>
-                        <li class="lesson-item" onclick="toggleLesson(this)">
-                            <div class="lesson-icon">2</div>
-                            <div class="lesson-info">
-                                <div class="lesson-title">Posições Iniciais</div>
-                                <div class="lesson-duration">20 minutos</div>
-                            </div>
-                            <i class="fas fa-check-circle" style="color: #ddd;"></i>
-                        </li>
-                        <li class="lesson-item" onclick="toggleLesson(this)">
-                            <div class="lesson-icon">3</div>
-                            <div class="lesson-info">
-                                <div class="lesson-title">Posições Médias</div>
-                                <div class="lesson-duration">20 minutos</div>
-                            </div>
-                            <i class="fas fa-check-circle" style="color: #ddd;"></i>
-                        </li>
-                        <li class="lesson-item" onclick="toggleLesson(this)">
-                            <div class="lesson-icon">4</div>
-                            <div class="lesson-info">
-                                <div class="lesson-title">Posições Finais</div>
-                                <div class="lesson-duration">15 minutos</div>
-                            </div>
-                            <i class="fas fa-check-circle" style="color: #ddd;"></i>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="module-card animate">
-                <div class="module-header">
-                    <div class="module-number">02</div>
-                    <h3>Vogais e Harakat</h3>
-                    <p>Fatha, Kasra, Damma e Tanween</p>
-                </div>
-                <div class="module-content">
-                    <ul class="lesson-list">
-                        <li class="lesson-item" onclick="toggleLesson(this)">
-                            <div class="lesson-icon">1</div>
-                            <div class="lesson-info">
-                                <div class="lesson-title">Fatha (a)</div>
-                                <div class="lesson-duration">15 minutos</div>
-                            </div>
-                            <i class="fas fa-check-circle" style="color: #ddd;"></i>
-                        </li>
-                        <li class="lesson-item" onclick="toggleLesson(this)">
-                            <div class="lesson-icon">2</div>
-                            <div class="lesson-info">
-                                <div class="lesson-title">Kasra (i)</div>
-                                <div class="lesson-duration">15 minutos</div>
-                            </div>
-                            <i class="fas fa-check-circle" style="color: #ddd;"></i>
-                        </li>
-                        <li class="lesson-item" onclick="toggleLesson(this)">
-                            <div class="lesson-icon">3</div>
-                            <div class="lesson-info">
-                                <div class="lesson-title">Damma (u)</div>
-                                <div class="lesson-duration">15 minutos</div>
-                            </div>
-                            <i class="fas fa-check-circle" style="color: #ddd;"></i>
-                        </li>
-                        <li class="lesson-item" onclick="toggleLesson(this)">
-                            <div class="lesson-icon">4</div>
-                            <div class="lesson-info">
-                                <div class="lesson-title">Sukun (sem vogal)</div>
-                                <div class="lesson-duration">20 minutos</div>
-                            </div>
-                            <i class="fas fa-check-circle" style="color: #ddd;"></i>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="module-card animate">
-                <div class="module-header">
-                    <div class="module-number">03</div>
-                    <h3>Palavras do Alcorão</h3>
-                    <p>Vocabulário essencial</p>
-                </div>
-                <div class="module-content">
-                    <ul class="lesson-list">
-                        <li class="lesson-item" onclick="toggleLesson(this)">
-                            <div class="lesson-icon">1</div>
-                            <div class="lesson-info">
-                                <div class="lesson-title">Nomes de Deus</div>
-                                <div class="lesson-duration">25 minutos</div>
-                            </div>
-                            <i class="fas fa-check-circle" style="color: #ddd;"></i>
-                        </li>
-                        <li class="lesson-item" onclick="toggleLesson(this)">
-                            <div class="lesson-icon">2</div>
-                            <div class="lesson-info">
-                                <div class="lesson-title">Palavras de Surat Al-Fatiha</div>
-                                <div class="lesson-duration">30 minutos</div>
-                            </div>
-                            <i class="fas fa-check-circle" style="color: #ddd;"></i>
-                        </li>
-                        <li class="lesson-item" onclick="toggleLesson(this)">
-                            <div class="lesson-icon">3</div>
-                            <div class="lesson-info">
-                                <div class="lesson-title">Palavras Comuns</div>
-                                <div class="lesson-duration">20 minutos</div>
-                            </div>
-                            <i class="fas fa-check-circle" style="color: #ddd;"></i>
-                        </li>
-                        <li class="lesson-item" onclick="toggleLesson(this)">
-                            <div class="lesson-icon">4</div>
-                            <div class="lesson-info">
-                                <div class="lesson-title">Leitura de Versículos</div>
-                                <div class="lesson-duration">30 minutos</div>
-                            </div>
-                            <i class="fas fa-check-circle" style="color: #ddd;"></i>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Quiz Section -->
-    <section class="section" id="avaliacoes" style="background: white;">
-        <div class="section-title animate">
-            <h2>Avaliações Interativas</h2>
-            <p>Teste seus conhecimentos e acompanhe seu progresso</p>
-        </div>
-
-        <div class="quiz-container animate">
-            <div class="quiz-header">
-                <h3>Quiz: Identificação de Letras</h3>
-                <p>Selecione a resposta correta para cada questão</p>
-            </div>
-
-            <div class="quiz-progress" id="quizProgress">
-                <div class="quiz-dot active"></div>
-                <div class="quiz-dot"></div>
-                <div class="quiz-dot"></div>
-                <div class="quiz-dot"></div>
-                <div class="quiz-dot"></div>
-            </div>
-
-            <div id="quizContent">
-                <div class="question-box">
-                    <div class="question-text">Qual é o nome desta letra?</div>
-                    <div class="arabic-question" id="questionLetter">ب</div>
-                    <div class="audio-player">
-                        <button class="play-btn" onclick="playAudio()">
-                            <i class="fas fa-volume-up"></i>
-                        </button>
-                        <span>Ouvir pronúncia</span>
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="content-area">
+            <!-- Alphabet Section -->
+            <div class="lesson-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <h2>Alfabeto Árabe</h2>
+                        <p style="color: #666; font-size: 0.9rem;">Clique em cada letra para dar feedback</p>
+                    </div>
+                    <div class="progress-indicator">
+                        <span id="lettersProgress">0/28</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="lettersProgressBar" style="width: 0%"></div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="options-grid" id="optionsGrid">
-                    <button class="option-btn" onclick="checkAnswer(this, 'Ba')">Ba</button>
-                    <button class="option-btn" onclick="checkAnswer(this, 'Ta')">Ta</button>
-                    <button class="option-btn" onclick="checkAnswer(this, 'Tha')">Tha</button>
-                    <button class="option-btn" onclick="checkAnswer(this, 'Nun')">Nun</button>
+                
+                <div class="alphabet-grid" id="alphabetGrid">
+                    <!-- Generated by JS -->
                 </div>
             </div>
 
-            <div class="quiz-results" id="quizResults">
-                <h3>Avaliação Completa!</h3>
-                <div class="score-circle" style="--score: 0">
-                    <div class="score-text" id="scoreText">0%</div>
+            <!-- Quiz Section -->
+            <div class="quiz-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <h2>Avaliação Diária</h2>
+                        <p style="color: #666; font-size: 0.9rem;">Teste seus conhecimentos</p>
+                    </div>
                 </div>
-                <p id="resultMessage">Continue praticando!</p>
-                <button class="btn btn-primary" onclick="restartQuiz()" style="margin-top: 2rem;">
-                    Tentar Novamente
+                
+                <div class="quiz-container" id="quizContainer">
+                    <div class="question-box">
+                        <div class="arabic-question" id="quizQuestion">ب</div>
+                        <p>Qual é o nome desta letra?</p>
+                    </div>
+                    <div class="options-grid" id="quizOptions">
+                        <!-- Generated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Teacher Feedback -->
+            <div class="sidebar-card">
+                <h3><i class="fas fa-chalkboard-teacher"></i> Feedback do Professor</h3>
+                <div id="teacherFeedback">
+                    <div class="teacher-note">
+                        <div class="teacher-note-header">
+                            <i class="fas fa-user-tie"></i>
+                            <span>Sheikh Omar</span>
+                        </div>
+                        <p>Excelente progresso na pronúncia da letra "ع" (Ayn). Continue praticando a articulação na garganta.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="sidebar-card">
+                <h3><i class="fas fa-history"></i> Atividade Recente</h3>
+                <div id="activityFeed">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+
+            <!-- Performance Chart -->
+            <div class="sidebar-card">
+                <h3><i class="fas fa-chart-bar"></i> Desempenho Semanal</h3>
+                <div class="chart-container" id="performanceChart">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+
+            <!-- Difficult Letters -->
+            <div class="sidebar-card">
+                <h3><i class="fas fa-exclamation-triangle"></i> Letras Difíceis</h3>
+                <div id="difficultLetters">
+                    <p style="color: #999; font-size: 0.9rem;">Nenhuma letra marcada como difícil ainda.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div class="modal-overlay" id="feedbackModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Feedback da Aula</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <div class="feedback-form">
+                <h4>Como foi aprender esta letra?</h4>
+                <div class="difficulty-selector">
+                    <button class="difficulty-btn easy" onclick="selectDifficulty('easy')">
+                        <i class="fas fa-smile"></i><br>Fácil
+                    </button>
+                    <button class="difficulty-btn medium" onclick="selectDifficulty('medium')">
+                        <i class="fas fa-meh"></i><br>Médio
+                    </button>
+                    <button class="difficulty-btn hard" onclick="selectDifficulty('hard')">
+                        <i class="fas fa-frown"></i><br>Difícil
+                    </button>
+                </div>
+                
+                <h4>Avalie sua confiança:</h4>
+                <div class="rating-stars" id="ratingStars">
+                    <span class="star" onclick="setRating(1)">★</span>
+                    <span class="star" onclick="setRating(2)">★</span>
+                    <span class="star" onclick="setRating(3)">★</span>
+                    <span class="star" onclick="setRating(4)">★</span>
+                    <span class="star" onclick="setRating(5)">★</span>
+                </div>
+                
+                <h4>Notas pessoais:</h4>
+                <textarea class="feedback-textarea" id="lessonNotes" placeholder="Escreva aqui suas dúvidas ou observações sobre esta letra..."></textarea>
+                
+                <button class="btn btn-primary" onclick="saveFeedback()" style="width: 100%;">
+                    Salvar Feedback
                 </button>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Contact Section -->
-    <section class="contact-section" id="contacto">
-        <div class="section-title animate" style="color: white;">
-            <h2 style="color: white;">Entre em Contacto</h2>
-            <p style="color: rgba(255,255,255,0.8);">Estamos aqui para ajudar na sua jornada de aprendizado</p>
-        </div>
-
-        <div class="contact-grid">
-            <div class="contact-card animate">
-                <div class="contact-icon">
-                    <i class="fab fa-whatsapp"></i>
-                </div>
-                <div class="contact-info">
-                    <h3>WhatsApp</h3>
-                    <p>860407269</p>
-                </div>
-            </div>
-            
-            <div class="contact-card animate">
-                <div class="contact-icon">
-                    <i class="fas fa-phone"></i>
-                </div>
-                <div class="contact-info">
-                    <h3>Telefone</h3>
-                    <p>+258 86 040 7269</p>
-                </div>
-            </div>
-
-            <div class="contact-card animate">
-                <div class="contact-icon">
-                    <i class="fas fa-envelope"></i>
-                </div>
-                <div class="contact-info">
-                    <h3>Email</h3>
-                    <p>Islammocambique@gmail.com</p>
-                </div>
-            </div>
-        </div>
-
-        <a href="https://wa.me/258860407269" class="whatsapp-btn animate" target="_blank">
-            <i class="fab fa-whatsapp"></i>
-            Falar no WhatsApp Agora
+    <!-- Contact -->
+    <div class="contact-section">
+        <h2>Precisa de Ajuda?</h2>
+        <p>Fale diretamente com nossos professores</p>
+        <a href="https://wa.me/258860407269" class="whatsapp-btn" target="_blank">
+            <i class="fab fa-whatsapp"></i> 860407269
         </a>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="logo" style="justify-content: center; margin-bottom: 1rem;">
-                <i class="fas fa-mosque" style="color: var(--secondary);"></i>
-                <span>Islam Moçambique</span>
-            </div>
-            <div class="social-links">
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
-            </div>
-            <p>&copy; 2026 Islam Moçambique. Todos os direitos reservados.</p>
-            <p style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
-                بسم الله الرحمن الرحيم
-            </p>
-        </div>
-    </footer>
+    </div>
 
     <script>
-        // Arabic Alphabet Data
+        // Data
         const alphabet = [
-            { letter: 'ا', name: 'Alif', transliteration: 'aa', sound: 'a' },
-            { letter: 'ب', name: 'Ba', transliteration: 'b', sound: 'b' },
-            { letter: 'ت', name: 'Ta', transliteration: 't', sound: 't' },
-            { letter: 'ث', name: 'Tha', transliteration: 'th', sound: 'th' },
-            { letter: 'ج', name: 'Jim', transliteration: 'j', sound: 'j' },
-            { letter: 'ح', name: 'Ha', transliteration: 'h', sound: 'h' },
-            { letter: 'خ', name: 'Kha', transliteration: 'kh', sound: 'kh' },
-            { letter: 'د', name: 'Dal', transliteration: 'd', sound: 'd' },
-            { letter: 'ذ', name: 'Dhal', transliteration: 'dh', sound: 'dh' },
-            { letter: 'ر', name: 'Ra', transliteration: 'r', sound: 'r' },
-            { letter: 'ز', name: 'Zay', transliteration: 'z', sound: 'z' },
-            { letter: 'س', name: 'Sin', transliteration: 's', sound: 's' },
-            { letter: 'ش', name: 'Shin', transliteration: 'sh', sound: 'sh' },
-            { letter: 'ص', name: 'Sad', transliteration: 's', sound: 's' },
-            { letter: 'ض', name: 'Dad', transliteration: 'd', sound: 'd' },
-            { letter: 'ط', name: 'Ta', transliteration: 't', sound: 't' },
-            { letter: 'ظ', name: 'Zha', transliteration: 'z', sound: 'z' },
-            { letter: 'ع', name: 'Ayn', transliteration: "'", sound: "'" },
-            { letter: 'غ', name: 'Ghayn', transliteration: 'gh', sound: 'gh' },
-            { letter: 'ف', name: 'Fa', transliteration: 'f', sound: 'f' },
-            { letter: 'ق', name: 'Qaf', transliteration: 'q', sound: 'q' },
-            { letter: 'ك', name: 'Kaf', transliteration: 'k', sound: 'k' },
-            { letter: 'ل', name: 'Lam', transliteration: 'l', sound: 'l' },
-            { letter: 'م', name: 'Mim', transliteration: 'm', sound: 'm' },
-            { letter: 'ن', name: 'Nun', transliteration: 'n', sound: 'n' },
-            { letter: 'ه', name: 'Ha', transliteration: 'h', sound: 'h' },
-            { letter: 'و', name: 'Waw', transliteration: 'w', sound: 'w' },
-            { letter: 'ي', name: 'Ya', transliteration: 'y', sound: 'y' }
+            { letter: 'ا', name: 'Alif', sound: 'aa' },
+            { letter: 'ب', name: 'Ba', sound: 'b' },
+            { letter: 'ت', name: 'Ta', sound: 't' },
+            { letter: 'ث', name: 'Tha', sound: 'th' },
+            { letter: 'ج', name: 'Jim', sound: 'j' },
+            { letter: 'ح', name: 'Ha', sound: 'h' },
+            { letter: 'خ', name: 'Kha', sound: 'kh' },
+            { letter: 'د', name: 'Dal', sound: 'd' },
+            { letter: 'ذ', name: 'Dhal', sound: 'dh' },
+            { letter: 'ر', name: 'Ra', sound: 'r' },
+            { letter: 'ز', name: 'Zay', sound: 'z' },
+            { letter: 'س', name: 'Sin', sound: 's' },
+            { letter: 'ش', name: 'Shin', sound: 'sh' },
+            { letter: 'ص', name: 'Sad', sound: 's' },
+            { letter: 'ض', name: 'Dad', sound: 'd' },
+            { letter: 'ط', name: 'Ta', sound: 't' },
+            { letter: 'ظ', name: 'Zha', sound: 'z' },
+            { letter: 'ع', name: 'Ayn', sound: "'" },
+            { letter: 'غ', name: 'Ghayn', sound: 'gh' },
+            { letter: 'ف', name: 'Fa', sound: 'f' },
+            { letter: 'ق', name: 'Qaf', sound: 'q' },
+            { letter: 'ك', name: 'Kaf', sound: 'k' },
+            { letter: 'ل', name: 'Lam', sound: 'l' },
+            { letter: 'م', name: 'Mim', sound: 'm' },
+            { letter: 'ن', name: 'Nun', sound: 'n' },
+            { letter: 'ه', name: 'Ha', sound: 'h' },
+            { letter: 'و', name: 'Waw', sound: 'w' },
+            { letter: 'ي', name: 'Ya', sound: 'y' }
         ];
+
+        let currentUser = null;
+        let userData = {
+            letters: {},
+            quizzes: [],
+            totalTime: 0,
+            lastActive: new Date().toISOString(),
+            streak: 1
+        };
+        let currentLetterIndex = null;
+        let currentDifficulty = null;
+        let currentRating = 0;
 
         // Quiz Data
-        const quizData = [
-            { question: 'ب', correct: 'Ba', options: ['Ba', 'Ta', 'Tha', 'Nun'] },
-            { question: 'م', correct: 'Mim', options: ['Mim', 'Nun', 'Lam', 'Ba'] },
-            { question: 'ا', correct: 'Alif', options: ['Lam', 'Alif', 'Ba', 'Ya'] },
-            { question: 'ر', correct: 'Ra', options: ['Zay', 'Dal', 'Ra', 'Dhal'] },
-            { question: 'س', correct: 'Sin', options: ['Shin', 'Sin', 'Sad', 'Ba'] }
+        const quizQuestions = [
+            { q: 'ب', options: ['Ba', 'Ta', 'Tha', 'Nun'], correct: 'Ba' },
+            { q: 'م', options: ['Mim', 'Nun', 'Lam', 'Qaf'], correct: 'Mim' },
+            { q: 'ا', options: ['Alif', 'Lam', 'Ba', 'Ya'], correct: 'Alif' },
+            { q: 'ر', options: ['Ra', 'Zay', 'Dal', 'Dhal'], correct: 'Ra' },
+            { q: 'س', options: ['Sin', 'Shin', 'Sad', 'Dad'], correct: 'Sin' }
         ];
-
         let currentQuiz = 0;
-        let score = 0;
-        let learnedLetters = new Set();
 
-        // Initialize Alphabet Grid
-        function initAlphabet() {
-            const grid = document.getElementById('alphabetGrid');
-            alphabet.forEach((item, index) => {
-                const card = document.createElement('div');
-                card.className = 'letter-card';
-                card.innerHTML = `
-                    <span class="arabic-letter">${item.letter}</span>
-                    <div class="letter-name">${item.name}</div>
-                    <div class="letter-transliteration">${item.transliteration}</div>
-                `;
-                card.onclick = () => toggleLearned(card, item.name);
-                grid.appendChild(card);
-            });
-        }
-
-        function toggleLearned(card, letterName) {
-            card.classList.toggle('learned');
-            if (card.classList.contains('learned')) {
-                learnedLetters.add(letterName);
-                playAudio();
-            } else {
-                learnedLetters.delete(letterName);
-            }
-            updateProgress();
-            checkBadges();
-        }
-
-        function updateProgress() {
-            const percent = Math.round((learnedLetters.size / alphabet.length) * 100);
-            document.getElementById('mainProgress').style.width = percent + '%';
-            document.getElementById('progressPercent').textContent = percent + '%';
-            document.getElementById('lessonsCompleted').textContent = learnedLetters.size;
-            
-            // Save to localStorage
-            localStorage.setItem('learnedLetters', JSON.stringify([...learnedLetters]));
-        }
-
-        function checkBadges() {
-            const badges = document.querySelectorAll('.badge');
-            const count = learnedLetters.size;
-            
-            if (count >= 7) badges[1].classList.add('unlocked');
-            if (count >= 14) badges[2].classList.add('unlocked');
-            if (count >= 28) badges[3].classList.add('unlocked');
-        }
-
-        // Quiz Functions
-        function loadQuestion() {
-            if (currentQuiz >= quizData.length) {
-                showResults();
+        // Login System
+        function login() {
+            const name = document.getElementById('userName').value.trim();
+            if (!name) {
+                alert('Por favor, digite seu nome');
                 return;
             }
             
-            const q = quizData[currentQuiz];
-            document.getElementById('questionLetter').textContent = q.question;
+            currentUser = {
+                name: name,
+                email: document.getElementById('userEmail').value,
+                joined: new Date().toISOString()
+            };
             
-            const optionsGrid = document.getElementById('optionsGrid');
-            optionsGrid.innerHTML = '';
+            // Load saved data
+            const saved = localStorage.getItem(`islam_mocambique_${name}`);
+            if (saved) {
+                userData = JSON.parse(saved);
+            }
+            
+            document.getElementById('loginOverlay').classList.add('hidden');
+            document.getElementById('userDisplayName').textContent = name;
+            document.getElementById('userInitial').textContent = name.charAt(0).toUpperCase();
+            
+            initApp();
+        }
+
+        function logout() {
+            saveUserData();
+            location.reload();
+        }
+
+        function saveUserData() {
+            if (currentUser) {
+                localStorage.setItem(`islam_mocambique_${currentUser.name}`, JSON.stringify(userData));
+            }
+        }
+
+        // Initialize App
+        function initApp() {
+            renderAlphabet();
+            updateStats();
+            renderActivityFeed();
+            renderPerformanceChart();
+            loadQuiz();
+            
+            // Track time
+            setInterval(() => {
+                userData.totalTime += 1;
+                if (userData.totalTime % 60 === 0) saveUserData();
+            }, 60000); // Every minute
+        }
+
+        // Alphabet with Feedback System
+        function renderAlphabet() {
+            const grid = document.getElementById('alphabetGrid');
+            grid.innerHTML = '';
+            
+            alphabet.forEach((letter, idx) => {
+                const card = document.createElement('div');
+                const status = userData.letters[letter.name];
+                
+                let className = 'letter-card';
+                if (status) {
+                    if (status.mastered) className += ' mastered';
+                    else if (status.difficulty === 'hard') className += ' difficult';
+                    else className += ' learned';
+                }
+                
+                card.className = className;
+                card.innerHTML = `
+                    ${status ? `<div class="status-badge ${status.mastered ? 'mastered' : (status.difficulty === 'hard' ? 'difficult' : 'learned')}">
+                        <i class="fas fa-${status.mastered ? 'crown' : (status.difficulty === 'hard' ? 'exclamation' : 'check')}"></i>
+                    </div>` : ''}
+                    <span class="arabic-letter">${letter.letter}</span>
+                    <span class="letter-name">${letter.name}</span>
+                `;
+                
+                card.onclick = () => openFeedbackModal(idx);
+                grid.appendChild(card);
+            });
+            
+            updateLettersProgress();
+        }
+
+        function updateLettersProgress() {
+            const learned = Object.keys(userData.letters).length;
+            const percent = Math.round((learned / alphabet.length) * 100);
+            
+            document.getElementById('statLetters').textContent = `${learned}/${alphabet.length}`;
+            document.getElementById('lettersProgress').textContent = `${learned}/${alphabet.length}`;
+            document.getElementById('lettersProgressBar').style.width = `${percent}%`;
+        }
+
+        // Feedback Modal
+        function openFeedbackModal(index) {
+            currentLetterIndex = index;
+            const letter = alphabet[index];
+            const status = userData.letters[letter.name] || {};
+            
+            // Reset form
+            document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+            document.getElementById('lessonNotes').value = status.notes || '';
+            
+            if (status.difficulty) {
+                document.querySelector(`.difficulty-btn.${status.difficulty}`).classList.add('selected');
+                currentDifficulty = status.difficulty;
+            }
+            
+            if (status.rating) {
+                setRating(status.rating);
+            }
+            
+            document.getElementById('feedbackModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('feedbackModal').classList.remove('show');
+            currentLetterIndex = null;
+            currentDifficulty = null;
+            currentRating = 0;
+        }
+
+        function selectDifficulty(level) {
+            document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelector(`.difficulty-btn.${level}`).classList.add('selected');
+            currentDifficulty = level;
+        }
+
+        function setRating(rating) {
+            currentRating = rating;
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, idx) => {
+                if (idx < rating) star.classList.add('active');
+                else star.classList.remove('active');
+            });
+        }
+
+        function saveFeedback() {
+            const letter = alphabet[currentLetterIndex];
+            const notes = document.getElementById('lessonNotes').value;
+            
+            userData.letters[letter.name] = {
+                learned: true,
+                difficulty: currentDifficulty,
+                rating: currentRating,
+                notes: notes,
+                date: new Date().toISOString(),
+                mastered: currentRating >= 4 && currentDifficulty === 'easy'
+            };
+            
+            // Add activity
+            addActivity({
+                type: currentDifficulty === 'hard' ? 'warning' : 'success',
+                title: `Letra ${letter.name} ${currentDifficulty === 'hard' ? 'marcada como difícil' : 'aprendida'}`,
+                time: 'Agora'
+            });
+            
+            saveUserData();
+            renderAlphabet();
+            updateStats();
+            renderDifficultLetters();
+            closeModal();
+        }
+
+        // Activity Feed
+        function addActivity(activity) {
+            const feed = document.getElementById('activityFeed');
+            const div = document.createElement('div');
+            div.className = 'activity-item';
+            div.innerHTML = `
+                <div class="activity-icon ${activity.type}">
+                    <i class="fas fa-${activity.type === 'success' ? 'check' : activity.type === 'warning' ? 'exclamation' : 'info'}"></i>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">${activity.title}</div>
+                    <div class="activity-time">${activity.time}</div>
+                </div>
+            `;
+            feed.insertBefore(div, feed.firstChild);
+        }
+
+        function renderActivityFeed() {
+            const feed = document.getElementById('activityFeed');
+            feed.innerHTML = '';
+            
+            // Add sample activities based on user data
+            Object.entries(userData.letters).slice(-5).forEach(([name, data]) => {
+                const date = new Date(data.date);
+                const timeDiff = Math.floor((new Date() - date) / 60000);
+                const timeStr = timeDiff < 1 ? 'Agora' : timeDiff < 60 ? `${timeDiff}min atrás` : 
+                                timeDiff < 1440 ? `${Math.floor(timeDiff/60)}h atrás` : 
+                                `${Math.floor(timeDiff/1440)}d atrás`;
+                
+                addActivity({
+                    type: data.difficulty === 'hard' ? 'warning' : data.mastered ? 'info' : 'success',
+                    title: `Letra ${name} ${data.mastered ? 'dominada' : data.difficulty === 'hard' ? 'precisa de prática' : 'aprendida'}`,
+                    time: timeStr
+                });
+            });
+            
+            if (Object.keys(userData.letters).length === 0) {
+                feed.innerHTML = '<p style="color: #999; text-align: center; padding: 2rem;">Nenhuma atividade ainda. Comece aprendendo o alfabeto!</p>';
+            }
+        }
+
+        // Performance Chart
+        function renderPerformanceChart() {
+            const chart = document.getElementById('performanceChart');
+            chart.innerHTML = '';
+            
+            const days = ['S', 'T', 'Q', 'Q', 'S', 'S', 'D'];
+            const scores = [60, 75, 80, 65, 85, 90, 95]; // Sample data
+            
+            days.forEach((day, idx) => {
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.left = `${idx * 20}%`;
+                bar.style.height = `${scores[idx]}%`;
+                bar.textContent = day;
+                bar.style.opacity = idx === 6 ? '1' : '0.7';
+                chart.appendChild(bar);
+            });
+        }
+
+        // Difficult Letters
+        function renderDifficultLetters() {
+            const container = document.getElementById('difficultLetters');
+            const difficult = Object.entries(userData.letters)
+                .filter(([name, data]) => data.difficulty === 'hard');
+            
+            if (difficult.length === 0) {
+                container.innerHTML = '<p style="color: #999; font-size: 0.9rem;">Nenhuma letra marcada como difícil. Masha Allah!</p>';
+                return;
+            }
+            
+            container.innerHTML = difficult.map(([name, data]) => `
+                <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; background: #fff3e0; border-radius: 8px; margin-bottom: 0.5rem;">
+                    <span style="font-family: 'Amiri', serif; font-size: 1.5rem; color: var(--primary);">
+                        ${alphabet.find(l => l.name === name).letter}
+                    </span>
+                    <span style="font-size: 0.9rem;">${name}</span>
+                    ${data.notes ? `<i class="fas fa-comment" style="color: var(--warning); margin-left: auto;" title="${data.notes}"></i>` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Quiz System
+        function loadQuiz() {
+            if (currentQuiz >= quizQuestions.length) {
+                showQuizResults();
+                return;
+            }
+            
+            const q = quizQuestions[currentQuiz];
+            document.getElementById('quizQuestion').textContent = q.q;
+            
+            const optionsDiv = document.getElementById('quizOptions');
+            optionsDiv.innerHTML = '';
             
             // Shuffle options
             const shuffled = [...q.options].sort(() => Math.random() - 0.5);
@@ -1311,168 +1279,182 @@
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
                 btn.textContent = opt;
-                btn.onclick = function() { checkAnswer(this, opt); };
-                optionsGrid.appendChild(btn);
+                btn.onclick = () => answerQuiz(btn, opt === q.correct);
+                optionsDiv.appendChild(btn);
             });
-            
-            updateQuizProgress();
         }
 
-        function checkAnswer(btn, answer) {
-            const correct = quizData[currentQuiz].correct;
+        function answerQuiz(btn, correct) {
             const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(b => b.disabled = true);
             
-            buttons.forEach(b => {
-                b.disabled = true;
-                if (b.textContent === correct) {
-                    b.classList.add('correct');
-                }
-            });
-            
-            if (answer === correct) {
-                score++;
+            if (correct) {
                 btn.classList.add('correct');
+                userData.quizzes.push({ correct: true, date: new Date().toISOString() });
+                addActivity({
+                    type: 'success',
+                    title: 'Resposta correta no quiz!',
+                    time: 'Agora'
+                });
             } else {
                 btn.classList.add('wrong');
+                // Highlight correct
+                const correctAnswer = quizQuestions[currentQuiz].correct;
+                buttons.forEach(b => {
+                    if (b.textContent === correctAnswer) b.classList.add('correct');
+                });
+                userData.quizzes.push({ correct: false, date: new Date().toISOString() });
             }
             
-            // Update dot
-            const dots = document.querySelectorAll('.quiz-dot');
-            if (answer === correct) {
-                dots[currentQuiz].classList.add('correct');
-            } else {
-                dots[currentQuiz].classList.add('wrong');
-            }
+            saveUserData();
             
             setTimeout(() => {
                 currentQuiz++;
-                loadQuestion();
+                loadQuiz();
             }, 1500);
         }
 
-        function updateQuizProgress() {
-            const dots = document.querySelectorAll('.quiz-dot');
-            dots.forEach((dot, idx) => {
-                dot.classList.remove('active');
-                if (idx === currentQuiz) dot.classList.add('active');
-            });
-        }
-
-        function showResults() {
-            document.getElementById('quizContent').style.display = 'none';
-            const results = document.getElementById('quizResults');
-            results.style.display = 'block';
+        function showQuizResults() {
+            const correct = userData.quizzes.slice(-5).filter(q => q.correct).length;
+            const percent = Math.round((correct / 5) * 100);
             
-            const percentage = Math.round((score / quizData.length) * 100);
-            document.getElementById('scoreText').textContent = percentage + '%';
-            document.querySelector('.score-circle').style.setProperty('--score', percentage);
+            document.getElementById('quizContainer').innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
+                    <h3>Quiz Completo!</h3>
+                    <div style="font-size: 3rem; color: var(--primary); font-weight: 700; margin: 1rem 0;">
+                        ${percent}%
+                    </div>
+                    <p>${percent >= 80 ? 'Excelente! Masha Allah!' : percent >= 60 ? 'Bom trabalho!' : 'Continue praticando!'}</p>
+                    <button class="btn btn-primary" onclick="restartQuiz()" style="margin-top: 1rem;">
+                        Tentar Novamente
+                    </button>
+                </div>
+            `;
             
-            let message = '';
-            if (percentage === 100) message = 'Excelente! Masha Allah! 🌟';
-            else if (percentage >= 80) message = 'Muito bom! Continue assim! ✨';
-            else if (percentage >= 60) message = 'Bom trabalho! Pratique mais! 📚';
-            else message = 'Continue praticando! Você consegue! 💪';
-            
-            document.getElementById('resultMessage').textContent = message;
-            
-            // Update stats
-            document.getElementById('quizzesPassed').textContent = 
-                parseInt(document.getElementById('quizzesPassed').textContent) + 1;
+            updateStats();
         }
 
         function restartQuiz() {
             currentQuiz = 0;
-            score = 0;
-            document.getElementById('quizContent').style.display = 'block';
-            document.getElementById('quizResults').style.display = 'none';
-            
-            // Reset dots
-            document.querySelectorAll('.quiz-dot').forEach(dot => {
-                dot.classList.remove('correct', 'wrong', 'active');
-            });
-            document.querySelector('.quiz-dot').classList.add('active');
-            
-            loadQuestion();
+            document.getElementById('quizContainer').innerHTML = `
+                <div class="question-box">
+                    <div class="arabic-question" id="quizQuestion">ب</div>
+                    <p>Qual é o nome desta letra?</p>
+                </div>
+                <div class="options-grid" id="quizOptions"></div>
+            `;
+            loadQuiz();
         }
 
-        function playAudio() {
-            // Simulate audio feedback
-            const btn = document.querySelector('.play-btn');
-            btn.style.transform = 'scale(0.9)';
-            setTimeout(() => btn.style.transform = 'scale(1)', 200);
+        // Stats
+        function updateStats() {
+            const learned = Object.keys(userData.letters).length;
+            const mastered = Object.values(userData.letters).filter(l => l.mastered).length;
+            
+            // Calculate average score
+            const recentQuizzes = userData.quizzes.slice(-10);
+            const avgScore = recentQuizzes.length > 0 
+                ? Math.round((recentQuizzes.filter(q => q.correct).length / recentQuizzes.length) * 100)
+                : 0;
+            
+            // Calculate streak
+            const lastActive = new Date(userData.lastActive);
+            const today = new Date();
+            const diffDays = Math.floor((today - lastActive) / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 1) userData.streak++;
+            else if (diffDays > 1) userData.streak = 1;
+            
+            userData.lastActive = today.toISOString();
+            
+            // Update display
+            document.getElementById('statLetters').textContent = `${learned}/${alphabet.length}`;
+            document.getElementById('statTime').textContent = `${Math.floor(userData.totalTime / 60)}h`;
+            document.getElementById('statScore').textContent = `${avgScore}%`;
+            document.getElementById('statStreak').textContent = userData.streak;
+            
+            // Update teacher feedback based on progress
+            updateTeacherFeedback(mastered, learned);
         }
 
-        // Lesson Toggle
-        function toggleLesson(item) {
-            item.classList.toggle('completed');
-            const icon = item.querySelector('.lesson-icon');
-            if (item.classList.contains('completed')) {
-                icon.innerHTML = '<i class="fas fa-check"></i>';
-                icon.style.background = 'var(--accent)';
-                icon.style.color = 'white';
-            } else {
-                icon.textContent = icon.parentElement.querySelector('.lesson-title').textContent.match(/\d+/)[0];
-                icon.style.background = '#f0f0f0';
-                icon.style.color = 'var(--primary)';
+        function updateTeacherFeedback(mastered, total) {
+            const container = document.getElementById('teacherFeedback');
+            
+            if (total === 0) {
+                container.innerHTML = `
+                    <div class="teacher-note">
+                        <div class="teacher-note-header">
+                            <i class="fas fa-user-tie"></i>
+                            <span>Sheikh Omar</span>
+                        </div>
+                        <p>Bem-vindo! Comece clicando nas letras do alfabeto acima. Não esqueça de dar feedback sobre como foi seu aprendizado.</p>
+                    </div>
+                `;
+            } else if (mastered > 5) {
+                container.innerHTML += `
+                    <div class="teacher-note">
+                        <div class="teacher-note-header">
+                            <i class="fas fa-user-tie"></i>
+                            <span>Sheikh Omar</span>
+                        </div>
+                        <p>Parabéns! Você já dominou ${mastered} letras. Está pronto para começar a ler palavras simples do Alcorão!</p>
+                    </div>
+                `;
             }
         }
 
-        // Scroll Animation
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: "0px 0px -50px 0px"
+        // User Menu
+        function toggleUserMenu() {
+            document.getElementById('userMenu').classList.toggle('show');
+        }
+
+        function showProfile() {
+            const learned = Object.keys(userData.letters).length;
+            const difficult = Object.values(userData.letters).filter(l => l.difficulty === 'hard').length;
+            
+            alert(`Perfil de ${currentUser.name}\n\nLetras aprendidas: ${learned}/28\nLetras dominadas: ${Object.values(userData.letters).filter(l => l.mastered).length}\nLetras difíceis: ${difficult}\nTotal de quizzes: ${userData.quizzes.length}\nTempo de estudo: ${Math.floor(userData.totalTime / 60)}h ${userData.totalTime % 60}min`);
+        }
+
+        function showProgress() {
+            const percent = Math.round((Object.keys(userData.letters).length / alphabet.length) * 100);
+            alert(`Seu Progresso: ${percent}%\n\nContinue assim! Você está indo muito bem.`);
+        }
+
+        function resetProgress() {
+            if (confirm('Tem certeza que deseja apagar todo seu progresso?')) {
+                userData = {
+                    letters: {},
+                    quizzes: [],
+                    totalTime: 0,
+                    lastActive: new Date().toISOString(),
+                    streak: 1
+                };
+                saveUserData();
+                renderAlphabet();
+                updateStats();
+                renderActivityFeed();
+                alert('Progresso reiniciado. Comece novamente!');
+            }
+        }
+
+        // Close modal on outside click
+        document.getElementById('feedbackModal').onclick = function(e) {
+            if (e.target === this) closeModal();
         };
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.animate').forEach((el) => observer.observe(el));
-
-        // Mobile Menu
-        document.querySelector('.mobile-menu').addEventListener('click', () => {
-            const nav = document.querySelector('.nav-links');
-            nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+        // Close user menu on outside click
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.user-avatar')) {
+                document.getElementById('userMenu').classList.remove('show');
+            }
         });
 
-        // Smooth Scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Load saved progress
+        // Check for saved session
         window.onload = () => {
-            initAlphabet();
-            loadQuestion();
-            
-            const saved = localStorage.getItem('learnedLetters');
-            if (saved) {
-                const letters = JSON.parse(saved);
-                letters.forEach(letter => {
-                    learnedLetters.add(letter);
-                    // Find and mark card
-                    const cards = document.querySelectorAll('.letter-card');
-                    cards.forEach(card => {
-                        if (card.querySelector('.letter-name').textContent === letter) {
-                            card.classList.add('learned');
-                        }
-                    });
-                });
-                updateProgress();
-                checkBadges();
+            const lastUser = localStorage.getItem('islam_mocambique_last_user');
+            if (lastUser) {
+                document.getElementById('userName').value = lastUser;
             }
         };
     </script>
