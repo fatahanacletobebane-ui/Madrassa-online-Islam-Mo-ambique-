@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islam Moçambique - Madrassa Online</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #1a5f4a;
+            --light-green: #2d8a6e;
+            --gold: #d4af37;
+            --light-gold: #f4d03f;
+            --dark-bg: #0a1f1a;
+            --glass-bg: rgba(26, 95, 74, 0.15);
+            --glass-border: rgba(212, 175, 55, 0.3);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a1f1a 0%, #1a3a2f 50%, #0d2b22 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .geometric-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(45, 138, 110, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .orb-1 { width: 300px; height: 300px; top: 10%; left: 10%; animation-delay: 0s; }
+        .orb-2 { width: 200px; height: 200px; top: 60%; right: 10%; animation-delay: 2s; }
+        .orb-3 { width: 150px; height: 150px; bottom: 20%; left: 30%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 60px 20px 40px;
+            position: relative;
+        }
+
+        .logo-container {
+            display: inline-block;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .mosque-icon {
+            font-size: 4rem;
+            color: var(--gold);
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 30px rgba(212, 175, 55, 0.5); }
+            to { text-shadow: 0 0 50px rgba(212, 175, 55, 0.8), 0 0 70px rgba(212, 175, 55, 0.4); }
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--light-gold) 50%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--light-green);
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            font-size: 2rem;
+            color: var(--gold);
+            margin-top: 15px;
+            opacity: 0.9;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Grid Layout */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+            padding-bottom: 60px;
+        }
+
+        /* Card Styles */
+        .module-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: block;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .module-card:hover::before {
+            left: 100%;
+        }
+
+        .module-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--gold);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 
+                        0 0 30px rgba(212, 175, 55, 0.2);
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            display: block;
+            transition: transform 0.3s;
+        }
+
+        .module-card:hover .card-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .card-description {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--gold);
+            color: var(--dark-bg);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* Specific Card Colors */
+        .card-arabic { border-top: 4px solid #e74c3c; }
+        .card-kalimah { border-top: 4px solid #3498db; }
+        .card-yassarna1 { border-top: 4px solid #9b59b6; }
+        .card-yassarna2 { border-top: 4px solid #e67e22; }
+        .card-duas { border-top: 4px solid #27ae60; }
+
+        /* Decorative Elements */
+        .decoration-line {
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 30px auto;
+            border-radius: 2px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid var(--glass-border);
+            margin-top: 60px;
+        }
+
+        .footer-text {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .contact-info {
+            margin-top: 15px;
+            color: var(--gold);
+            font-size: 0.85rem;
+        }
+
+        /* Loading Animation */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .subtitle { font-size: 1rem; letter-spacing: 2px; }
+            .modules-grid { grid-template-columns: 1fr; gap: 20px; }
+            .module-card { padding: 30px 20px; }
+        }
+
+        /* Tech decorative elements */
+        .tech-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animations -->
+    <div class="bg-animation">
+        <div class="geometric-pattern"></div>
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+    </div>
+    <div class="tech-grid"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <div class="mosque-icon">🕌</div>
+        </div>
+        <h1>Islam Moçambique</h1>
+        <div class="subtitle">Madrassa Online</div>
+        <div class="arabic-text">السلام عليكم</div>
+        <div class="decoration-line"></div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="modules-grid">
+            
+            <!-- Alfabeto Árabe -->
+            <a href="https://raw.githubusercontent.com/seu-usuario/madrassa-online/main/alfabeto_arabe/index.html" 
+               class="module-card card-arabic" 
+               onclick="handleNavigation(event, this.href, 'alfabeto')">
+                <span class="card-icon">🔤</span>
+                <h3 class="card-title">Alfabeto Árabe</h3>
+                <p class="card-description">Aprenda as letras do alfabeto árabe com áudio e animações interativas</p>
+                <span class="card-badge">Iniciante</span>
+            </a>
+
+            <!-- Kalimah -->
+            <a href="https://raw.githubusercontent.com/seu-usuario/madrassa-online/main/kalimah/index.html" 
+               class="module-card card-kalimah"
+               onclick="handleNavigation(event, this.href, 'kalimah')">
+                <span class="card-icon">☪️</span>
+                <h3 class="card-title">Kalimah</h3>
+                <p class="card-description">As declarações de fé fundamentais do Islão com pronúncia guiada</p>
+                <span class="card-badge">Essencial</span>
+            </a>
+
+            <!-- Yassarna 1 -->
+            <a href="https://raw.githubusercontent.com/seu-usuario/madrassa-online/main/yassarna_parte_1/index.htm" 
+               class="module-card card-yassarna1"
+               onclick="handleNavigation(event, this.href, 'yassarna1')">
+                <span class="card-icon">📖</span>
+                <h3 class="card-title">Yassarna 1</h3>
+                <p class="card-description">Primeira parte do livro Yassarna para aprendizado progressivo</p>
+                <span class="card-badge">Intermediário</span>
+            </a>
+
+            <!-- Yassarna 2 -->
+            <a href="https://raw.githubusercontent.com/seu-usuario/madrassa-online/main/yassarna_2_parte/index.html" 
+               class="module-card card-yassarna2"
+               onclick="handleNavigation(event, this.href, 'yassarna2')">
+                <span class="card-icon">📚</span>
+                <h3 class="card-title">Yassarna 2</h3>
+                <p class="card-description">Continuação do estudo Yassarna - avanço na leitura árabe</p>
+                <span class="card-badge">Avançado</span>
+            </a>
+
+            <!-- Duãs do Dia a Dia -->
+            <a href="https://drive.google.com/file/d/1xczSE4SPSFH5NydC3jM-mkhkOIOcUcAo/export?format=csv" 
+               class="module-card card-duas"
+               onclick="handleNavigation(event, this.href, 'duas')">
+                <span class="card-icon">🤲</span>
+                <h3 class="card-title">Duãs do Dia a Dia</h3>
+                <p class="card-description">Orações diárias essenciais para cada momento da vida muçulmana</p>
+                <span class="card-badge">Prática</span>
+            </a>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-text">© 2026 Islam Moçambique - Madrassa Online</p>
+        <p class="footer-text">Plataforma de Educação Islâmica Digital</p>
+        <div class="contact-info">
+            📞 860407269 | ✉️ Islammocambique@gmail.com
+        </div>
+    </footer>
+
+    <script>
+        // Handle navigation with loading feedback
+        function handleNavigation(event, url, moduleName) {
+            // Add click animation
+            const card = event.currentTarget;
+            card.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                card.style.transform = '';
+                // Navigate to the URL
+                window.location.href = url;
+            }, 200);
+
+            // Log for analytics (optional)
+            console.log(`Navigating to ${moduleName}: ${url}`);
+        }
+
+        // Add entrance animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.module-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Parallax effect on mouse move
+        document.addEventListener('mousemove', (e) => {
+            const orbs = document.querySelectorAll('.floating-orb');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            orbs.forEach((orb, index) => {
+                const speed = (index + 1) * 20;
+                orb.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
